@@ -20,11 +20,11 @@ def chat_gpt(user_message):
     while True:
         if context:
             #get context
-            context_string = "\n".join(context)
+            #context_string = "\n".join(context)
 
             #Comment out the context string above and uncomment the code below to read from a file. Useful for sending large amounts of context to the API.
-            #with open("./docs/input.txt", "r") as f:
-            #    context_string = f.read()
+            with open("./docs/input.txt", "r") as f:
+                context_string = f.read()
 
             # Create prompt
             prompt = [
