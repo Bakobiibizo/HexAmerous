@@ -1,0 +1,17 @@
+{
+  "dependencies": {},
+  "description": "node-gyp bindings for Faiss",
+  "devDependencies": {},
+  "keywords": [
+    "faiss"
+  ],
+  "license": "BSD-3-Clause",
+  "main": "./src/index.js",
+  "name": "faiss",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gajus/faiss"
+  },
+  "scripts": {},
+  "version": "1.0.0"
+}
