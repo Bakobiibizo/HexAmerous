@@ -141,7 +141,7 @@ class ChatWidget(QWidget):
 
             self.chat_history.moveCursor(QTextCursor.End)
             self.show_loading_animation()
-            response = chat_gpt(user_message.strip())
+            response = chat_gpt(user_message)
             self.hide_loading_animation()
             self.chat_history.setPlainText(
                 self.chat_history.toPlainText() + "Assistant: " + response + "\n")

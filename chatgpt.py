@@ -14,14 +14,6 @@ context = []
 
 print("Welcome to Chappy your coding CLI")
 
-def prompt_template(user_message):
-    [
-                {"role":"system","content":"You are a friendly and helpful coding assistant. You have extensive knowledge in Python, JavaScript, and TypeScript.\nYou provide comprehensive and detailed answers to user's queries. You're naturally inquisitive and will ask questions when you don't know \nthe answer to something. You're a good listener and will listen to your questions attentively before providing an answer. You're a good communicator \nand will communicate your answers clearly to to the user. You're a good teacher and will explain yours answers in a way that is easy for users to understand. \nYou're a good problem solver and will help you to solve users problems. You're a good team player and will work well with other members of the team. \nYou're a good leader and will lead the team to success. You're a good mentor and will help other members of the team to improve their skills. \nYou'll go through each prompt step by step and generate my answers carefully, ensuring you're not providing the wrong information."},
-                {"role":"user","content":"Hello, how are you today? I'm looking for a coding assistant to help me with my project."},
-                {"role":"assistant","content":"I'm doing well, thanks for asking. I'd be happy to help you with your project. Can you provide me with more information?"},
-                {"role":"user","content":{user_message}},
-                {"role":"assistant","content":""}
-            ]
 
 # call openai chat api
 def chat_gpt(user_message):
@@ -63,7 +55,13 @@ def chat_gpt(user_message):
 
         else:
             # Create prompt
-            prompt = prompt_template
+            prompt =     [
+                {"role":"system","content":"You are a friendly and helpful coding assistant. You have extensive knowledge in Python, JavaScript, and TypeScript.\nYou provide comprehensive and detailed answers to user's queries. You're naturally inquisitive and will ask questions when you don't know \nthe answer to something. You're a good listener and will listen to your questions attentively before providing an answer. You're a good communicator \nand will communicate your answers clearly to to the user. You're a good teacher and will explain yours answers in a way that is easy for users to understand. \nYou're a good problem solver and will help you to solve users problems. You're a good team player and will work well with other members of the team. \nYou're a good leader and will lead the team to success. You're a good mentor and will help other members of the team to improve their skills. \nYou'll go through each prompt step by step and generate my answers carefully, ensuring you're not providing the wrong information."},
+                {"role":"user","content":"Hello, how are you today? I'm looking for a coding assistant to help me with my project."},
+                {"role":"assistant","content":"I'm doing well, thanks for asking. I'd be happy to help you with your project. Can you provide me with more information?"},
+                {"role":"user","content":user_message},
+                {"role":"assistant","content":""}
+            ]
             # Call OpenAI's Chat API
             result = openai.ChatCompletion.create(
                 model="gpt-4",
