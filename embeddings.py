@@ -10,6 +10,7 @@ from langchain.retrievers.document_compressors import LLMChainExtractor
 import openai
 from dotenv import load_dotenv
 import os
+from chatgpt import search_gpt
 
 load_dotenv()
 
@@ -53,7 +54,7 @@ def load_embedding():
     return vectordb
 
 def base_retriever(user_query):
-    retriever = load_embedding().as_retriever(llm=llm, search_kwars={"k":1})
+    retriever = load_embedding().as_retriever(llm=llm)
     docs = retriever.get_relevant_documents(user_query)
     return base_formatter(docs)
 
@@ -64,3 +65,22 @@ def retriever(user_query):
     compressed_docs = cc_retriever.get_relevant_documents(user_query)
     docs = base_formatter(compressed_docs)
     return docs
+
+def memory_search(user_query):
+    data = base_retriever(user_query)
+    prompt = [{
+        "role":"system",
+        "content":'''
+        "The user has asked this question:
+
+        {user_query}
+
+        You have looked up the relevant information from your data store and it is:
+
+        {data}
+
+        Please answer the user's question using the data as relevant context."
+        '''.format(user_query=user_query, data=data)
+    }]
+    result = search_gpt(user_query, prompt)
+    return result

@@ -28,7 +28,11 @@ def chat_gpt(user_message):
             #    context_string = f.read()
 
             # Create prompt
-            prompt = prompt_template(user_message)
+            prompt =     [
+                {"role":"system","content":"This is the context of the conversation you are having with the user:" + context},
+                {"role":"user","content":user_message},
+                {"role":"assistant","content":""}
+            ]
 
             # Call OpenAI's Chat API
             result = openai.ChatCompletion.create(
@@ -94,3 +98,29 @@ def chat_gpt(user_message):
 
             # Return the AI's response
             return response
+
+def search_gpt(user_query, prompt):
+    result = openai.ChatCompletion.create(
+    model="gpt-4",
+    messages=prompt
+    )
+    # Get response from OpenAI
+    response = result['choices'][0]['message']['content']
+    # Read the current value of the counter from a file
+    with open("./log/log_count.txt", "r") as f:
+        log_count = int(f.read().strip())
+    # Increment log counter
+    log_count += 1
+    # Write log counter to file
+    with open("./log/log_count.txt", "w") as f:
+        f.write(str(log_count))
+    # Print AI's response and write to log
+    print(f"Assistant: {response}")
+    user_message = user_query
+    # Append to log
+    with open(f"./log/log{log_count}.txt", "a") as f:
+        f.write(f"User: {user_message}\nAssistant: {response}\n\n")
+    # Add context
+    context.append(f"User: {user_message}\nAssistant: {response}\n\n")
+    # Return the AI's response
+    return response

@@ -25,7 +25,8 @@ from embeddings import(
     create_embedding,
     base_retriever,
     retriever,
-    create_mass_embedding
+    create_mass_embedding,
+    memory_search
 )
 
 from langchain.utilities import SerpAPIWrapper
@@ -43,7 +44,15 @@ class CustomTextEdit(QTextEdit):
         elif event.key() == Qt.Key_Return:
             self.parent().send_message()
         elif event.key() == Qt.Key_Up:
-            self.parent().cycle_message_history()
+            if self.parent().message_history_index is None:
+                self.parent().message_history_index += 1
+            else:
+                self.parent().cycle_message_history_backward()
+        elif event.key() == Qt.Key_Down:
+            if self.parent().message_history_index is None:
+               self.parent().messsage_history_index += 1
+            else:
+                self.parent().cycle_message_history_forward()
         else:
             super().keyPressEvent(event)
 
@@ -192,6 +201,10 @@ class ChatWidget(QWidget):
         create_mass_embedding(file_path)
         self.chat_history.setPlainText(
                 self.chat_history.toPlainText() + str("Embedding created, use !base_retrieve and !retrieve to pull relevant documents"))
+    def search_memory(self, text):
+        results = memory_search(text)
+        self.chat_history.setPlainText(
+                self.chat_history.toPlainText() + str("Memory search results: \n" + str(results)) + "\n\n")
 
     def run_command(self, text):
         if text == "!clear":
@@ -230,6 +243,9 @@ class ChatWidget(QWidget):
         elif text.startswith("!search "):
             text = text.removeprefix("!search ")
             self.search_agent(text)
+        elif text.startswith("!searchmem "):
+            text = text.removeprefix("!searchmem ")
+            self.search_memory(text)
         else:
             self.chat_history.setPlainText(
                 self.chat_history.toPlainText() + str("Command not found. Type !help for a list of commands\n"))
@@ -247,25 +263,32 @@ class ChatWidget(QWidget):
         !embed - Upload a file to create embeddings.
         !base_retrieve - Uncompressed search of documents.
         !retrieve - Compressed search the documents.
-        !search - Search the document store for relevant documents and get a summary.
+        !search - Search the internet for context on a prompt then ask the prompt.
+        !searchmem - Search the memory for context on a prompt then ask the prompt.
         !mass_embed - Upload multiple files to create embeddings. Follow with a space then folder path.
         """))
 
-
-
-
     def message_history(self, message):
+        print(self.message_history_index)
         self.message_history_array.append(message)
         self.message_history_index += 1
 
-    def cycle_message_history(self):
-        if self.message_history_index == 0:
-           self.message_history_index = len(self.message_history_index)
-        else:
+    def cycle_message_history_forward(self):
+        if self.message_history_index is None:
+            self.message_history_index = 1
+        elif self.message_history_index < len(self.message_history_array):
+
             self.message_history_index -= 1
-            self.user_input.setPlainText(self.message_history_array[self.message_history_index])
 
+        self.user_input.setPlainText(self.message_history_array[self.message_history_index - 1])
 
+    def cycle_message_history_backward(self):
+        if self.message_history_index is None:
+            self.message_history_index = len(self.message_history_array) - 1
+        elif self.message_history_index > 0:
+            self.message_history_index -= 1
+
+        self.user_input.setPlainText(self.message_history_array[self.message_history_index])
 
     def load_chat_history(self):
         file_name, _ = QFileDialog.getOpenFileName(self, "Open chat history", "d:/5. coding/datastore/gptlogs/log.txt", "Text Files (*.txt)")
