@@ -37,7 +37,7 @@ def chat_gpt(user_message):
     while True:
         if context:
 
-            context_string = "".join(context + "\n\n")
+            context_string = "".join(str(context) + "\n\n")
             print(context_string)
 
             # Comment out the context string above and uncomment the code below to read from a file. Useful for sending large amounts of context to the API.
