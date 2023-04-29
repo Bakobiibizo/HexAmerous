@@ -16,11 +16,12 @@ load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Initialize variables
-context = []
+
 
 print("Welcome to Chappy your coding assistant")
 
 selected_model = "gpt-3.5-turbo"
+
 
 
 def change_selected_model(model):
@@ -28,19 +29,15 @@ def change_selected_model(model):
     return selected_model
 # call openai chat api
 
-def change_context_module(new_context):
-    context = context.append(new_context)
-    return context
-
+context = []
 
 def chat_gpt(user_message):
 
-    while True:
 
+    while True:
         if context:
 
-            # get context
-            context_string = str(context)
+            context_string = "".join(context + "\n\n")
             print(context_string)
 
             # Comment out the context string above and uncomment the code below to read from a file. Useful for sending large amounts of context to the API.

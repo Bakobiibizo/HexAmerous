@@ -24,8 +24,7 @@ from PyQt5.QtWidgets import (
 )
 from chatgpt import (
     chat_gpt,
-    change_selected_model,
-    change_context_module
+    change_selected_model
 )
 from embeddings import (
     create_embedding,
@@ -194,7 +193,6 @@ class ChatWidget(QWidget):
             self.run_command(user_message)
             self.user_input.clear()
         elif user_message.strip():
-            change_context_module(new_context=user_message)
             self.chat_history.setPlainText(
                 self.chat_history.toPlainText() + "You: " + user_message + "\n")
             self.chat_history.moveCursor(QTextCursor.End)
