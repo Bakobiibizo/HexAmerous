@@ -5,4 +5,8 @@ keyboard
 PyQt5
 chromadb
 google-search-results
-faiss
+pathlib
+unstructured
+tiktoken
+pypdf
+playwright

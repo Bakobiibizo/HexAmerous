@@ -1,5 +1,11 @@
 .env
 .venv
-*/**.txt
+log/**
 __pycache__
-docs/**
+docs/*.txt
+docs/*.clip
+docs/index/**
+project/*.md
+.vscode
+
+venv
