@@ -28,6 +28,10 @@ def change_selected_model(model):
     return selected_model
 # call openai chat api
 
+def change_context_module(new_context):
+    context = context.append(new_context)
+    return context
+
 
 def chat_gpt(user_message):
 

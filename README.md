@@ -21,6 +21,15 @@ I have preloaded a prompt that instructs the model that it's a typescript and py
 
 Python 3.8 or higher
 
+## Environment variables
+
+Included is a file `called env-example.env`, change it to `.env` and add the corresponding API keys. This API key is stored locally and securely and the .gitignore is set to ignore that file when pushing to the repo, so you don't have to worry about your API keys being exposed. You can read more about how it works [here](https://pypi.org/project/python-dotenv/).
+OpenAi API key: https://platform.openai.com/account/api-keys
+SerpAPI key: https://serpapi.com/dashboard
+SerperAPI: https://serper.dev/api-key
+Google API key: https://console.cloud.google.com/apis/credentials
+Google CSE ID: https://cse.google.com/cse/all
+
 ## Installation
 
 Select `install.sh` or `install.bat` and run it from your terminal or command prompt. Note that on Unix-based systems, you may need to give the script execution permissions by running `chmod +x install.sh` before executing it with `./install.sh`.
@@ -71,6 +80,12 @@ Select the model you'd like the query. The default is gpt-3.5-turbo. Note you ne
 - April 28th: Added memsearch, addproject, addmem. Removed Hotkey. Few bug corrections.
 - April 29th: Refactored code base to be more readable, added documentation to code base, updated README, updated requirements, created install scripts and run scripts, QA'd both scripts, added error correction to stop file from constantly closing. Updated .gitignore.
 
+I believe I have gotten this to a good enough state for my purposes, which was to demo out the langchain system. I will be moving on to other projects now. If you have any questions or would like to contribute to the project please feel free to [reach out to me](mailto:richard@bakobi.com)
+
+## Author
+Bakobiibizo - richard@bakobi.com
+Bakobi Inc. - https://sites.google.com/bakobi.com/bakobi-creative-design/home
+
 ## License
 
-
+GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007

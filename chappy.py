@@ -22,7 +22,11 @@ from PyQt5.QtWidgets import (
     QMessageBox,
     QComboBox
 )
-from chatgpt import chat_gpt, change_selected_model
+from chatgpt import (
+    chat_gpt,
+    change_selected_model,
+    change_context_module
+)
 from embeddings import (
     create_embedding,
     base_retriever,
@@ -35,6 +39,7 @@ from langchain.utilities import GoogleSerperAPIWrapper, GoogleSearchAPIWrapper
 from langchain.agents import initialize_agent, load_tools
 from scrappy import scrape_site
 from embed_project import run_embed_project
+
 
 
 # -------------- Langchain Variables -------------- #
@@ -189,6 +194,7 @@ class ChatWidget(QWidget):
             self.run_command(user_message)
             self.user_input.clear()
         elif user_message.strip():
+            change_context_module(new_context=user_message)
             self.chat_history.setPlainText(
                 self.chat_history.toPlainText() + "You: " + user_message + "\n")
             self.chat_history.moveCursor(QTextCursor.End)
@@ -236,9 +242,7 @@ class ChatWidget(QWidget):
     def open_file_dialog(self):
         file_dialog = QFileDialog(self)
         file_dialog.setStyleSheet("background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold;")
-
         file_dialog.setFileMode(QFileDialog.ExistingFile)
-
         if file_dialog.exec_() == QFileDialog.Accepted:
             file_name = file_dialog.selectedFiles()[0]
             self.process_file(file_name)
