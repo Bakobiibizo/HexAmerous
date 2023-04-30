@@ -5,7 +5,8 @@ from PyQt5.QtGui import (
     QPixmap,
     QPalette,
     QBrush,
-    QMovie
+    QMovie,
+    QIcon
 )
 from PyQt5.QtWidgets import (
     QApplication,
@@ -31,12 +32,13 @@ from embeddings import (
     base_retriever,
     retriever,
     create_mass_embedding,
-    memory_search
+    memory_search,
+    change_vectorstore
 )
 from langchain import OpenAI
 from langchain.utilities import GoogleSerperAPIWrapper, GoogleSearchAPIWrapper
 from langchain.agents import initialize_agent, load_tools
-from scrappy import scrape_site
+from scrappy import scrape_site, scrape_site_map
 from embed_project import run_embed_project
 
 
@@ -49,11 +51,12 @@ agent = initialize_agent(tools, llm, agent="zero-shot-react-description", verbos
 
 
 # -------------- Custom Text Edit -------------- #
-
+print('CustomTextEdit 54')
 class CustomTextEdit(QTextEdit):
     def __init__(self, *args, **kwargs):
         super(CustomTextEdit, self).__init__(*args, **kwargs)
 
+    print('keyPressEvent 58')
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Return and event.modifiers() == Qt.ShiftModifier:
             self.insertPlainText("\n")
@@ -95,6 +98,7 @@ class ChatWidget(QWidget):
         self.loading_label = QLabel(self)
         self.loading_movie = QMovie("docs/gears.png")
         self.combo_box = QComboBox(self)
+        self.vectorstore_box = QComboBox(self)
 
         self.button_layout = QHBoxLayout()
 
@@ -121,12 +125,21 @@ class ChatWidget(QWidget):
         self.combo_box.addItem("gpt-4")
         self.combo_box.setStyleSheet(
             "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold;")
+        general = "docs/index"
+        self.vectorstore_box.addItem(general)
+        langchain = "docs/langchain"
+        self.vectorstore_box.addItem(langchain)
+        i18n = "docs/i18n"
+        self.vectorstore_box.addItem(i18n)
+        self.vectorstore_box.setStyleSheet(
+            "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold;")
 
     def create_widget_layouts(self):
         self.layout.addWidget(self.chat_history)
         self.layout.addWidget(self.user_input)
         self.layout.addWidget(self.loading_label)
         self.layout.addWidget(self.combo_box)
+        self.layout.addWidget(self.vectorstore_box)
 
         self.button_layout.addWidget(self.send_button)
         self.button_layout.addWidget(self.clear_button)
@@ -143,6 +156,8 @@ class ChatWidget(QWidget):
         self.upload_button.clicked.connect(self.open_file_dialog)
         self.combo_box.currentIndexChanged.connect(
             self.on_combobox_changed)
+        self.vectorstore_box.currentIndexChanged.connect(
+            self.on_vectorstore_changed)
 
     # Drop down menu change
     def on_combobox_changed(self, index):
@@ -152,6 +167,12 @@ class ChatWidget(QWidget):
             self.chat_history.toPlainText() + selected_option + "\n\n")
         self.chat_history.moveCursor(QTextCursor.End)
 
+    def on_vectorstore_changed(self, index):
+        selected_option = self.vectorstore_box.itemText(index)
+        change_vectorstore(selected_option)
+        self.chat_history.setPlainText(
+            self.chat_history.toPlainText() + selected_option + "\n\n")
+        self.chat_history.moveCursor(QTextCursor.End)
 
     # Create Chat History
     def create_chat_history(self):
@@ -194,13 +215,13 @@ class ChatWidget(QWidget):
             self.user_input.clear()
         elif user_message.strip():
             self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + "You: " + user_message + "\n")
+                self.chat_history.toPlainText() + "You: " + user_message + "\n\n")
             self.chat_history.moveCursor(QTextCursor.End)
             self.show_loading_animation()
             response = chat_gpt(user_message)
             self.hide_loading_animation()
             self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + "Assistant: " + response + "\n")
+                self.chat_history.toPlainText() + "Assistant: " + response + "\n\n")
             self.chat_history.moveCursor(QTextCursor.End)
 
     #/Open the large input text box
@@ -315,6 +336,16 @@ class ChatWidget(QWidget):
         except Exception as e:
             self.error_handling.handle_error(e)
 
+    def add_map_db(self, text, collection_name):
+        try:
+            url = text
+            results = scrape_site_map(url, collection_name)
+            self.chat_history.setPlainText(
+                self.chat_history.toPlainText() + str("Added to database: \n" + str(results) + "\n\n"))
+            self.chat_history.moveCursor(QTextCursor.End)
+        except Exception as e:
+            self.error_handling.handle_error(e)
+
     # Add a project to the database
     def add_project_to_db(self, text):
         try:
@@ -360,14 +391,20 @@ class ChatWidget(QWidget):
             if text.startswith("!addmem"):
                 text = text.removeprefix("!addmem ")
                 self.add_to_db(text)
+            if text.startswith("!addmap"):
+                text = text.removeprefix("!addmap ")
+                split_text = text.split(" ")
+                text = split_text[0]
+                collection_name = split_text[1]
+                print (text, collection_name)
+                self.add_map_db(text, collection_name)
             if text.startswith("!addproject "):
                 text = text.removeprefix("!addproject ")
                 self.add_project_to_db(text)
-            else:
-                self.chat_history.setPlainText(
-                    self.chat_history.toPlainText() + str("Command not found. Type !help for a list of commands \n\n"))
-            self.chat_history.moveCursor(QTextCursor.End)
         except Exception as e:
+            self.chat_history.setPlainText(
+                self.chat_history.toPlainText() + str("Command not found. Type !help for a list of commands \n\n"))
+            self.chat_history.moveCursor(QTextCursor.End)
             self.error_handling.handle_error(e)
     # Help info
     def display_help(self):
@@ -385,6 +422,7 @@ class ChatWidget(QWidget):
         !search - Search the internet for context on a prompt then ask the prompt.
         !searchmem - Search the memory for context on a prompt then ask the prompt.
         !addmem - Add a list of comma delineated website to the database.
+        !addmap - Find site map and add all the sites from it to the database.
         !embed - Upload a file to create embeddings.
         !mass_embed - Upload multiple files to create embeddings. Follow with a space then folder path.
         !addproject - Add a project to the database. Follow with a space then folder path. Note this sends your project file information to the OpenAI API.
@@ -451,7 +489,7 @@ class MainWindow(QWidget):
         super().__init__(parent)
         self.background_image = QPixmap("docs/meg.jpg")
         self.setWindowTitle("Chappy - Coding Assistant")
-        self.resize(600, 600)
+        self.resize(700, 700)
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
         self.scroll_area = ScrollArea()
@@ -528,6 +566,9 @@ class ErrorHandling():
 def main():
     app = QApplication(sys.argv)
     main_window = MainWindow()
+    icon = QIcon("docs/favicon.ico")
+    app.setWindowIcon(QIcon('docs/favicon.ico'))
+    app.setWindowIcon(icon)
     main_window.show()
     sys.exit(app.exec_())
 

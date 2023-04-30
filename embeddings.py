@@ -21,6 +21,18 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 embeddings = OpenAIEmbeddings()
 llm = OpenAI(temperature=0)
 text_splitter = CharacterTextSplitter(chunk_size=300, chunk_overlap=25)
+vectorstore ='docs/index'
+new_vectorstore = ''
+
+def change_vectorstore(optional_arg="new_vectorstore"):
+    global vectorstore
+    global new_vectorstore
+    if not new_vectorstore:
+        return vectorstore
+    else:
+        vectorstore = new_vectorstore
+    print(vectorstore)
+    return vectorstore
 
 #Check if the files are valid
 def check_file(file_path):
@@ -60,14 +72,16 @@ def create_mass_embedding(folder_path):
 def create_embedding(file_path):
     data = check_file(file_path)
     base_formatter(data)
-    vectordb = Chroma.from_documents(data, embeddings, persist_directory='docs/')
-    vectordb.persist()
+    vectorstore = change_vectorstore()
+    chromadb = Chroma.from_documents(data, embeddings, persist_directory=vectorstore)
+    chromadb.persist()
     return "Embedding created"
 
 #Load vectorstore database
 def load_embedding():
-    vectordb = Chroma(persist_directory='docs/', embedding_function=embeddings)
-    return vectordb
+    vectorstore = change_vectorstore()
+    chromadb = Chroma(persist_directory=vectorstore, embedding_function=embeddings)
+    return chromadb
 
 #Search for uncompressed docs in database
 def base_retriever(user_query):
