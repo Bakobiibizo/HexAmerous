@@ -1,9 +1,13 @@
-from langchain.document_loaders import PlaywrightURLLoader
+from langchain.document_loaders import PlaywrightURLLoader, SitemapLoader
 from langchain.text_splitter import TextSplitter
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
 from embeddings import create_embedding, load_embedding, base_formatter
 from langchain.text_splitter import TokenTextSplitter
+from langchain.document_loaders.sitemap import SitemapLoader
+import nest_asyncio
+
+
 
 #Scrape a website
 def scrape_site(url):
@@ -25,7 +29,27 @@ def scrape_site(url):
     print(texts)
 
     #Store in database
-    vectordb = Chroma.from_texts(texts, embeddings, persist_directory='docs/index')
-    vectordb.persist()
+    chromadb = Chroma.from_texts(texts, embeddings, persist_directory='docs/index')
+    chromadb.persist()
 
-    return vectordb
+    return chromadb
+
+
+def scrape_site_map(site_path, collection_name):
+
+    nest_asyncio.apply()
+
+    sitemap_loader = SitemapLoader(web_path=site_path)
+
+    docs = sitemap_loader.load()
+    data = docs[0].page_content
+
+    #Text splitter
+    texts = text_splitter.split_text(data)
+    print(texts)
+
+    #Store in database
+    chromadb = Chroma.from_documents(texts, embeddings, persist_directory='docs/index',collection_name=collection_name)
+    chromadb.persist()
+
+    return chromadb
