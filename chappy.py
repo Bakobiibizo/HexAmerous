@@ -59,11 +59,11 @@ class CustomTextEdit(QTextEdit):
     print('keyPressEvent 58')
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Return and event.modifiers() == Qt.ShiftModifier:
-            self.insertPlainText("\n")
+            self.insertPlainText("\n")#balhablah
         elif event.key() == Qt.Key_Return:
-            self.parent().send_message()
+            self.parent().send_message('')
         elif event.key() == Qt.Key_Enter:
-            self.parent().send_message()
+            self.parent().send_message('')
         else:
             super().keyPressEvent(event)
 
@@ -206,23 +206,23 @@ class ChatWidget(QWidget):
             self.user_input.setFixedHeight(round(height))
 
     # Send a message
-    def send_message(self, user_message=None):
-        if user_message is None:
-            user_message = self.user_input.toPlainText()
+    def send_message(self, user_message):
+        user_message = self.user_input.toPlainText()
         self.user_input.clear()
-        if user_message.startswith("!"):
-            self.run_command(user_message)
-            self.user_input.clear()
-        elif user_message.strip():
-            self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + "You: " + user_message + "\n\n")
-            self.chat_history.moveCursor(QTextCursor.End)
-            self.show_loading_animation()
-            response = chat_gpt(user_message)
-            self.hide_loading_animation()
-            self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + "Assistant: " + response + "\n\n")
-            self.chat_history.moveCursor(QTextCursor.End)
+        if user_message is not None:
+            if user_message.startswith("!"):
+                self.run_command(user_message)
+                self.user_input.clear()
+            elif user_message.strip():
+                self.chat_history.setPlainText(
+                    self.chat_history.toPlainText() + "You: " + user_message + "\n\n")
+                self.chat_history.moveCursor(QTextCursor.End)
+                self.show_loading_animation()
+                response = chat_gpt(user_message)
+                self.hide_loading_animation()
+                self.chat_history.setPlainText(
+                    self.chat_history.toPlainText() + "Assistant: " + response + "\n\n")
+                self.chat_history.moveCursor(QTextCursor.End)
 
     #/Open the large input text box
     def open_large_text_input(self):
@@ -406,6 +406,9 @@ class ChatWidget(QWidget):
                     self.chat_history.toPlainText() + str("Command not found. Type !help for a list of commands \n\n"))
             self.chat_history.moveCursor(QTextCursor.End)
             self.error_handling.handle_error(e)
+        except Exception as e:
+                self.error_handling.handle_error(e)
+
     # Help info
     def display_help(self):
         self.chat_history.setPlainText(
