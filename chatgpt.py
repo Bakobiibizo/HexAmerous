@@ -75,6 +75,7 @@ def chat_gpt(user_message):
 
 print('loading search_gpt')
 def search_gpt(user_query, prompt):
+    global selected_model
 
     result = openai.ChatCompletion.create(
         model=selected_model,

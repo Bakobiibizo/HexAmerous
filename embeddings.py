@@ -49,7 +49,7 @@ def check_file(file_path):
         return loader.load()
         print("md file loaded")
     else:
-        return Exception('Invalid file type')
+       return Exception('Invalid file type')
 
 #Format text
 def base_formatter(docs):
@@ -72,9 +72,8 @@ def create_mass_embedding(folder_path):
 def create_embedding(file_path):
     data = check_file(file_path)
     base_formatter(data)
-    vectorstore = change_vectorstore()
-    chromadb = Chroma.from_documents(data, embeddings, persist_directory=vectorstore)
-    chromadb.persist()
+    vectordb = Chroma.from_documents(data, embeddings, persist_directory='docs/')
+    vectordb.persist()
     return "Embedding created"
 
 #Load vectorstore database

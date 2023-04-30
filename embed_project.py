@@ -41,4 +41,10 @@ def run_embed_project(file_path):
         print("Creating embedding...")
         #create_embedding(output_file)
 
-    print("All files converted to Markdown. Generating embeddings")
+    if count == len(project_files):
+        print("All files converted to Markdown. Generating embeddings")
+
+        return result
+    else:
+        print("Error converting files to Markdown")
+        return Exception("Error converting files to Markdown")

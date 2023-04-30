@@ -401,9 +401,9 @@ class ChatWidget(QWidget):
             if text.startswith("!addproject "):
                 text = text.removeprefix("!addproject ")
                 self.add_project_to_db(text)
-        except Exception as e:
-            self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str("Command not found. Type !help for a list of commands \n\n"))
+            else:
+                self.chat_history.setPlainText(
+                    self.chat_history.toPlainText() + str("Command not found. Type !help for a list of commands \n\n"))
             self.chat_history.moveCursor(QTextCursor.End)
             self.error_handling.handle_error(e)
     # Help info
