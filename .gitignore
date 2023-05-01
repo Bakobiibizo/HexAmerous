@@ -1,6 +1,6 @@
 .env
 .venv
-log/**
+log/development log**
 __pycache__
 docs/*.txt
 docs/*.clip

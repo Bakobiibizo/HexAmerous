@@ -1,0 +1,94 @@
+User: what is langchain?
+Assistant: Langchain appears to be a Python package or library that includes modules for building language models and agents, as well as tools for working with natural language processing. It looks like the package includes a base language model, base agent classes, and a prompt template. There is also a script for running the langchain server locally using docker-compose.
+
+User: how do global variables work in python?
+Assistant: In Python, a global variable is a variable that is defined outside of the scope of a function and can be accessed by any function within the same module. To define a global variable, you simply need to assign a value to a variable outside of any function or class. 
+
+For example, here's how you could define a global variable in Python: 
+
+```
+# Define a global variable
+my_global_var = "Hello, world!"
+
+# Define a function that accesses the global variable
+def print_global_var():
+    print(my_global_var)
+
+# Call the function to print the global variable's value
+print_global_var()
+```
+
+In this example, `my_global_var` is defined outside of any function or class, making it a global variable. The `print_global_var()` function is then defined to access the global variable and print its value. Finally, the function is called to print the global variable's value.
+
+Note that it's generally not considered good practice to use global variables excessively as they can make code more difficult to read and maintain by creating side effects and potential name collisions.
+
+User: do global variables have the scope of the script they are in or in all scripts running in the program?
+Assistant: Global variables have scope within the module they are defined in, which means they can be accessed by any function within the same module. However, they do not have scope across multiple modules or scripts, unless they are imported and used in those modules or scripts. So to answer your question, global variables have scope within the script or module they are defined in, not across all scripts running in the program.
+
+User: and in your example does print have the same function as return?
+Assistant: No, `print` and `return` are not the same thing in Python. 
+
+`print` is a built-in Python function that outputs its arguments to the console or terminal. It does not affect the internal state of a program or function.
+
+On the other hand, `return` is a keyword in Python that specifies the value that a function should return to its caller. When a function executes a `return` statement, it immediately exits and returns the specified value (if provided) to the caller. 
+
+So in the example I provided, the `print_global_var()` function prints the value of the global variable, but doesn't return anything. If you wanted to return the value of the global variable instead of printing it, you would need to modify the function to include a `return` statement.
+
+User: so if i wanted to call the variable value in another part of the application id put return embeddings and call it? or id just call embeddings?
+Assistant: It depends on how the variable `embeddings` is defined and where it is defined in your application. 
+
+If `embeddings` is a global variable defined in a module, you can access it from any other module by importing the module in which it is defined and using the dot notation to access the variable.
+
+For example, let's say `embeddings` is defined in a module called `my_module`:
+
+```
+# my_module.py
+embeddings = [1, 2, 3, 4, 5]
+```
+
+Then in another module `my_other_module`, you can import `my_module` and access `embeddings` like this:
+
+```
+# my_other_module.py
+import my_module
+
+# Access the embeddings variable
+print(my_module.embeddings)
+```
+
+Alternatively, if `embeddings` is a local variable defined in a function, you can use the `return` statement to return the value of `embeddings` to the calling code.
+
+For example:
+
+```
+def get_embeddings():
+    embeddings = [1, 2, 3, 4, 5]
+    return embeddings
+```
+
+In this case, you can call the `get_embeddings` function from another part of your application to retrieve the value of `embeddings`:
+
+```
+embeddings = get_embeddings()
+print(embeddings)
+```
+
+User: def create_embedding(file_path, optional_arg="metadata"):
+    data =check_file(file_path)
+    metadata = optional_arg
+    if metadata:
+        meta = metadata
+    else:
+        meta = 'file_path'
+    vectordb = Chroma.from_documents(documents=data, metadata=meta, embeddings=embeddings, persist_directory='docs/')
+    vectordb.persist()
+    return "Embedding created"
+Assistant: This function `create_embedding` takes in a file_path and an optional argument `optional_arg`. It passes the file path to a `check_file` function to retrieve the data, and sets the `metadata` variable to the value of the `optional_arg` parameter if it is not empty, otherwise it sets it to the string `'file_path'`. 
+
+Then it creates a `Chroma` object using the `data` and `metadata` variables to store the embeddings, and saves it in a directory specified by `persist_directory`. Finally, it returns the message `"Embedding created"`. 
+
+However, the variable `embeddings` used when creating the `Chroma` object is not defined in this function or anywhere in the context of our conversation so I can't tell you what it is.
+
+User: sorry i didnt mean to send that I wasnt finished, what i was going to add was that embeddings was defined in the global space would the chroma object still see the definition of the embeding?
+Assistant: Yes, if `embeddings` is defined in the global space or module, it can be accessed by any function within that module, including the `create_embedding` function. So the `Chroma` object created within the `create_embedding` function would have access to `embeddings` as long as it is defined within the same module.
+

@@ -1,4 +1,0 @@
-```python
-"""CSV toolkit."""
-
-```

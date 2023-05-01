@@ -12,3 +12,4 @@ pypdf
 playwright
 nest_asyncio
 bs4
+logging
