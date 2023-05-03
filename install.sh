@@ -25,6 +25,6 @@ echo "installing playwright"
 playwright install
 echo "Done."
 
-# Run your Python script (chappy.py)
-echo "Running your Python script (chappy.py)"
-python chappy.py
+# Run your Python script (HexAmerous.py)
+echo "Running your Python script (HexAmerous.py)"
+python HexAmerous.py

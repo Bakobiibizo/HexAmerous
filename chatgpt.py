@@ -19,7 +19,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 # Initialize variables
 
 
-print("Welcome to Chappy your coding assistant")
+print("Welcome to HexAmerous your coding assistant")
 
 selected_model = "gpt-3.5-turbo"
 
@@ -60,8 +60,7 @@ def chat_gpt(user_message):
 
     # Create prompt
     prompt = [
-        {"role": "system", "content": "This is the context of the conversation you are having with the user: \n{context}".format(
-            context=context_string)},
+        {"role": "system", "content": "This is the context of the conversation you are having with the user: " + str(context)},
         {"role": "user", "content": user_message},
         {"role": "assistant", "content": ""}
     ]
@@ -123,6 +122,6 @@ def search_gpt(user_query, prompt):
     # Return the AI's response
 
 
-    print("Loaded chatgpy.py")
+    print("Loaded HexAmerous.py")
 
     return response

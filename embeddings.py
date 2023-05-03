@@ -49,17 +49,28 @@ def check_file(file_path):
         loader = UnstructuredMarkdownLoader(file_path)
         logger.info(loader.load())
         return loader.load()
+    else:
+        print("File type not supported")
+        return "File type not supported"
 
 logger.info('loading create_mass_embedding function')
 #Loop files in a folder path for embedding
 def create_mass_embedding(folder_path):
     logger.info('creating mass embedding')
+    if not os.path.exists(folder_path):
+        folder_path = 'docs/empty'
+        result = "Folder does not exist"
+        return result
     for filename in os.listdir(folder_path):
         file_path = os.path.join(folder_path, filename)
         result = create_embedding(file_path, filename)
         print(f"Embedding created for {filename}: {result}")
+        with open('docs/index.txt', 'a') as f:
+            f.write(f"{os.path.join(folder_path, file_path)}\n")
+        logger.info(f"Embedding created for {filename}: {result}")
 
-    return "Embeddings created"
+    return result
+
 
 logger.info('create_embedding function')
 #Embed a single embedding
