@@ -44,7 +44,7 @@ from scrappy import scrape_site, scrape_site_map
 from embed_project import run_embed_project
 from ye_logger_of_yor import get_logger
 
-logger = get_logger('Init log')
+logger = get_logger()
 
 #Global Variables
 logger.info('loading langchain variables')

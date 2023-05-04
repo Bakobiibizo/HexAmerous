@@ -7,8 +7,11 @@ from dotenv import load_dotenv
 from langchain.utilities import GoogleSerperAPIWrapper, GoogleSearchAPIWrapper
 from langchain.agents import initialize_agent, load_tools
 from langchain.llms import OpenAI
+from ye_logger_of_yor import get_logger
 
-print("loading chatgpt.py")
+logger = get_logger()
+
+print("loading HexAmerous")
 
 # Load environment variables
 load_dotenv()
@@ -24,7 +27,7 @@ print("Welcome to HexAmerous your coding assistant")
 selected_model = "gpt-3.5-turbo"
 
 
-print('change_selected_model')
+logger.info('change_selected_model')
 def change_selected_model(model):
     selected_model = model
     return selected_model
@@ -51,12 +54,11 @@ context = [{
         "content": "I am glad to hear that. What can I help you with today?"
         },
 ]
-print('loading chat_gpt')
+logger.info('loading chat_gpt')
 def chat_gpt(user_message):
     global context
-    global selected_model
-    context_string = context
-    print(context_string)
+    context_string = str(context)
+    logger.info(context_string)
 
     # Create prompt
     prompt = [
@@ -73,7 +75,7 @@ def chat_gpt(user_message):
 
     # Read the current value of the counter from a file
     with open("./log/log_count.txt", "r") as f:
-        log_count = int(f.read().strip())
+        log_count = str(f.read().strip())
     # get response from OpenAI
 
     response = result['choices'][0]['message']['content']
@@ -87,9 +89,12 @@ def chat_gpt(user_message):
     return response
 
 
-print('loading search_gpt')
+logger.info('loading search_gpt')
 def search_gpt(user_query, prompt):
     global selected_model
+    global context
+
+    prompt_string = str(context + prompt)
 
     result = openai.ChatCompletion.create(
         model=selected_model,
@@ -97,7 +102,7 @@ def search_gpt(user_query, prompt):
     )
     # Get response from OpenAI
     response = result['choices'][0]['message']['content']
-
+    logger.info(result)
     # Read the current value of the counter from a file
     with open("./log/log_count.txt", "r") as f:
         log_count = int(f.read().strip())
@@ -122,6 +127,6 @@ def search_gpt(user_query, prompt):
     # Return the AI's response
 
 
-    print("Loaded HexAmerous.py")
+    logger.info("Loaded HexAmerous.py")
 
     return response

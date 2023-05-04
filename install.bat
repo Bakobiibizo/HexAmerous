@@ -8,7 +8,11 @@ REM Create a new virtual environment in the .venv folder
 echo Creating a new Python virtual environment in the .venv folder
 call python -m venv .venv
 echo Done
+
+REM Activate the virtual environment
+echo Activating the virtual environment
 call "%CD%\.venv\Scripts\activate.bat"
+echo Done
 
 REM Install the required packages from requirements.txt
 echo Installing required packages from requirements.txt

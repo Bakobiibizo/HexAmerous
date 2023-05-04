@@ -1,0 +1,1687 @@
+User: testing
+Assistant: I'm sorry, I'm not sure what you mean by "testing". Can you please provide more context or let me know how I can assist you?
+
+User: background 2
+Assistant: I'm sorry but I'm not sure what you mean by "background 2". Could you please provide me with more context or let me know how I can assist you?
+
+User: testing
+Assistant: I'm sorry, I'm not sure what you mean by "testing". Can you please provide me with more information or a specific question that you would like me to help with?
+
+User: welcome
+Assistant: Thank you! What can I help you with today?
+
+User: hi
+Assistant: Hello there! How can I assist you today?
+
+file saved
+
+User: mass_embed docs/embeddings/pdfs
+Assistant: I'm sorry, I don't understand what you mean by "mass_embed docs/embeddings/pdfs". Can you please provide more context or clarify your request?
+
+User: #I keep getting encoding errors, can you make this script filter out characters that dont encode with utf-8 or skip the errors? 
+import os
+import glob
+from embeddings import create_embedding
+
+
+def run_embed_project(file_path):
+    project_folder = file_path
+    output_folder = 'embeddings'
+    # Get all .py files in the project folder and its subdirectories
+    project_files = glob.glob(os.path.join(project_folder, '**/*.py'), recursive=True)
+
+
+    # Ensure the output folder exists
+    os.makedirs(output_folder, exist_ok=True)
+    print("Converting files to Markdown")
+
+
+
+    def convert_files(project_files):
+        count = 0
+        # Convert each .py file to a Markdown
+        for python_file in project_files:
+            count += 1
+
+
+            # Read the file content
+            with open(python_file, 'r', encoding='UTF-8', errors='ignore') as f:
+                file_content = f.read()
+
+
+            # Create a Markdown version of the code with syntax highlighting
+            code_md = f"```python\n{file_content}\n```\n"
+
+
+            # Set output file path
+            output_file = os.path.join(output_folder, os.path.relpath(python_file, project_folder))
+            output_file = os.path.splitext(output_file)[0] + '.md'
+
+
+            # Ensure the directory for the output file exists
+            os.makedirs(os.path.dirname(output_file), exist_ok=True)
+
+
+            # Write the Markdown file
+            with open(output_file, 'w') as f:
+                f.write(code_md)
+
+
+            # Print progress to the console
+            print(f"File {count}/{len(project_files)} saved: {os.path.relpath(python_file, project_folder)}")
+
+
+            # Create the embedding
+            print("Creating embedding...")
+            create_embedding(output_file)
+    result = convert_files(project_files)
+    print("Done!")
+    return result
+Assistant: Sure, we can modify the script to handle encoding errors. One way to do this is to open the files with the `'rb'` mode instead of `'r'`, which treats the file as a binary file and allows us to skip the problematic characters with the `errors='ignore'` option. Here's the modified script:
+
+```
+import os
+import glob
+from embeddings import create_embedding
+
+
+def run_embed_project(file_path):
+    project_folder = file_path
+    output_folder = 'embeddings'
+
+    # Get all .py files in the project folder and its subdirectories
+    project_files = glob.glob(os.path.join(project_folder, '**/*.py'), recursive=True)
+
+    # Ensure the output folder exists
+    os.makedirs(output_folder, exist_ok=True)
+    print("Converting files to Markdown")
+
+    def convert_files(project_files):
+        count = 0
+        # Convert each .py file to a Markdown
+        for python_file in project_files:
+            count += 1
+
+            # Read the file content
+            with open(python_file, 'rb') as f:
+                file_content = f.read().decode('utf-8', errors='ignore')
+
+            # Create a Markdown version of the code with syntax highlighting
+            code_md = f"```python\n{file_content}\n```\n"
+
+            # Set output file path
+            output_file = os.path.join(output_folder, os.path.relpath(python_file, project_folder))
+            output_file = os.path.splitext(output_file)[0] + '.md'
+
+            # Ensure the directory for the output file exists
+            os.makedirs(os.path.dirname(output_file), exist_ok=True)
+
+            # Write the Markdown file
+            with open(output_file, 'w') as f:
+                f.write(code_md)
+
+            # Print progress to the console
+            print(f"File {count}/{len(project_files)} saved: {os.path.relpath(python_file, project_folder)}")
+
+            # Create the embedding
+            print("Creating embedding...")
+            create_embedding(output_file)
+
+    result = convert_files(project_files)
+    print("Done!")
+    return result
+```
+
+This code should successfully handle encoding errors and skip the problematic characters.
+
+User:   File "C:\Python310\lib\codecs.py", line 322, in decode
+    (result, consumed) = self._buffer_decode(data, self.errors, final)
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0x92 in position 1194: invalid start byte
+Assistant: I'm sorry you're experiencing an error. Can you please provide more context on when this error occurred and what you were trying to do at that moment?
+
+User: from langchain.document_loaders import(
+    TextLoader,
+    PyPDFLoader,
+    UnstructuredMarkdownLoader,
+    UnstructuredFileLoader,
+    PDFMinerLoader
+)
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.llms import OpenAI
+from langchain.vectorstores import Chroma
+from langchain.retrievers import ContextualCompressionRetriever
+from langchain.retrievers.document_compressors import LLMChainExtractor
+from langchain.text_splitter import CharacterTextSplitter
+import nltk
+import openai
+from dotenv import load_dotenv
+import os
+from chatgpt import search_gpt
+from ye_logger_of_yor import get_logger
+
+
+logger = get_logger()
+
+
+load_dotenv()
+
+
+logger.info('Loading global variables')
+#Load Langchain variables
+openai.api_key = os.getenv("OPENAI_API_KEY")
+embeddings = OpenAIEmbeddings()
+llm = OpenAI(temperature=0)
+text_splitter = CharacterTextSplitter(chunk_size=300, chunk_overlap=25)
+vectorstore = 'docs/'
+
+
+logger.info('base_formatter function')
+def base_formatter(docs):
+    logger.info('formatting')
+    print(f"\n{'-' * 100}\n".join([f"Document {i+1}:\n\n" + d.page_content for i, d in enumerate(docs)]))
+    return (f"\n{'-' * 100}\n".join([f"Document {i+1}:\n\n" + d.page_content for i, d in enumerate(docs)]))
+
+
+logger.info('loading check_file function 43')
+#Check if the files are valid
+def check_file(file_path):
+    logger.info('checking file')
+    if file_path.endswith('.txt'):
+        loader = TextLoader(file_path)
+        if loader:
+            print(loader.load())
+            return loader.load()
+    if file_path.endswith('.pdf'):
+        loader = UnstructuredFileLoader(file_path, mode='elements', strategy='hi_res', encoding=('utf-32', 'ignore'))
+        if loader:
+            print("pdf file loaded")
+            return loader.load()
+    if file_path.endswith('.md'):
+        loader = UnstructuredFileLoader(file_path, mode='elements', strategy='hi_res', encoding=('utf-32', 'ignore'))
+        if loader:
+            logger.info(loader.load())
+            return loader.load()
+    else:
+        print("File type not supported")
+        return "File type not supported"
+
+
+logger.info('loading create_mass_embedding function')
+#Loop files in a folder path for embedding
+def create_mass_embedding(folder_path):
+    logger.info('creating mass embedding')
+    if not os.path.exists(folder_path):
+        folder_path = 'docs/empty'
+        result = "Folder does not exist"
+        return result
+    for filename in os.listdir(folder_path):
+        file_path = os.path.join(folder_path, filename)
+        result = create_embedding(file_path, filename)
+        if result:
+            print(f"Embedding created for {filename}: {result}")
+            with open('docs/index.txt', 'a') as f:
+                f.write(f"{os.path.join(folder_path, file_path)}\n")
+            logger.info(f"Embedding created for {filename}: {result}")
+            return result
+        else:
+            logger.info(f"Embedding failed for {filename}")
+            return(f"Embedding failed for {filename}")
+
+
+
+logger.info('create_embedding function')
+#Embed a single embedding
+def create_embedding(file_path, optional_arg="metadata"):
+    logger.info('creating embedding')
+    data =check_file(file_path)
+    if data:
+        print("Data loaded")
+        metadata = optional_arg
+        if metadata:
+            meta = metadata
+        else:
+            meta = 'file_path'
+        vectordb = Chroma.from_documents(documents=data, metadata=meta, embedding=embeddings, persist_directory='docs/')
+        vectordb.persist()
+        return "Embedding created"
+    else:
+        return "Embedding failed"
+
+
+#Load vectorstore database
+logger.info('load_embedding function')
+def load_embedding():
+    logger.info('loading embedding')
+    chromadb = Chroma(persist_directory=vectorstore, embedding_function=embeddings)
+    return chromadb
+
+
+logger.info('base_retriever function')
+#Search for uncompressed docs in database
+def base_retriever(user_query):
+    logger.info('running base_retriever')
+    retriever = load_embedding().as_retriever(llm=llm)
+    docs = retriever.get_relevant_documents(user_query)
+    return docs
+
+
+logger.info('retriever function')
+#Search for compressed docs in database
+def retriever(user_query):
+    logger.info('running retriever')
+    compressor = LLMChainExtractor.from_llm(llm)
+    retriever = load_embedding().as_retriever(llm=llm)
+    cc_retriever = ContextualCompressionRetriever(base_compressor=compressor, base_retriever=retriever)
+    compressed_docs = cc_retriever.get_relevant_documents(user_query)
+    docs = compressed_docs
+    return docs
+
+
+logger.info('load_vector_store_docs function')
+def load_vector_store_docs():
+    logger.info('running load_vector_store_docs')
+    vectorstore = 'docs/index'
+    chromadb = Chroma(persist_directory=vectorstore, embedding_function=embeddings)
+    docs = chromadb.documents
+    return docs
+
+
+logger.info('memory_search function')
+#Query the database and pass the info to chatgpt for response
+def memory_search(user_query):
+    logger.info('running memory_search')
+    data = base_retriever(user_query)
+    prompt = [{
+        "role":"system",
+        "content":'''
+        "The user has asked this question:
+
+
+        {user_query}
+
+
+        You have looked up the relevant information from your data store and it is:
+
+
+        {data}
+
+
+        Please answer the user's question using the data as relevant context."
+        '''.format(user_query=user_query, data=data)
+    }]
+
+
+    result = search_gpt(user_query, prompt)
+
+
+    return result
+Assistant: Hello! How can I assist you today?
+
+User: from langchain.document_loaders import(
+    TextLoader,
+    PyPDFLoader,
+    UnstructuredMarkdownLoader,
+    UnstructuredFileLoader,
+    PDFMinerLoader
+)
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.llms import OpenAI
+from langchain.vectorstores import Chroma
+from langchain.retrievers import ContextualCompressionRetriever
+from langchain.retrievers.document_compressors import LLMChainExtractor
+from langchain.text_splitter import CharacterTextSplitter
+import nltk
+import openai
+from dotenv import load_dotenv
+import os
+from chatgpt import search_gpt
+from ye_logger_of_yor import get_logger
+
+
+logger = get_logger()
+
+
+load_dotenv()
+
+
+logger.info('Loading global variables')
+#Load Langchain variables
+openai.api_key = os.getenv("OPENAI_API_KEY")
+embeddings = OpenAIEmbeddings()
+llm = OpenAI(temperature=0)
+text_splitter = CharacterTextSplitter(chunk_size=300, chunk_overlap=25)
+vectorstore = 'docs/'
+
+
+logger.info('base_formatter function')
+def base_formatter(docs):
+    logger.info('formatting')
+    print(f"\n{'-' * 100}\n".join([f"Document {i+1}:\n\n" + d.page_content for i, d in enumerate(docs)]))
+    return (f"\n{'-' * 100}\n".join([f"Document {i+1}:\n\n" + d.page_content for i, d in enumerate(docs)]))
+
+
+logger.info('loading check_file function 43')
+#Check if the files are valid
+def check_file(file_path):
+    logger.info('checking file')
+    if file_path.endswith('.txt'):
+        loader = TextLoader(file_path)
+        if loader:
+            print(loader.load())
+            return loader.load()
+    if file_path.endswith('.pdf'):
+        loader = UnstructuredFileLoader(file_path, mode='elements', strategy='hi_res', encoding=('utf-32', 'ignore'))
+        if loader:
+            print("pdf file loaded")
+            return loader.load()
+    if file_path.endswith('.md'):
+        loader = UnstructuredFileLoader(file_path, mode='elements', strategy='hi_res', encoding=('utf-32', 'ignore'))
+        if loader:
+            logger.info(loader.load())
+            return loader.load()
+    else:
+        print("File type not supported")
+        return "File type not supported"
+
+
+logger.info('loading create_mass_embedding function')
+#Loop files in a folder path for embedding
+def create_mass_embedding(folder_path):
+    logger.info('creating mass embedding')
+    if not os.path.exists(folder_path):
+        folder_path = 'docs/empty'
+        result = "Folder does not exist"
+        return result
+    for filename in os.listdir(folder_path):
+        file_path = os.path.join(folder_path, filename)
+        result = create_embedding(file_path, filename)
+        if result:
+            print(f"Embedding created for {filename}: {result}")
+            with open('docs/index.txt', 'a') as f:
+                f.write(f"{os.path.join(folder_path, file_path)}\n")
+            logger.info(f"Embedding created for {filename}: {result}")
+            return result
+        else:
+            logger.info(f"Embedding failed for {filename}")
+            return(f"Embedding failed for {filename}")
+
+
+
+logger.info('create_embedding function')
+#Embed a single embedding
+def create_embedding(file_path, optional_arg="metadata"):
+    logger.info('creating embedding')
+    data =check_file(file_path)
+    if data:
+        print("Data loaded")
+        metadata = optional_arg
+        if metadata:
+            meta = metadata
+        else:
+            meta = 'file_path'
+        vectordb = Chroma.from_documents(documents=data, metadata=meta, embedding=embeddings, persist_directory='docs/')
+        vectordb.persist()
+        return "Embedding created"
+    else:
+        return "Embedding failed"
+
+
+#Load vectorstore database
+logger.info('load_embedding function')
+def load_embedding():
+    logger.info('loading embedding')
+    chromadb = Chroma(persist_directory=vectorstore, embedding_function=embeddings)
+    return chromadb
+
+
+logger.info('base_retriever function')
+#Search for uncompressed docs in database
+def base_retriever(user_query):
+    logger.info('running base_retriever')
+    retriever = load_embedding().as_retriever(llm=llm)
+    docs = retriever.get_relevant_documents(user_query)
+    return docs
+
+
+logger.info('retriever function')
+#Search for compressed docs in database
+def retriever(user_query):
+    logger.info('running retriever')
+    compressor = LLMChainExtractor.from_llm(llm)
+    retriever = load_embedding().as_retriever(llm=llm)
+    cc_retriever = ContextualCompressionRetriever(base_compressor=compressor, base_retriever=retriever)
+    compressed_docs = cc_retriever.get_relevant_documents(user_query)
+    docs = compressed_docs
+    return docs
+
+
+logger.info('load_vector_store_docs function')
+def load_vector_store_docs():
+    logger.info('running load_vector_store_docs')
+    vectorstore = 'docs/index'
+    chromadb = Chroma(persist_directory=vectorstore, embedding_function=embeddings)
+    docs = chromadb.documents
+    return docs
+
+
+logger.info('memory_search function')
+#Query the database and pass the info to chatgpt for response
+def memory_search(user_query):
+    logger.info('running memory_search')
+    data = base_retriever(user_query)
+    prompt = [{
+        "role":"system",
+        "content":'''
+        "The user has asked this question:
+
+
+        {user_query}
+
+
+        You have looked up the relevant information from your data store and it is:
+
+
+        {data}
+
+
+        Please answer the user's question using the data as relevant context."
+        '''.format(user_query=user_query, data=data)
+    }]
+
+
+    result = search_gpt(user_query, prompt)
+
+
+    return result
+Assistant: Hello! How can I assist you today?
+
+User: # flake8: noqa
+import time
+from sys import platform
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Dict,
+    Iterable,
+    List,
+    Optional,
+    Set,
+    Tuple,
+    TypedDict,
+    Union,
+)
+
+
+if TYPE_CHECKING:
+    from playwright.sync_api import Browser, CDPSession, Page, sync_playwright
+
+
+black_listed_elements: Set[str] = {
+    "html",
+    "head",
+    "title",
+    "meta",
+    "iframe",
+    "body",
+    "script",
+    "style",
+    "path",
+    "svg",
+    "br",
+    "::marker",
+}
+
+
+
+class ElementInViewPort(TypedDict):
+    node_index: str
+    backend_node_id: int
+    node_name: Optional[str]
+    node_value: Optional[str]
+    node_meta: List[str]
+    is_clickable: bool
+    origin_x: int
+    origin_y: int
+    center_x: int
+    center_y: int
+
+
+
+class Crawler:
+    def __init__(self) -> None:
+        try:
+            from playwright.sync_api import sync_playwright
+        except ImportError:
+            raise ValueError(
+                "Could not import playwright python package. "
+                "Please install it with `pip install playwright`."
+            )
+        self.browser: Browser = (
+            sync_playwright().start().chromium.launch(headless=False)
+        )
+        self.page: Page = self.browser.new_page()
+        self.page.set_viewport_size({"width": 1280, "height": 1080})
+        self.page_element_buffer: Dict[int, ElementInViewPort]
+        self.client: CDPSession
+
+
+    def go_to_page(self, url: str) -> None:
+        self.page.goto(url=url if "://" in url else "http://" + url)
+        self.client = self.page.context.new_cdp_session(self.page)
+        self.page_element_buffer = {}
+
+
+    def scroll(self, direction: str) -> None:
+        if direction == "up":
+            self.page.evaluate(
+                "(document.scrollingElement || document.body).scrollTop = (document.scrollingElement || document.body).scrollTop - window.innerHeight;"
+            )
+        elif direction == "down":
+            self.page.evaluate(
+                "(document.scrollingElement || document.body).scrollTop = (document.scrollingElement || document.body).scrollTop + window.innerHeight;"
+            )
+
+
+    def click(self, id: Union[str, int]) -> None:
+        # Inject javascript into the page which removes the target= attribute from all links
+        js = """
+        links = document.getElementsByTagName("a");
+        for (var i = 0; i < links.length; i++) {
+            links[i].removeAttribute("target");
+        }
+        """
+        self.page.evaluate(js)
+
+
+        element = self.page_element_buffer.get(int(id))
+        if element:
+            x: float = element["center_x"]
+            y: float = element["center_y"]
+
+
+            self.page.mouse.click(x, y)
+        else:
+            print("Could not find element")
+
+
+    def type(self, id: Union[str, int], text: str) -> None:
+        self.click(id)
+        self.page.keyboard.type(text)
+
+
+    def enter(self) -> None:
+        self.page.keyboard.press("Enter")
+
+
+    def crawl(self) -> List[str]:
+        page = self.page
+        page_element_buffer = self.page_element_buffer
+        start = time.time()
+
+
+        page_state_as_text = []
+
+
+        device_pixel_ratio: float = page.evaluate("window.devicePixelRatio")
+        if platform == "darwin" and device_pixel_ratio == 1:  # lies
+            device_pixel_ratio = 2
+
+
+        win_upper_bound: float = page.evaluate("window.pageYOffset")
+        win_left_bound: float = page.evaluate("window.pageXOffset")
+        win_width: float = page.evaluate("window.screen.width")
+        win_height: float = page.evaluate("window.screen.height")
+        win_right_bound: float = win_left_bound + win_width
+        win_lower_bound: float = win_upper_bound + win_height
+
+
+        #       percentage_progress_start = (win_upper_bound / document_scroll_height) * 100
+        #       percentage_progress_end = (
+        #           (win_height + win_upper_bound) / document_scroll_height
+        #       ) * 100
+        percentage_progress_start = 1
+        percentage_progress_end = 2
+
+
+        page_state_as_text.append(
+            {
+                "x": 0,
+                "y": 0,
+                "text": "[scrollbar {:0.2f}-{:0.2f}%]".format(
+                    round(percentage_progress_start, 2), round(percentage_progress_end)
+                ),
+            }
+        )
+
+
+        tree = self.client.send(
+            "DOMSnapshot.captureSnapshot",
+            {"computedStyles": [], "includeDOMRects": True, "includePaintOrder": True},
+        )
+        strings: Dict[int, str] = tree["strings"]
+        document: Dict[str, Any] = tree["documents"][0]
+        nodes: Dict[str, Any] = document["nodes"]
+        backend_node_id: Dict[int, int] = nodes["backendNodeId"]
+        attributes: Dict[int, Dict[int, Any]] = nodes["attributes"]
+        node_value: Dict[int, int] = nodes["nodeValue"]
+        parent: Dict[int, int] = nodes["parentIndex"]
+        node_names: Dict[int, int] = nodes["nodeName"]
+        is_clickable: Set[int] = set(nodes["isClickable"]["index"])
+
+
+        input_value: Dict[str, Any] = nodes["inputValue"]
+        input_value_index: List[int] = input_value["index"]
+        input_value_values: List[int] = input_value["value"]
+
+
+        layout: Dict[str, Any] = document["layout"]
+        layout_node_index: List[int] = layout["nodeIndex"]
+        bounds: Dict[int, List[float]] = layout["bounds"]
+
+
+        cursor: int = 0
+
+
+        child_nodes: Dict[str, List[Dict[str, Any]]] = {}
+        elements_in_view_port: List[ElementInViewPort] = []
+
+
+        anchor_ancestry: Dict[str, Tuple[bool, Optional[int]]] = {"-1": (False, None)}
+        button_ancestry: Dict[str, Tuple[bool, Optional[int]]] = {"-1": (False, None)}
+
+
+        def convert_name(
+            node_name: Optional[str], has_click_handler: Optional[bool]
+        ) -> str:
+            if node_name == "a":
+                return "link"
+            if node_name == "input":
+                return "input"
+            if node_name == "img":
+                return "img"
+            if (
+                node_name == "button" or has_click_handler
+            ):  # found pages that needed this quirk
+                return "button"
+            else:
+                return "text"
+
+
+        def find_attributes(
+            attributes: Dict[int, Any], keys: List[str]
+        ) -> Dict[str, str]:
+            values = {}
+
+
+            for [key_index, value_index] in zip(*(iter(attributes),) * 2):
+                if value_index < 0:
+                    continue
+                key = strings[key_index]
+                value = strings[value_index]
+
+
+                if key in keys:
+                    values[key] = value
+                    keys.remove(key)
+
+
+                    if not keys:
+                        return values
+
+
+            return values
+
+
+        def add_to_hash_tree(
+            hash_tree: Dict[str, Tuple[bool, Optional[int]]],
+            tag: str,
+            node_id: int,
+            node_name: Optional[str],
+            parent_id: int,
+        ) -> Tuple[bool, Optional[int]]:
+            parent_id_str = str(parent_id)
+            if not parent_id_str in hash_tree:
+                parent_name = strings[node_names[parent_id]].lower()
+                grand_parent_id = parent[parent_id]
+
+
+                add_to_hash_tree(
+                    hash_tree, tag, parent_id, parent_name, grand_parent_id
+                )
+
+
+            is_parent_desc_anchor, anchor_id = hash_tree[parent_id_str]
+
+
+            # even if the anchor is nested in another anchor, we set the "root" for all descendants to be ::Self
+            if node_name == tag:
+                value: Tuple[bool, Optional[int]] = (True, node_id)
+            elif (
+                is_parent_desc_anchor
+            ):  # reuse the parent's anchor_id (which could be much higher in the tree)
+                value = (True, anchor_id)
+            else:
+                value = (
+                    False,
+                    None,
+                )  # not a descendant of an anchor, most likely it will become text, an interactive element or discarded
+
+
+            hash_tree[str(node_id)] = value
+
+
+            return value
+
+
+        for index, node_name_index in enumerate(node_names):
+            node_parent = parent[index]
+            node_name: Optional[str] = strings[node_name_index].lower()
+
+
+            is_ancestor_of_anchor, anchor_id = add_to_hash_tree(
+                anchor_ancestry, "a", index, node_name, node_parent
+            )
+
+
+            is_ancestor_of_button, button_id = add_to_hash_tree(
+                button_ancestry, "button", index, node_name, node_parent
+            )
+
+
+            try:
+                cursor = layout_node_index.index(
+                    index
+                )  # todo replace this with proper cursoring, ignoring the fact this is O(n^2) for the moment
+            except:
+                continue
+
+
+            if node_name in black_listed_elements:
+                continue
+
+
+            [x, y, width, height] = bounds[cursor]
+            x /= device_pixel_ratio
+            y /= device_pixel_ratio
+            width /= device_pixel_ratio
+            height /= device_pixel_ratio
+
+
+            elem_left_bound = x
+            elem_top_bound = y
+            elem_right_bound = x + width
+            elem_lower_bound = y + height
+
+
+            partially_is_in_viewport = (
+                elem_left_bound < win_right_bound
+                and elem_right_bound >= win_left_bound
+                and elem_top_bound < win_lower_bound
+                and elem_lower_bound >= win_upper_bound
+            )
+
+
+            if not partially_is_in_viewport:
+                continue
+
+
+            meta_data: List[str] = []
+
+
+            # inefficient to grab the same set of keys for kinds of objects, but it's fine for now
+            element_attributes = find_attributes(
+                attributes[index], ["type", "placeholder", "aria-label", "title", "alt"]
+            )
+
+
+            ancestor_exception = is_ancestor_of_anchor or is_ancestor_of_button
+            ancestor_node_key = (
+                None
+                if not ancestor_exception
+                else str(anchor_id)
+                if is_ancestor_of_anchor
+                else str(button_id)
+            )
+            ancestor_node = (
+                None
+                if not ancestor_exception
+                else child_nodes.setdefault(str(ancestor_node_key), [])
+            )
+
+
+            if node_name == "#text" and ancestor_exception and ancestor_node:
+                text = strings[node_value[index]]
+                if text == "|" or text == "•":
+                    continue
+                ancestor_node.append({"type": "type", "value": text})
+            else:
+                if (
+                    node_name == "input" and element_attributes.get("type") == "submit"
+                ) or node_name == "button":
+                    node_name = "button"
+                    element_attributes.pop(
+                        "type", None
+                    )  # prevent [button ... (button)..]
+
+
+                for key in element_attributes:
+                    if ancestor_exception and ancestor_node:
+                        ancestor_node.append(
+                            {
+                                "type": "attribute",
+                                "key": key,
+                                "value": element_attributes[key],
+                            }
+                        )
+                    else:
+                        meta_data.append(element_attributes[key])
+
+
+            element_node_value = None
+
+
+            if node_value[index] >= 0:
+                element_node_value = strings[node_value[index]]
+                if (
+                    element_node_value == ""
+                ):  # commonly used as a separator, does not add much context - lets save ourselves some token space
+                    continue
+            elif (
+                node_name == "input"
+                and index in input_value_index
+                and element_node_value is None
+            ):
+                node_input_text_index = input_value_index.index(index)
+                text_index = input_value_values[node_input_text_index]
+                if node_input_text_index >= 0 and text_index >= 0:
+                    element_node_value = strings[text_index]
+
+
+            # remove redudant elements
+            if ancestor_exception and (node_name != "a" and node_name != "button"):
+                continue
+
+
+            elements_in_view_port.append(
+                {
+                    "node_index": str(index),
+                    "backend_node_id": backend_node_id[index],
+                    "node_name": node_name,
+                    "node_value": element_node_value,
+                    "node_meta": meta_data,
+                    "is_clickable": index in is_clickable,
+                    "origin_x": int(x),
+                    "origin_y": int(y),
+                    "center_x": int(x + (width / 2)),
+                    "center_y": int(y + (height / 2)),
+                }
+            )
+
+
+        # lets filter further to remove anything that does not hold any text nor has click handlers + merge text from leaf#text nodes with the parent
+        elements_of_interest = []
+        id_counter = 0
+
+
+        for element in elements_in_view_port:
+            node_index = element.get("node_index")
+            node_name = element.get("node_name")
+            element_node_value = element.get("node_value")
+            node_is_clickable = element.get("is_clickable")
+            node_meta_data: Optional[List[str]] = element.get("node_meta")
+
+
+            inner_text = f"{element_node_value} " if element_node_value else ""
+            meta = ""
+
+
+            if node_index in child_nodes:
+                for child in child_nodes[node_index]:
+                    entry_type = child.get("type")
+                    entry_value = child.get("value")
+
+
+                    if entry_type == "attribute" and node_meta_data:
+                        entry_key = child.get("key")
+                        node_meta_data.append(f'{entry_key}="{entry_value}"')
+                    else:
+                        inner_text += f"{entry_value} "
+
+
+            if node_meta_data:
+                meta_string = " ".join(node_meta_data)
+                meta = f" {meta_string}"
+
+
+            if inner_text != "":
+                inner_text = f"{inner_text.strip()}"
+
+
+            converted_node_name = convert_name(node_name, node_is_clickable)
+
+
+            # not very elegant, more like a placeholder
+            if (
+                (converted_node_name != "button" or meta == "")
+                and converted_node_name != "link"
+                and converted_node_name != "input"
+                and converted_node_name != "img"
+                and converted_node_name != "textarea"
+            ) and inner_text.strip() == "":
+                continue
+
+
+            page_element_buffer[id_counter] = element
+
+
+            if inner_text != "":
+                elements_of_interest.append(
+                    f"""<{converted_node_name} id={id_counter}{meta}>{inner_text}</{converted_node_name}>"""
+                )
+            else:
+                elements_of_interest.append(
+                    f"""<{converted_node_name} id={id_counter}{meta}/>"""
+                )
+            id_counter += 1
+
+
+        print("Parsing time: {:0.2f} seconds".format(time.time() - start))
+        return elements_of_interest
+
+
+
+  File "C:\Python310\lib\codecs.py", line 322, in decode
+    (result, consumed) = self._buffer_decode(data, self.errors, final)
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0x95 in position 10819: invalid start byte
+done
+Assistant: It seems that there is an error in your code. The error message indicates an issue with UTF-8 encoding. You might want to check if there are any non-UTF characters in your code or in any of the input data.
+
+User: from langchain.document_loaders import(
+    TextLoader,
+    PyPDFLoader,
+    UnstructuredMarkdownLoader,
+    UnstructuredFileLoader,
+    PDFMinerLoader
+)
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.llms import OpenAI
+from langchain.vectorstores import Chroma
+from langchain.retrievers import ContextualCompressionRetriever
+from langchain.retrievers.document_compressors import LLMChainExtractor
+from langchain.text_splitter import CharacterTextSplitter
+import nltk
+import openai
+from dotenv import load_dotenv
+import os
+from chatgpt import search_gpt
+from ye_logger_of_yor import get_logger
+
+
+logger = get_logger()
+
+
+load_dotenv()
+
+
+logger.info('Loading global variables')
+#Load Langchain variables
+openai.api_key = os.getenv("OPENAI_API_KEY")
+embeddings = OpenAIEmbeddings()
+llm = OpenAI(temperature=0)
+text_splitter = CharacterTextSplitter(chunk_size=300, chunk_overlap=25)
+vectorstore = 'docs/'
+
+
+logger.info('base_formatter function')
+def base_formatter(docs):
+    logger.info('formatting')
+    print(f"\n{'-' * 100}\n".join([f"Document {i+1}:\n\n" + d.page_content for i, d in enumerate(docs)]))
+    return (f"\n{'-' * 100}\n".join([f"Document {i+1}:\n\n" + d.page_content for i, d in enumerate(docs)]))
+
+
+logger.info('loading check_file function 43')
+#Check if the files are valid
+def check_file(file_path):
+    logger.info('checking file')
+    if file_path.endswith('.txt'):
+        loader = TextLoader(file_path)
+        if loader:
+            print(loader.load())
+            return loader.load()
+    if file_path.endswith('.pdf'):
+        loader = UnstructuredFileLoader(file_path, mode='elements', strategy='hi_res', encoding=('utf-32', 'ignore'))
+        if loader:
+            print("pdf file loaded")
+            return loader.load()
+    if file_path.endswith('.md'):
+        loader = UnstructuredFileLoader(file_path, mode='elements', strategy='hi_res', encoding=('utf-32', 'ignore'))
+        if loader:
+            logger.info(loader.load())
+            return loader.load()
+    else:
+        print("File type not supported")
+        return "File type not supported"
+
+
+logger.info('loading create_mass_embedding function')
+#Loop files in a folder path for embedding
+def create_mass_embedding(folder_path):
+    logger.info('creating mass embedding')
+    if not os.path.exists(folder_path):
+        folder_path = 'docs/empty'
+        result = "Folder does not exist"
+        return result
+    for filename in os.listdir(folder_path):
+        file_path = os.path.join(folder_path, filename)
+        result = create_embedding(file_path, filename)
+        if result:
+            print(f"Embedding created for {filename}: {result}")
+            with open('docs/index.txt', 'a') as f:
+                f.write(f"{os.path.join(folder_path, file_path)}\n")
+            logger.info(f"Embedding created for {filename}: {result}")
+            return result
+        else:
+            logger.info(f"Embedding failed for {filename}")
+            return(f"Embedding failed for {filename}")
+
+
+
+logger.info('create_embedding function')
+#Embed a single embedding
+def create_embedding(file_path, optional_arg="metadata"):
+    logger.info('creating embedding')
+    data =check_file(file_path)
+    if data:
+        print("Data loaded")
+        metadata = optional_arg
+        if metadata:
+            meta = metadata
+        else:
+            meta = 'file_path'
+        vectordb = Chroma.from_documents(documents=data, metadata=meta, embedding=embeddings, persist_directory='docs/')
+        vectordb.persist()
+        return "Embedding created"
+    else:
+        return "Embedding failed"
+
+
+#Load vectorstore database
+logger.info('load_embedding function')
+def load_embedding():
+    logger.info('loading embedding')
+    chromadb = Chroma(persist_directory=vectorstore, embedding_function=embeddings)
+    return chromadb
+
+
+logger.info('base_retriever function')
+#Search for uncompressed docs in database
+def base_retriever(user_query):
+    logger.info('running base_retriever')
+    retriever = load_embedding().as_retriever(llm=llm)
+    docs = retriever.get_relevant_documents(user_query)
+    return docs
+
+
+logger.info('retriever function')
+#Search for compressed docs in database
+def retriever(user_query):
+    logger.info('running retriever')
+    compressor = LLMChainExtractor.from_llm(llm)
+    retriever = load_embedding().as_retriever(llm=llm)
+    cc_retriever = ContextualCompressionRetriever(base_compressor=compressor, base_retriever=retriever)
+    compressed_docs = cc_retriever.get_relevant_documents(user_query)
+    docs = compressed_docs
+    return docs
+
+
+logger.info('load_vector_store_docs function')
+def load_vector_store_docs():
+    logger.info('running load_vector_store_docs')
+    vectorstore = 'docs/index'
+    chromadb = Chroma(persist_directory=vectorstore, embedding_function=embeddings)
+    docs = chromadb.documents
+    return docs
+
+
+logger.info('memory_search function')
+#Query the database and pass the info to chatgpt for response
+def memory_search(user_query):
+    logger.info('running memory_search')
+    data = base_retriever(user_query)
+    prompt = [{
+        "role":"system",
+        "content":'''
+        "The user has asked this question:
+
+
+        {user_query}
+
+
+        You have looked up the relevant information from your data store and it is:
+
+
+        {data}
+
+
+        Please answer the user's question using the data as relevant context."
+        '''.format(user_query=user_query, data=data)
+    }]
+
+
+    result = search_gpt(user_query, prompt)
+
+
+    return result
+
+Creating embedding...
+Traceback (most recent call last):
+  File "E:\00Bako\HexAmerous\HexAmerous.py", line 69, in keyPressEvent
+    self.parent().send_message('')
+  File "E:\00Bako\HexAmerous\HexAmerous.py", line 203, in send_message
+    self.run_command(user_message)
+  File "E:\00Bako\HexAmerous\HexAmerous.py", line 351, in run_command
+    self.add_project_to_db(text)
+  File "E:\00Bako\HexAmerous\HexAmerous.py", line 302, in add_project_to_db
+    results = run_embed_project(file_path=text)
+  File "E:\00Bako\HexAmerous\embed_project.py", line 48, in run_embed_project
+    result = convert_files(project_files)
+    create_embedding(output_file)
+  File "E:\00Bako\HexAmerous\embeddings.py", line 88, in create_embedding
+    data =check_file(file_path)
+  File "E:\00Bako\HexAmerous\embeddings.py", line 56, in check_file
+    logger.info(loader.load())
+  File "E:\00Bako\HexAmerous\.venv\lib\site-packages\langchain\document_loaders\unstructured.py", line 61, in load
+    elements = self._get_elements()
+  File "E:\00Bako\HexAmerous\.venv\lib\site-packages\langchain\document_loaders\unstructured.py", line 95, in _get_elements
+    return partition(filename=self.file_path, **self.unstructured_kwargs)
+  File "E:\00Bako\HexAmerous\.venv\lib\site-packages\unstructured\partition\auto.py", line 127, in partition
+    elements = partition_md(
+  File "E:\00Bako\HexAmerous\.venv\lib\site-packages\unstructured\partition\md.py", line 34, in partition_md
+    text = optional_decode(f.read())
+  File "C:\Python310\lib\codecs.py", line 322, in decode
+    (result, consumed) = self._buffer_decode(data, self.errors, final)
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0x95 in position 10819: invalid start byte
+Assistant: It looks like there's a UnicodeDecodeError error raised in the process. It seems like the file you're trying to load might not be encoded in UTF-8. Would you mind checking the encoding of the file and adjusting the `encoding` argument in the relevant document loader accordingly?
+
+User: please correct it to filter the incoming data 
+Assistant: I'm sorry, I'm not sure what you mean by "correct it to filter the incoming data". Could you please provide more context or clarify your request?
+
+User: Creating embedding...
+Traceback (most recent call last):
+  File "E:\00Bako\HexAmerous\HexAmerous.py", line 69, in keyPressEvent
+    self.parent().send_message('')
+  File "E:\00Bako\HexAmerous\HexAmerous.py", line 203, in send_message
+    self.run_command(user_message)
+  File "E:\00Bako\HexAmerous\HexAmerous.py", line 351, in run_command
+    self.add_project_to_db(text)
+  File "E:\00Bako\HexAmerous\HexAmerous.py", line 302, in add_project_to_db
+    results = run_embed_project(file_path=text)
+  File "E:\00Bako\HexAmerous\embed_project.py", line 48, in run_embed_project
+    result = convert_files(project_files)
+    create_embedding(output_file)
+  File "E:\00Bako\HexAmerous\embeddings.py", line 88, in create_embedding
+    data =check_file(file_path)
+  File "E:\00Bako\HexAmerous\embeddings.py", line 56, in check_file
+    logger.info(loader.load())
+  File "E:\00Bako\HexAmerous\.venv\lib\site-packages\langchain\document_loaders\unstructured.py", line 61, in load
+    elements = self._get_elements()
+  File "E:\00Bako\HexAmerous\.venv\lib\site-packages\langchain\document_loaders\unstructured.py", line 95, in _get_elements
+    return partition(filename=self.file_path, **self.unstructured_kwargs)
+  File "E:\00Bako\HexAmerous\.venv\lib\site-packages\unstructured\partition\auto.py", line 127, in partition
+    elements = partition_md(
+  File "E:\00Bako\HexAmerous\.venv\lib\site-packages\unstructured\partition\md.py", line 34, in partition_md
+    text = optional_decode(f.read())
+  File "C:\Python310\lib\codecs.py", line 322, in decode
+    (result, consumed) = self._buffer_decode(data, self.errors, final)
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0x95 in position 10819: invalid start byte
+
+
+import os
+import glob
+from embeddings import create_embedding
+
+
+
+def run_embed_project(file_path):
+    project_folder = file_path
+    output_folder = 'embeddings'
+
+
+    # Get all .py files in the project folder and its subdirectories
+    project_files = glob.glob(os.path.join(project_folder, '**/*.py'), recursive=True)
+
+
+    # Ensure the output folder exists
+    os.makedirs(output_folder, exist_ok=True)
+    print("Converting files to Markdown")
+
+
+    def convert_files(project_files):
+        count = 0
+        # Convert each .py file to a Markdown
+        for python_file in project_files:
+            count += 1
+
+
+            # Read the file content
+            with open(python_file, 'rb') as f:
+                file_content = f.read().decode('utf-8', errors='ignore')
+
+
+            # Create a Markdown version of the code with syntax highlighting
+            code_md = f"```python\n{file_content}\n```\n"
+
+
+            # Set output file path
+            output_file = os.path.join(output_folder, os.path.relpath(python_file, project_folder))
+            output_file = os.path.splitext(output_file)[0] + '.md'
+
+
+            # Ensure the directory for the output file exists
+            os.makedirs(os.path.dirname(output_file), exist_ok=True)
+
+
+            # Write the Markdown file
+            with open(output_file, 'w') as f:
+                f.write(code_md)
+
+
+            # Print progress to the console
+            print(f"File {count}/{len(project_files)} saved: {os.path.relpath(python_file, project_folder)}")
+
+
+            # Create the embedding
+            print("Creating embedding...")
+            create_embedding(output_file)
+
+
+    result = convert_files(project_files)
+    print("Done!")
+    return result
+
+#Please correct to filter out the offending characters
+Assistant: The error message suggests that some of the files you are trying to process contain characters that cannot be decoded as UTF-8. You are currently ignoring such errors in `decode` function, and it seems that this is not sufficient.
+
+One possible solution would be to catch the `UnicodeDecodeError` exception, print the file that caused it and then skip that file. To do this, you can modify the `convert_files` function as follows:
+
+```python
+def convert_files(project_files):
+    count = 0
+    # Convert each .py file to a Markdown
+    for python_file in project_files:
+        count += 1
+
+        try:
+            # Read the file content
+            with open(python_file, 'r', encoding='utf-8', errors='strict') as f:
+                file_content = f.read()
+
+            # Create a Markdown version of the code with syntax highlighting
+            code_md = f"```python\n{file_content}\n```\n"
+
+            # Set output file path
+            output_file = os.path.join(output_folder, os.path.relpath(python_file, project_folder))
+            output_file = os.path.splitext(output_file)[0] + '.md'
+
+            # Ensure the directory for the output file exists
+            os.makedirs(os.path.dirname(output_file), exist_ok=True)
+
+            # Write the Markdown file
+            with open(output_file, 'w', encoding='utf-8', errors='strict') as f:
+                f.write(code_md)
+
+            # Print progress to the console
+            print(f"File {count}/{len(project_files)} saved: {os.path.relpath(python_file, project_folder)}")
+
+            # Create the embedding
+            print("Creating embedding...")
+            create_embedding(output_file)
+
+        except UnicodeDecodeError:
+            # Print the offending file and continue with the next one
+            print(f"Skipping file due to UnicodeDecodeError: {python_file}")
+
+    print("Done!")
+```
+
+With this modification, if a `UnicodeDecodeError` is raised when reading a file, the script will print a message indicating the file that caused the error, and then move on to the next file.
+
+User: how do i enable the right click menu on a PyQt5 app
+Assistant: To enable the right-click menu in a PyQt5 app, you can use the `contextMenuEvent` method. Here's an example code snippet:
+
+```
+class MyApp(QWidget):
+    def __init__(self):
+        super().__init__()
+        # initialize your UI components
+
+    def contextMenuEvent(self, event):
+        menu = QMenu(self)
+        action = menu.addAction("Do something")
+        action.triggered.connect(self.do_something)
+        menu.exec_(self.mapToGlobal(event.pos()))
+
+    def do_something(self):
+        # implement action to be performed
+```
+
+In this example, you'll need to replace `MyApp` with the name of your PyQt5 widget class. The `contextMenuEvent` method is called whenever the user right-clicks on the widget. It creates a `QMenu` instance, adds an action to it, and connects that action to a custom method that performs some action. Finally, it displays the menu at the location of the right-click using `exec_()` method. 
+
+You can customize the contents of the menu and the actions by adding additional menu items and connecting them to custom methods as needed.
+
+User: i need functions for undo redo cut copy pase and delete and select all with corresponding commands
+Assistant: Sure, I can give you example PyQt5 code for each of these functionality.
+
+For Cut, Copy, Paste and Delete:
+
+```
+from PyQt5.QtGui import QKeySequence
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTextEdit, QAction, QMenuBar, QMenu
+
+class TextEditor(QMainWindow):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.initUI()
+
+    def initUI(self):
+        self.text_edit = QTextEdit(self)
+        self.setCentralWidget(self.text_edit)
+
+        self.init_menu()
+
+        self.setWindowTitle("Text Editor")
+        self.show()
+
+    def init_menu(self):
+        # File Menu
+        file_menu = QMenu('File', self)
+
+        # Edit Menu
+        edit_menu = QMenu('Edit', self)
+
+        # Undo Action
+        undo_action = QAction('Undo', self)
+        undo_action.setShortcut(QKeySequence.Undo)
+        edit_menu.addAction(undo_action)
+
+        # Redo Action
+        redo_action = QAction('Redo', self)
+        redo_action.setShortcut(QKeySequence.Redo)
+        edit_menu.addAction(redo_action)
+
+        # Cut Action
+        cut_action = QAction('Cut', self)
+        cut_action.setShortcut(QKeySequence.Cut)
+        edit_menu.addAction(cut_action)
+
+        # Copy Action
+        copy_action = QAction('Copy', self)
+        copy_action.setShortcut(QKeySequence.Copy)
+        edit_menu.addAction(copy_action)
+
+        # Paste Action
+        paste_action = QAction('Paste', self)
+        paste_action.setShortcut(QKeySequence.Paste)
+        edit_menu.addAction(paste_action)
+
+        # Delete Action
+        delete_action = QAction('Delete', self)
+        delete_action.setShortcut(QKeySequence.Delete)
+        edit_menu.addAction(delete_action)
+
+        # Edit Menu > Select All
+        select_all_action = QAction('Select All', self)
+        select_all_action.setShortcut(QKeySequence.SelectAll)
+        edit_menu.addAction(select_all_action)
+
+        # Adding Menus to MenuBar
+        menu_bar = self.menuBar()
+        menu_bar.addMenu(file_menu)
+        menu_bar.addMenu(edit_menu)
+
+if __name__ == '__main__':
+    app = QApplication([])
+    window = TextEditor()
+    app.exec_()
+```
+
+For Select All:
+```
+# Edit Menu > Select All
+select_all_action = QAction('Select All', self)
+select_all_action.setShortcut(QKeySequence.SelectAll)
+select_all_action.triggered.connect(self.text_edit.selectAll)
+edit_menu.addAction(select_all_action)
+```
+
+Please let me know if you have any questions!
+
+User: class ChatWidget(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.init_ui()
+
+
+    logger.info('init ui')
+    # Initialize the UI
+    def init_ui(self):
+        self.init_menu()
+        self.create_widgets()
+        self.set_widget_properties()
+        self.create_widget_layouts()
+        self.set_widget_connections()
+        self.init_menu()
+        self.setCentralWidget(self.text_edit)
+        self.setLayout(self.layout)
+
+
+
+        self.text_edit = QTextEdit(self)
+    def init_menu(self):
+        # File Menu
+        file_menu = QMenu('File', self)
+
+
+        # Edit Menu
+        edit_menu = QMenu('Edit', self)
+
+
+        # Undo Action
+        undo_action = QAction('Undo', self)
+        undo_action.setShortcut(QKeySequence.Undo)
+        edit_menu.addAction(undo_action)
+
+
+        # Redo Action
+        redo_action = QAction('Redo', self)
+        redo_action.setShortcut(QKeySequence.Redo)
+        edit_menu.addAction(redo_action)
+
+
+        # Cut Action
+        cut_action = QAction('Cut', self)
+        cut_action.setShortcut(QKeySequence.Cut)
+        edit_menu.addAction(cut_action)
+
+
+        # Copy Action
+        copy_action = QAction('Copy', self)
+        copy_action.setShortcut(QKeySequence.Copy)
+        edit_menu.addAction(copy_action)
+
+
+        # Paste Action
+        paste_action = QAction('Paste', self)
+        paste_action.setShortcut(QKeySequence.Paste)
+        edit_menu.addAction(paste_action)
+
+
+        # Delete Action
+        delete_action = QAction('Delete', self)
+        delete_action.setShortcut(QKeySequence.Delete)
+        edit_menu.addAction(delete_action)
+
+
+        # Edit Menu > Select All
+        select_all_action = QAction('Select All', self)
+        select_all_action.setShortcut(QKeySequence.SelectAll)
+        edit_menu.addAction(select_all_action)
+
+
+        # Adding Menus to MenuBar
+        menu_bar = self.menuBar()
+        menu_bar.addMenu(file_menu)
+        menu_bar.addMenu(edit_menu)
+
+
+
+    logger.info('create chat widget')
+    # Create the widgets
+    def create_widgets(self):
+        self.layout = QVBoxLayout()
+        self.chat_history = self.create_chat_history()
+        self.user_input = self.create_user_input()
+        self.send_button = QPushButton("Send")
+        self.clear_button = QPushButton("Clear")
+        self.large_text_input_button = QPushButton("L Input")
+        self.upload_button = QPushButton("Up File")
+        self.combo_box = QComboBox(self)
+        self.button_layout = QHBoxLayout()
+Assistant: It looks like you're creating a chat widget with a text input field and a menu bar. You've implemented the undo, redo, cut, copy, paste, delete, and select all functionalities in your `init_menu` function using `QAction` objects and adding them to the `edit_menu`. 
+
+You've also created a few buttons for sending messages, clearing the text input field, uploading files, and expanding the text input field. 
+
+Your `create_widgets` function creates a QVBoxLayout and adds the chat history widget and user input field to it. 
+
+Overall, it seems like a good start to a chat widget with basic functionality. Let me know if you have any specific questions or if there's anything else I can help you with.
+
+User: write me a script that lets me interact with the prompts in the cli when executing commands in my notebook
+Assistant: Sure, here's an example script that allows you to interact with prompts in the command line interface when executing commands in your notebook:
+
+```python
+import subprocess
+
+def execute_cmd_with_prompt(cmd_str):
+    process = subprocess.Popen(cmd_str.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    prompt_detected = False
+    while process.poll() is None:
+        output = process.stdout.readline()
+        if output:
+            output_str = output.decode().strip()
+            print(output_str)
+            if 'prompt' in output_str.lower():
+                prompt_response = input('Enter your response:')
+                prompt_detected = True
+                process.stdin.write(bytes(prompt_response + "\r\n", 'utf-8'))
+                process.stdin.flush()
+                
+        error = process.stderr.readline()
+        if error:
+            error_str = error.decode().strip()
+            print(error_str)
+    
+    if prompt_detected:
+        output, error = process.communicate()
+        print(output.decode().strip())
+        print(error.decode().strip())
+    
+    return process.returncode
+```
+
+This script uses the `subprocess` module to execute a command specified by `cmd_str` and reads its output in real-time. If the output contains a prompt, it waits for the user to enter a response and sends the response to the command's standard input. Once the command has completed, it returns its exit code.
+
+You can use this function as follows:
+
+```python
+cmd_str = 'python my_script.py'
+execute_cmd_with_prompt(cmd_str)
+```
+
+In this example, `cmd_str` specifies the command to be executed (in this case, running a Python script). The function `execute_cmd_with_prompt` will execute the command and handle any prompts that may be encountered. Once the command has completed, it will return the exit code.
+
+User: how do i keep my self in  afolder when using a notebook?
+Assistant: To keep yourself in a folder when using a notebook, you can change the current working directory of your Jupyter notebook to the directory containing your project files. You can do this by first going to the directory containing your project files in your terminal or command prompt. Then, start your Jupyter notebook by running the command `jupyter notebook` in the terminal or command prompt. This should launch the notebook server and open a web page in your browser.
+
+Once you're in the Jupyter notebook interface, navigate to the folder where you want to create or open your notebook. Then, click on the "New" button in the top right corner and select "Notebook: Python 3" or whichever kernel you prefer. 
+
+When you do this, a new notebook file will be created in the current directory. You can now work in this notebook while remaining in the folder containing your project files. 
+
+If you ever need to change the current working directory of your Jupyter notebook, you can use the following code in a notebook cell:
+
+```python
+import os
+os.chdir('/path/to/new/directory')
+```
+
+Replace `/path/to/new/directory` with the path to the directory you want to set as your new working directory. This will change the current working directory for the notebook to the specified directory.
+
+User: please write me a script that I can put into my notebook that will let me interact with the command line prompts
+Assistant: Sure, here's an example script:
+
+```python
+import subprocess
+
+def execute_cmd_with_prompt(cmd_str):
+    process = subprocess.Popen(cmd_str.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    prompt_detected = False
+    while process.poll() is None:
+        output = process.stdout.readline()
+        if output:
+            output_str = output.decode().strip()
+            print(output_str)
+            if 'prompt' in output_str.lower():
+                prompt_response = input('Enter your response:')
+                prompt_detected = True
+                process.stdin.write(bytes(prompt_response + "\r\n", 'utf-8'))
+                process.stdin.flush()
+                
+        error = process.stderr.readline()
+        if error:
+            error_str = error.decode().strip()
+            print(error_str)
+    
+    if prompt_detected:
+        output, error = process.communicate()
+        print(output.decode().strip())
+        print(error.decode().strip())
+    
+    return process.returncode
+```
+
+This script uses the `subprocess` module to execute a command specified by `cmd_str` and reads its output in real-time. If the output contains a prompt, it waits for the user to enter a response and sends the response to the command's standard input. Once the command has completed, it returns its exit code.
+
+You can use this function as follows:
+
+```python
+cmd_str = 'my_command'
+execute_cmd_with_prompt(cmd_str)
+```
+
+In this example, `cmd_str` specifies the command to be executed. The function `execute_cmd_with_prompt` will execute the command and handle any prompts that may be encountered. Once the command has completed, it will return the exit code.
+
+User: i dont see where i put the command when im prompted
+Assistant: When you use the script to execute a command, the script captures the output of the command and displays it in the terminal. If the output contains a prompt, the script will display the prompt and wait for you to enter a response. 
+
+You can then type in your response to the prompt in the terminal and hit "Enter". The response will be sent to the command's standard input, and the command will continue to execute.
+
+Once the command has completed, the script will display the command's exit code.
+
+User: I am running an TPU instance of collab on a local machine, I cannot use the terminal
+Assistant: If you cannot use the terminal on your local machine, you can try using the built-in shell in Google Colab to interact with your TPU instance.
+
+To open the shell in Colab, you can use the magic command `!`. For example, `!ls` will list the files in the current directory. 
+
+To access your TPU instance, you will need to set the TPU address by running the following command:
+
+```
+import os
+os.environ['TPU_ADDRESS'] = 'grpc://' + 'XX.XX.XX.XX:8470'  # replace XX.XX.XX.XX with your TPU's IP address
+```
+
+Once you have set the TPU address, you can use the `ctpu` script to manage your TPU instance. For example, you can use `!ctpu up` to start your TPU instance, and `!ctpu ls` to list your instances.
+
+Note that you will need to install `ctpu` first by running `!pip install google-cloud-tpu` in a notebook cell.
+
+User: i think the truthy values are returning one in the code you gave me
+Assistant: I'm sorry, I may have misunderstood your previous question. Could you please provide more context or clarify what code you are referring to? That way, I can properly address your concern.
+

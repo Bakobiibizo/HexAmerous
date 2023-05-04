@@ -16,7 +16,6 @@ class YeLoggerOfYor(object):
         self.formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s - Line %(lineno)d')
         self.file_handler.setFormatter(self.formatter)
         self.logger.addHandler(self.file_handler)
-
-def get_logger(log_file_name):
-    my_logger = YeLoggerOfYor(log_file_name)
+my_logger = YeLoggerOfYor("log/log-of-yore.log")
+def get_logger():
     return my_logger.logger
