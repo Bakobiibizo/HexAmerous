@@ -2,7 +2,7 @@
 
 ## Description
 
-I have preloaded a prompt that instructs the model that it's a typescript and python expert. Just given its base state its very good and sending short complete blocks of code. I find writing out a schema and preplanning my code blocks helps me a lot when writing programs. I ask for the specific code block needed, add it to the program, test it, then continue. You can ask the model for assistance with planning out this process. Once you get past a file at the size of about `chappy.py` it loses context and cannot provide accurate code any long. So keep sections compartmentalized and brief if possible.
+I have preloaded a prompt that instructs the model that it's a typescript and python expert. Just given its base state its very good and sending short complete blocks of code. I find writing out a schema and preplanning my code blocks helps me a lot when writing programs. I ask for the specific code block needed, add it to the program, test it, then continue. You can ask the model for assistance with planning out this process. Once you get past a file at the size of about `HexAmerous.py` it loses context and cannot provide accurate code any long. So keep sections compartmentalized and brief if possible.
 
 ## Features
 

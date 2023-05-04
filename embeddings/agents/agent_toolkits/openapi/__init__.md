@@ -1,0 +1,4 @@
+```python
+"""OpenAPI spec agent."""
+
+```

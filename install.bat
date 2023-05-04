@@ -12,6 +12,7 @@ echo Done
 REM Activate the virtual environment
 echo Activating the virtual environment
 call "%CD%\.venv\Scripts\activate.bat"
+echo export PATH="$PATH:%CD%\.venv\Lib\site-packages" >> ~\.bashrc
 echo Done
 
 REM Install the required packages from requirements.txt
@@ -24,6 +25,6 @@ echo Installing playwright
 call playwright install
 echo Done
 
-REM Run your Python script (HexAmerous.py)
-echo Running your Python script (HexAmerous.py)
+REM Run your Python script HexAmerous.py
+echo Running your Python script HexAmerous.py
 call python HexAmerous.py
