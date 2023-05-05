@@ -517,7 +517,7 @@ class MainWindow(QWidget):
         self.layout.addWidget(self.scroll_area)
         self.background = self.change_background_image()
 
-    def change_background_image(self, image="./imgs/00004.png"):
+    def change_background_image(self, image="./imgs/0000"+str(random.randint(1, 4)) +".png"):
         self.image = image
         image_choice = QPixmap(self.image)
         palette = QPalette()

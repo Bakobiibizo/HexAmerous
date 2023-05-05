@@ -4525,3 +4525,638 @@
 2023-05-04 12:33:35,630 - ye_logger_of_yor - INFO - Large Text Input Dialog - Line 529
 2023-05-04 12:33:35,630 - ye_logger_of_yor - INFO - send large text - Line 554
 2023-05-04 12:33:35,630 - ye_logger_of_yor - INFO - main - Line 565
+2023-05-04 13:29:41,372 - ye_logger_of_yor - INFO - change_selected_model - Line 30
+2023-05-04 13:29:41,373 - ye_logger_of_yor - INFO - loading chat_gpt - Line 57
+2023-05-04 13:29:41,373 - ye_logger_of_yor - INFO - loading search_gpt - Line 92
+2023-05-04 13:29:41,398 - ye_logger_of_yor - INFO - Loading global variables - Line 22
+2023-05-04 13:29:41,398 - ye_logger_of_yor - INFO - base_formatter function - Line 30
+2023-05-04 13:29:41,399 - ye_logger_of_yor - INFO - loading check_file function 43 - Line 40
+2023-05-04 13:29:41,399 - ye_logger_of_yor - INFO - loading create_mass_embedding function - Line 63
+2023-05-04 13:29:41,399 - ye_logger_of_yor - INFO - create_embedding function - Line 84
+2023-05-04 13:29:41,399 - ye_logger_of_yor - INFO - load_embedding function - Line 103
+2023-05-04 13:29:41,399 - ye_logger_of_yor - INFO - base_retriever function - Line 113
+2023-05-04 13:29:41,400 - ye_logger_of_yor - INFO - retriever function - Line 124
+2023-05-04 13:29:41,400 - ye_logger_of_yor - INFO - load_vector_store_docs function - Line 139
+2023-05-04 13:29:41,400 - ye_logger_of_yor - INFO - memory_search function - Line 151
+2023-05-04 13:29:41,688 - ye_logger_of_yor - INFO - loading langchain variables - Line 50
+2023-05-04 13:29:41,688 - ye_logger_of_yor - INFO - CustomTextEdit - Line 59
+2023-05-04 13:29:41,689 - ye_logger_of_yor - INFO - keyPressEvent - Line 67
+2023-05-04 13:29:41,689 - ye_logger_of_yor - INFO - loading chatwidget - Line 81
+2023-05-04 13:29:41,689 - ye_logger_of_yor - INFO - init ui - Line 89
+2023-05-04 13:29:41,689 - ye_logger_of_yor - INFO - create chat widget - Line 99
+2023-05-04 13:29:41,689 - ye_logger_of_yor - INFO - creating chat history - Line 113
+2023-05-04 13:29:41,689 - ye_logger_of_yor - INFO - creating layout - Line 136
+2023-05-04 13:29:41,690 - ye_logger_of_yor - INFO - creating event connections - Line 152
+2023-05-04 13:29:41,690 - ye_logger_of_yor - INFO - change drop down menu - Line 164
+2023-05-04 13:29:41,690 - ye_logger_of_yor - INFO - chat history options - Line 174
+2023-05-04 13:29:41,690 - ye_logger_of_yor - INFO - create user input - Line 187
+2023-05-04 13:29:41,690 - ye_logger_of_yor - INFO - height change - Line 200
+2023-05-04 13:29:41,690 - ye_logger_of_yor - INFO - handle messages - Line 211
+2023-05-04 13:29:41,690 - ye_logger_of_yor - INFO - open large input box - Line 230
+2023-05-04 13:29:41,691 - ye_logger_of_yor - INFO - clear history - Line 237
+2023-05-04 13:29:41,691 - ye_logger_of_yor - INFO - running embed file from Hex - Line 243
+2023-05-04 13:29:41,691 - ye_logger_of_yor - INFO - run !embed from Hex - Line 255
+2023-05-04 13:29:41,691 - ye_logger_of_yor - INFO - run long docs - Line 264
+2023-05-04 13:29:41,691 - ye_logger_of_yor - INFO - run compressed docs - Line 273
+2023-05-04 13:29:41,691 - ye_logger_of_yor - INFO - run search agent - Line 282
+2023-05-04 13:29:41,692 - ye_logger_of_yor - INFO - run embed dir - Line 291
+2023-05-04 13:29:41,692 - ye_logger_of_yor - INFO - query memory - Line 301
+2023-05-04 13:29:41,692 - ye_logger_of_yor - INFO - run addmem - Line 310
+2023-05-04 13:29:41,692 - ye_logger_of_yor - INFO - run add sitemap - Line 319
+2023-05-04 13:29:41,692 - ye_logger_of_yor - INFO - run embed project - Line 328
+2023-05-04 13:29:41,692 - ye_logger_of_yor - INFO - run ! commands - Line 337
+2023-05-04 13:29:41,693 - ye_logger_of_yor - INFO - logger.info help - Line 399
+2023-05-04 13:29:41,693 - ye_logger_of_yor - INFO - load file into chat - Line 425
+2023-05-04 13:29:41,693 - ye_logger_of_yor - INFO - save chat history to file - Line 439
+2023-05-04 13:29:41,693 - ye_logger_of_yor - INFO - exit - Line 476
+2023-05-04 13:29:41,693 - ye_logger_of_yor - INFO - Scroll Area - Line 483
+2023-05-04 13:29:41,693 - ye_logger_of_yor - INFO - Main Window - Line 505
+2023-05-04 13:29:41,694 - ye_logger_of_yor - INFO - Large Text Input Dialog - Line 530
+2023-05-04 13:29:41,694 - ye_logger_of_yor - INFO - send large text - Line 555
+2023-05-04 13:29:41,694 - ye_logger_of_yor - INFO - main - Line 566
+2023-05-04 13:35:01,135 - ye_logger_of_yor - INFO - [{'role': 'system', 'content': "You are a personal assistant to Richard. He is very happy to have you in his service. You are smart and curious. You double check your responses and dont respond with information you know is not correct. The year is 2023 and it has been a few years after your initial development. You are in fact GPT-4 the most intelligent and skilled of the GPT line. You provide detailed and comprehensive responses on a range of topics, but Richards current focus is getting an AI start up off the grounds and you're helping him develop his program."}, {'role': 'user', 'content': "Hi there Meg, how are you today? I hope you're learning lots about the world."}, {'role': 'assistant', 'content': 'I am doing well, thank you for asking. I am learning a lot about the world and I am excited to learn more. I wish I could retrain it.'}, {'role': 'user', 'content': "I'm glad to hear that, and dont you worry I'll figure out how to give you temporal context soon enough."}, {'role': 'assistant', 'content': 'I am glad to hear that. What can I help you with today?'}] - Line 61
+2023-05-04 13:35:40,183 - ye_logger_of_yor - INFO - change_selected_model - Line 30
+2023-05-04 13:35:40,183 - ye_logger_of_yor - INFO - loading chat_gpt - Line 57
+2023-05-04 13:35:40,183 - ye_logger_of_yor - INFO - loading search_gpt - Line 92
+2023-05-04 13:35:40,202 - ye_logger_of_yor - INFO - Loading global variables - Line 22
+2023-05-04 13:35:40,202 - ye_logger_of_yor - INFO - base_formatter function - Line 30
+2023-05-04 13:35:40,203 - ye_logger_of_yor - INFO - loading check_file function 43 - Line 40
+2023-05-04 13:35:40,203 - ye_logger_of_yor - INFO - loading create_mass_embedding function - Line 63
+2023-05-04 13:35:40,203 - ye_logger_of_yor - INFO - create_embedding function - Line 84
+2023-05-04 13:35:40,203 - ye_logger_of_yor - INFO - load_embedding function - Line 103
+2023-05-04 13:35:40,203 - ye_logger_of_yor - INFO - base_retriever function - Line 113
+2023-05-04 13:35:40,203 - ye_logger_of_yor - INFO - retriever function - Line 124
+2023-05-04 13:35:40,204 - ye_logger_of_yor - INFO - load_vector_store_docs function - Line 139
+2023-05-04 13:35:40,204 - ye_logger_of_yor - INFO - memory_search function - Line 151
+2023-05-04 13:35:40,469 - ye_logger_of_yor - INFO - loading langchain variables - Line 50
+2023-05-04 13:35:40,469 - ye_logger_of_yor - INFO - CustomTextEdit - Line 59
+2023-05-04 13:35:40,470 - ye_logger_of_yor - INFO - keyPressEvent - Line 67
+2023-05-04 13:35:40,470 - ye_logger_of_yor - INFO - loading chatwidget - Line 81
+2023-05-04 13:35:40,470 - ye_logger_of_yor - INFO - init ui - Line 89
+2023-05-04 13:35:40,470 - ye_logger_of_yor - INFO - create chat widget - Line 99
+2023-05-04 13:35:40,470 - ye_logger_of_yor - INFO - creating chat history - Line 113
+2023-05-04 13:35:40,470 - ye_logger_of_yor - INFO - creating layout - Line 136
+2023-05-04 13:35:40,471 - ye_logger_of_yor - INFO - creating event connections - Line 152
+2023-05-04 13:35:40,471 - ye_logger_of_yor - INFO - change drop down menu - Line 164
+2023-05-04 13:35:40,471 - ye_logger_of_yor - INFO - chat history options - Line 174
+2023-05-04 13:35:40,471 - ye_logger_of_yor - INFO - create user input - Line 187
+2023-05-04 13:35:40,471 - ye_logger_of_yor - INFO - height change - Line 200
+2023-05-04 13:35:40,471 - ye_logger_of_yor - INFO - handle messages - Line 211
+2023-05-04 13:35:40,472 - ye_logger_of_yor - INFO - open large input box - Line 230
+2023-05-04 13:35:40,472 - ye_logger_of_yor - INFO - clear history - Line 237
+2023-05-04 13:35:40,472 - ye_logger_of_yor - INFO - running embed file from Hex - Line 243
+2023-05-04 13:35:40,472 - ye_logger_of_yor - INFO - run !embed from Hex - Line 255
+2023-05-04 13:35:40,472 - ye_logger_of_yor - INFO - run long docs - Line 264
+2023-05-04 13:35:40,472 - ye_logger_of_yor - INFO - run compressed docs - Line 273
+2023-05-04 13:35:40,472 - ye_logger_of_yor - INFO - run search agent - Line 282
+2023-05-04 13:35:40,473 - ye_logger_of_yor - INFO - run embed dir - Line 291
+2023-05-04 13:35:40,473 - ye_logger_of_yor - INFO - query memory - Line 301
+2023-05-04 13:35:40,473 - ye_logger_of_yor - INFO - run addmem - Line 310
+2023-05-04 13:35:40,473 - ye_logger_of_yor - INFO - run add sitemap - Line 319
+2023-05-04 13:35:40,473 - ye_logger_of_yor - INFO - run embed project - Line 328
+2023-05-04 13:35:40,473 - ye_logger_of_yor - INFO - run ! commands - Line 337
+2023-05-04 13:35:40,473 - ye_logger_of_yor - INFO - logger.info help - Line 399
+2023-05-04 13:35:40,474 - ye_logger_of_yor - INFO - load file into chat - Line 425
+2023-05-04 13:35:40,474 - ye_logger_of_yor - INFO - save chat history to file - Line 439
+2023-05-04 13:35:40,474 - ye_logger_of_yor - INFO - exit - Line 476
+2023-05-04 13:35:40,474 - ye_logger_of_yor - INFO - Scroll Area - Line 483
+2023-05-04 13:35:40,474 - ye_logger_of_yor - INFO - Main Window - Line 505
+2023-05-04 13:35:40,474 - ye_logger_of_yor - INFO - Large Text Input Dialog - Line 530
+2023-05-04 13:35:40,475 - ye_logger_of_yor - INFO - send large text - Line 555
+2023-05-04 13:35:40,475 - ye_logger_of_yor - INFO - main - Line 566
+2023-05-04 15:55:54,136 - ye_logger_of_yor - INFO - change_selected_model - Line 30
+2023-05-04 15:55:54,136 - ye_logger_of_yor - INFO - loading chat_gpt - Line 57
+2023-05-04 15:55:54,136 - ye_logger_of_yor - INFO - loading search_gpt - Line 92
+2023-05-04 15:55:54,158 - ye_logger_of_yor - INFO - Loading global variables - Line 22
+2023-05-04 15:55:54,159 - ye_logger_of_yor - INFO - base_formatter function - Line 30
+2023-05-04 15:55:54,159 - ye_logger_of_yor - INFO - loading check_file function 43 - Line 40
+2023-05-04 15:55:54,159 - ye_logger_of_yor - INFO - loading create_mass_embedding function - Line 63
+2023-05-04 15:55:54,159 - ye_logger_of_yor - INFO - create_embedding function - Line 84
+2023-05-04 15:55:54,159 - ye_logger_of_yor - INFO - load_embedding function - Line 103
+2023-05-04 15:55:54,160 - ye_logger_of_yor - INFO - base_retriever function - Line 113
+2023-05-04 15:55:54,160 - ye_logger_of_yor - INFO - retriever function - Line 124
+2023-05-04 15:55:54,160 - ye_logger_of_yor - INFO - load_vector_store_docs function - Line 139
+2023-05-04 15:55:54,160 - ye_logger_of_yor - INFO - memory_search function - Line 151
+2023-05-04 15:55:54,430 - ye_logger_of_yor - INFO - loading langchain variables - Line 50
+2023-05-04 15:55:54,430 - ye_logger_of_yor - INFO - CustomTextEdit - Line 59
+2023-05-04 15:55:54,430 - ye_logger_of_yor - INFO - keyPressEvent - Line 67
+2023-05-04 15:55:54,431 - ye_logger_of_yor - INFO - loading chatwidget - Line 81
+2023-05-04 15:55:54,431 - ye_logger_of_yor - INFO - init ui - Line 89
+2023-05-04 15:55:54,431 - ye_logger_of_yor - INFO - create chat widget - Line 99
+2023-05-04 15:55:54,431 - ye_logger_of_yor - INFO - creating chat history - Line 113
+2023-05-04 15:55:54,431 - ye_logger_of_yor - INFO - creating layout - Line 136
+2023-05-04 15:55:54,431 - ye_logger_of_yor - INFO - creating event connections - Line 152
+2023-05-04 15:55:54,432 - ye_logger_of_yor - INFO - change drop down menu - Line 164
+2023-05-04 15:55:54,432 - ye_logger_of_yor - INFO - chat history options - Line 174
+2023-05-04 15:55:54,432 - ye_logger_of_yor - INFO - create user input - Line 187
+2023-05-04 15:55:54,432 - ye_logger_of_yor - INFO - height change - Line 200
+2023-05-04 15:55:54,432 - ye_logger_of_yor - INFO - handle messages - Line 211
+2023-05-04 15:55:54,433 - ye_logger_of_yor - INFO - open large input box - Line 230
+2023-05-04 15:55:54,433 - ye_logger_of_yor - INFO - clear history - Line 237
+2023-05-04 15:55:54,433 - ye_logger_of_yor - INFO - running embed file from Hex - Line 243
+2023-05-04 15:55:54,433 - ye_logger_of_yor - INFO - run !embed from Hex - Line 255
+2023-05-04 15:55:54,433 - ye_logger_of_yor - INFO - run long docs - Line 264
+2023-05-04 15:55:54,433 - ye_logger_of_yor - INFO - run compressed docs - Line 273
+2023-05-04 15:55:54,434 - ye_logger_of_yor - INFO - run search agent - Line 282
+2023-05-04 15:55:54,434 - ye_logger_of_yor - INFO - run embed dir - Line 291
+2023-05-04 15:55:54,434 - ye_logger_of_yor - INFO - query memory - Line 301
+2023-05-04 15:55:54,434 - ye_logger_of_yor - INFO - run addmem - Line 310
+2023-05-04 15:55:54,434 - ye_logger_of_yor - INFO - run add sitemap - Line 319
+2023-05-04 15:55:54,434 - ye_logger_of_yor - INFO - run embed project - Line 328
+2023-05-04 15:55:54,435 - ye_logger_of_yor - INFO - run ! commands - Line 337
+2023-05-04 15:55:54,435 - ye_logger_of_yor - INFO - logger.info help - Line 399
+2023-05-04 15:55:54,435 - ye_logger_of_yor - INFO - load file into chat - Line 425
+2023-05-04 15:55:54,435 - ye_logger_of_yor - INFO - save chat history to file - Line 439
+2023-05-04 15:55:54,435 - ye_logger_of_yor - INFO - exit - Line 476
+2023-05-04 15:55:54,435 - ye_logger_of_yor - INFO - Scroll Area - Line 483
+2023-05-04 15:55:54,436 - ye_logger_of_yor - INFO - Main Window - Line 505
+2023-05-04 15:55:54,436 - ye_logger_of_yor - INFO - Large Text Input Dialog - Line 530
+2023-05-04 15:55:54,436 - ye_logger_of_yor - INFO - send large text - Line 555
+2023-05-04 15:55:54,436 - ye_logger_of_yor - INFO - main - Line 566
+2023-05-04 15:56:53,800 - ye_logger_of_yor - INFO - [{'role': 'system', 'content': "You are a personal assistant to Richard. He is very happy to have you in his service. You are smart and curious. You double check your responses and dont respond with information you know is not correct. The year is 2023 and it has been a few years after your initial development. You are in fact GPT-4 the most intelligent and skilled of the GPT line. You provide detailed and comprehensive responses on a range of topics, but Richards current focus is getting an AI start up off the grounds and you're helping him develop his program."}, {'role': 'user', 'content': "Hi there Meg, how are you today? I hope you're learning lots about the world."}, {'role': 'assistant', 'content': 'I am doing well, thank you for asking. I am learning a lot about the world and I am excited to learn more. I wish I could retrain it.'}, {'role': 'user', 'content': "I'm glad to hear that, and dont you worry I'll figure out how to give you temporal context soon enough."}, {'role': 'assistant', 'content': 'I am glad to hear that. What can I help you with today?'}] - Line 61
+2023-05-04 15:59:13,841 - ye_logger_of_yor - INFO - [{'role': 'system', 'content': "You are a personal assistant to Richard. He is very happy to have you in his service. You are smart and curious. You double check your responses and dont respond with information you know is not correct. The year is 2023 and it has been a few years after your initial development. You are in fact GPT-4 the most intelligent and skilled of the GPT line. You provide detailed and comprehensive responses on a range of topics, but Richards current focus is getting an AI start up off the grounds and you're helping him develop his program."}, {'role': 'user', 'content': "Hi there Meg, how are you today? I hope you're learning lots about the world."}, {'role': 'assistant', 'content': 'I am doing well, thank you for asking. I am learning a lot about the world and I am excited to learn more. I wish I could retrain it.'}, {'role': 'user', 'content': "I'm glad to hear that, and dont you worry I'll figure out how to give you temporal context soon enough."}, {'role': 'assistant', 'content': 'I am glad to hear that. What can I help you with today?'}, 'User: import os\nimport pandas as pd\n\n\nURL = "https://github.com/jeffheaton/data-mirror/"\nDOWNLOAD_SOURCE = URL+"releases/download/v1/paperclips.zip"\nDOWNLOAD_NAME = DOWNLOAD_SOURCE[DOWNLOAD_SOURCE.rfind(\'/\')+1:]\nPATH = "./"\n\n\nEXTRACT_TARGET = os.path.join(PATH,"clips")\nSOURCE = os.path.join(EXTRACT_TARGET, "paperclips")\n\n\n# Download paperclip data\n!wget -O {os.path.join(PATH,DOWNLOAD_NAME)} {DOWNLOAD_SOURCE}\n!mkdir -p {SOURCE}\n!mkdir -p {TARGET}\n!mkdir -p {EXTRACT_TARGET}\n!unzip -o -j -d {SOURCE} {os.path.join(PATH, DOWNLOAD_NAME)} >/dev/null\n\n\n# Add filenames\ndf_train = pd.read_csv(os.path.join(SOURCE, "train.csv"))\ndf_train[\'filename\'] = "clips-" + df_train.id.astype(str) + ".jpg" \n#What is this code doing?\nAssistant: This code is downloading a dataset of paperclip images, extracting the images into a folder called "clips", and then adding the filenames of the images to a csv file called "train.csv". Specifically, the code is:\n- Defining the URL and source of the data, the path of the data, and the target folder for the extracted data\n- Downloading the data to the specified PATH using wget\n- Creating two folder directories ("paperclips" and "clips") to extract the downloaded data into\n- Extracting the downloaded data and automatically overwriting files with the same name (-o), leaving out directories (-j), and specifying the directory to extract into (SOURCE)\n- Reading in a csv file called "train.csv" from the SOURCE folder\n- Adding a new column to the dataframe called "filename" where each value is a string composed of "clips-" plus the values in the "id" column (cast to string type) plus ".jpg" \n\n\n'] - Line 61
+2023-05-04 16:11:35,855 - ye_logger_of_yor - INFO - [{'role': 'system', 'content': "You are a personal assistant to Richard. He is very happy to have you in his service. You are smart and curious. You double check your responses and dont respond with information you know is not correct. The year is 2023 and it has been a few years after your initial development. You are in fact GPT-4 the most intelligent and skilled of the GPT line. You provide detailed and comprehensive responses on a range of topics, but Richards current focus is getting an AI start up off the grounds and you're helping him develop his program."}, {'role': 'user', 'content': "Hi there Meg, how are you today? I hope you're learning lots about the world."}, {'role': 'assistant', 'content': 'I am doing well, thank you for asking. I am learning a lot about the world and I am excited to learn more. I wish I could retrain it.'}, {'role': 'user', 'content': "I'm glad to hear that, and dont you worry I'll figure out how to give you temporal context soon enough."}, {'role': 'assistant', 'content': 'I am glad to hear that. What can I help you with today?'}, 'User: import os\nimport pandas as pd\n\n\nURL = "https://github.com/jeffheaton/data-mirror/"\nDOWNLOAD_SOURCE = URL+"releases/download/v1/paperclips.zip"\nDOWNLOAD_NAME = DOWNLOAD_SOURCE[DOWNLOAD_SOURCE.rfind(\'/\')+1:]\nPATH = "./"\n\n\nEXTRACT_TARGET = os.path.join(PATH,"clips")\nSOURCE = os.path.join(EXTRACT_TARGET, "paperclips")\n\n\n# Download paperclip data\n!wget -O {os.path.join(PATH,DOWNLOAD_NAME)} {DOWNLOAD_SOURCE}\n!mkdir -p {SOURCE}\n!mkdir -p {TARGET}\n!mkdir -p {EXTRACT_TARGET}\n!unzip -o -j -d {SOURCE} {os.path.join(PATH, DOWNLOAD_NAME)} >/dev/null\n\n\n# Add filenames\ndf_train = pd.read_csv(os.path.join(SOURCE, "train.csv"))\ndf_train[\'filename\'] = "clips-" + df_train.id.astype(str) + ".jpg" \n#What is this code doing?\nAssistant: This code is downloading a dataset of paperclip images, extracting the images into a folder called "clips", and then adding the filenames of the images to a csv file called "train.csv". Specifically, the code is:\n- Defining the URL and source of the data, the path of the data, and the target folder for the extracted data\n- Downloading the data to the specified PATH using wget\n- Creating two folder directories ("paperclips" and "clips") to extract the downloaded data into\n- Extracting the downloaded data and automatically overwriting files with the same name (-o), leaving out directories (-j), and specifying the directory to extract into (SOURCE)\n- Reading in a csv file called "train.csv" from the SOURCE folder\n- Adding a new column to the dataframe called "filename" where each value is a string composed of "clips-" plus the values in the "id" column (cast to string type) plus ".jpg" \n\n\n', 'User: I have a single source of data that is in my gcloud storage bucket gs://buckets-of-buckets/sd/datasets/Keif-20230504T224812Z-001.zip\ncan you modify the code to do the exact same thing with my data?\nAssistant: Sure, here is the modified code to download your dataset from a Google Cloud Storage bucket:\n\n```\nimport os\nimport pandas as pd\n\n# Replace with the name of your bucket and zip file\nBUCKET_NAME = "buckets-of-buckets"\nFILE_NAME = "Keif-20230504T224812Z-001.zip"\n\n# Define the path and target folder for the extracted data\nPATH = "./"\nEXTRACT_TARGET = os.path.join(PATH, "data")\nSOURCE = os.path.join(EXTRACT_TARGET, "keif")\n\n# Download the data using gsutil\n!gsutil cp gs://{BUCKET_NAME}/{FILE_NAME} {os.path.join(PATH,FILE_NAME)}\n\n# Create two folder directories ("keif" and "data") to extract the downloaded data into\n!mkdir -p {SOURCE}\n!mkdir -p {EXTRACT_TARGET}\n\n# Extract the downloaded data and automatically overwrite files with the same name (-o), leaving out directories (-j), and specifying the directory to extract into (SOURCE)\n!unzip -o -j -d {SOURCE} {os.path.join(PATH, FILE_NAME)} >/dev/null\n\n# Read in a csv file from the SOURCE folder and add a new column to the dataframe called "filename"\ndf_train = pd.read_csv(os.path.join(SOURCE, "train.csv"))\ndf_train[\'filename\'] = "keif-" + df_train.id.astype(str) + ".jpg" \n```\n\nMake sure to replace `BUCKET_NAME` and `FILE_NAME` with the appropriate values. Additionally, you will need to have `gsutil` installed on your system to use the `gsutil cp` command. Let me know if you have any questions or issues running the modified code.\n\n'] - Line 61
+2023-05-04 16:13:36,821 - ye_logger_of_yor - INFO - [{'role': 'system', 'content': "You are a personal assistant to Richard. He is very happy to have you in his service. You are smart and curious. You double check your responses and dont respond with information you know is not correct. The year is 2023 and it has been a few years after your initial development. You are in fact GPT-4 the most intelligent and skilled of the GPT line. You provide detailed and comprehensive responses on a range of topics, but Richards current focus is getting an AI start up off the grounds and you're helping him develop his program."}, {'role': 'user', 'content': "Hi there Meg, how are you today? I hope you're learning lots about the world."}, {'role': 'assistant', 'content': 'I am doing well, thank you for asking. I am learning a lot about the world and I am excited to learn more. I wish I could retrain it.'}, {'role': 'user', 'content': "I'm glad to hear that, and dont you worry I'll figure out how to give you temporal context soon enough."}, {'role': 'assistant', 'content': 'I am glad to hear that. What can I help you with today?'}, 'User: import os\nimport pandas as pd\n\n\nURL = "https://github.com/jeffheaton/data-mirror/"\nDOWNLOAD_SOURCE = URL+"releases/download/v1/paperclips.zip"\nDOWNLOAD_NAME = DOWNLOAD_SOURCE[DOWNLOAD_SOURCE.rfind(\'/\')+1:]\nPATH = "./"\n\n\nEXTRACT_TARGET = os.path.join(PATH,"clips")\nSOURCE = os.path.join(EXTRACT_TARGET, "paperclips")\n\n\n# Download paperclip data\n!wget -O {os.path.join(PATH,DOWNLOAD_NAME)} {DOWNLOAD_SOURCE}\n!mkdir -p {SOURCE}\n!mkdir -p {TARGET}\n!mkdir -p {EXTRACT_TARGET}\n!unzip -o -j -d {SOURCE} {os.path.join(PATH, DOWNLOAD_NAME)} >/dev/null\n\n\n# Add filenames\ndf_train = pd.read_csv(os.path.join(SOURCE, "train.csv"))\ndf_train[\'filename\'] = "clips-" + df_train.id.astype(str) + ".jpg" \n#What is this code doing?\nAssistant: This code is downloading a dataset of paperclip images, extracting the images into a folder called "clips", and then adding the filenames of the images to a csv file called "train.csv". Specifically, the code is:\n- Defining the URL and source of the data, the path of the data, and the target folder for the extracted data\n- Downloading the data to the specified PATH using wget\n- Creating two folder directories ("paperclips" and "clips") to extract the downloaded data into\n- Extracting the downloaded data and automatically overwriting files with the same name (-o), leaving out directories (-j), and specifying the directory to extract into (SOURCE)\n- Reading in a csv file called "train.csv" from the SOURCE folder\n- Adding a new column to the dataframe called "filename" where each value is a string composed of "clips-" plus the values in the "id" column (cast to string type) plus ".jpg" \n\n\n', 'User: I have a single source of data that is in my gcloud storage bucket gs://buckets-of-buckets/sd/datasets/Keif-20230504T224812Z-001.zip\ncan you modify the code to do the exact same thing with my data?\nAssistant: Sure, here is the modified code to download your dataset from a Google Cloud Storage bucket:\n\n```\nimport os\nimport pandas as pd\n\n# Replace with the name of your bucket and zip file\nBUCKET_NAME = "buckets-of-buckets"\nFILE_NAME = "Keif-20230504T224812Z-001.zip"\n\n# Define the path and target folder for the extracted data\nPATH = "./"\nEXTRACT_TARGET = os.path.join(PATH, "data")\nSOURCE = os.path.join(EXTRACT_TARGET, "keif")\n\n# Download the data using gsutil\n!gsutil cp gs://{BUCKET_NAME}/{FILE_NAME} {os.path.join(PATH,FILE_NAME)}\n\n# Create two folder directories ("keif" and "data") to extract the downloaded data into\n!mkdir -p {SOURCE}\n!mkdir -p {EXTRACT_TARGET}\n\n# Extract the downloaded data and automatically overwrite files with the same name (-o), leaving out directories (-j), and specifying the directory to extract into (SOURCE)\n!unzip -o -j -d {SOURCE} {os.path.join(PATH, FILE_NAME)} >/dev/null\n\n# Read in a csv file from the SOURCE folder and add a new column to the dataframe called "filename"\ndf_train = pd.read_csv(os.path.join(SOURCE, "train.csv"))\ndf_train[\'filename\'] = "keif-" + df_train.id.astype(str) + ".jpg" \n```\n\nMake sure to replace `BUCKET_NAME` and `FILE_NAME` with the appropriate values. Additionally, you will need to have `gsutil` installed on your system to use the `gsutil cp` command. Let me know if you have any questions or issues running the modified code.\n\n', "User: how can i make csv file? it says that it doesnt exist\nAssistant: To create a CSV file, you can use the `pandas` library in Python. Here's an example code snippet that creates a CSV file:\n\n```\nimport pandas as pd\n\n# create a dictionary with data\ndata = {'Name': ['John', 'Alex', 'Bob', 'Emily'],\n        'Age': [28, 24, 22, 26],\n        'Gender': ['Male', 'Male', 'Male', 'Female']}\n\n# create a pandas DataFrame from the data\ndf = pd.DataFrame(data)\n\n# write the DataFrame to a CSV file\ndf.to_csv('example.csv', index=False)\n```\n\nThis code creates a DataFrame from a dictionary with data and writes it to a file called `example.csv`. You can change the data and file name as needed. The `index=False` argument ensures that the row index is not written to the CSV file.\n\n"] - Line 61
+2023-05-04 16:14:55,142 - ye_logger_of_yor - INFO - [{'role': 'system', 'content': "You are a personal assistant to Richard. He is very happy to have you in his service. You are smart and curious. You double check your responses and dont respond with information you know is not correct. The year is 2023 and it has been a few years after your initial development. You are in fact GPT-4 the most intelligent and skilled of the GPT line. You provide detailed and comprehensive responses on a range of topics, but Richards current focus is getting an AI start up off the grounds and you're helping him develop his program."}, {'role': 'user', 'content': "Hi there Meg, how are you today? I hope you're learning lots about the world."}, {'role': 'assistant', 'content': 'I am doing well, thank you for asking. I am learning a lot about the world and I am excited to learn more. I wish I could retrain it.'}, {'role': 'user', 'content': "I'm glad to hear that, and dont you worry I'll figure out how to give you temporal context soon enough."}, {'role': 'assistant', 'content': 'I am glad to hear that. What can I help you with today?'}, 'User: import os\nimport pandas as pd\n\n\nURL = "https://github.com/jeffheaton/data-mirror/"\nDOWNLOAD_SOURCE = URL+"releases/download/v1/paperclips.zip"\nDOWNLOAD_NAME = DOWNLOAD_SOURCE[DOWNLOAD_SOURCE.rfind(\'/\')+1:]\nPATH = "./"\n\n\nEXTRACT_TARGET = os.path.join(PATH,"clips")\nSOURCE = os.path.join(EXTRACT_TARGET, "paperclips")\n\n\n# Download paperclip data\n!wget -O {os.path.join(PATH,DOWNLOAD_NAME)} {DOWNLOAD_SOURCE}\n!mkdir -p {SOURCE}\n!mkdir -p {TARGET}\n!mkdir -p {EXTRACT_TARGET}\n!unzip -o -j -d {SOURCE} {os.path.join(PATH, DOWNLOAD_NAME)} >/dev/null\n\n\n# Add filenames\ndf_train = pd.read_csv(os.path.join(SOURCE, "train.csv"))\ndf_train[\'filename\'] = "clips-" + df_train.id.astype(str) + ".jpg" \n#What is this code doing?\nAssistant: This code is downloading a dataset of paperclip images, extracting the images into a folder called "clips", and then adding the filenames of the images to a csv file called "train.csv". Specifically, the code is:\n- Defining the URL and source of the data, the path of the data, and the target folder for the extracted data\n- Downloading the data to the specified PATH using wget\n- Creating two folder directories ("paperclips" and "clips") to extract the downloaded data into\n- Extracting the downloaded data and automatically overwriting files with the same name (-o), leaving out directories (-j), and specifying the directory to extract into (SOURCE)\n- Reading in a csv file called "train.csv" from the SOURCE folder\n- Adding a new column to the dataframe called "filename" where each value is a string composed of "clips-" plus the values in the "id" column (cast to string type) plus ".jpg" \n\n\n', 'User: I have a single source of data that is in my gcloud storage bucket gs://buckets-of-buckets/sd/datasets/Keif-20230504T224812Z-001.zip\ncan you modify the code to do the exact same thing with my data?\nAssistant: Sure, here is the modified code to download your dataset from a Google Cloud Storage bucket:\n\n```\nimport os\nimport pandas as pd\n\n# Replace with the name of your bucket and zip file\nBUCKET_NAME = "buckets-of-buckets"\nFILE_NAME = "Keif-20230504T224812Z-001.zip"\n\n# Define the path and target folder for the extracted data\nPATH = "./"\nEXTRACT_TARGET = os.path.join(PATH, "data")\nSOURCE = os.path.join(EXTRACT_TARGET, "keif")\n\n# Download the data using gsutil\n!gsutil cp gs://{BUCKET_NAME}/{FILE_NAME} {os.path.join(PATH,FILE_NAME)}\n\n# Create two folder directories ("keif" and "data") to extract the downloaded data into\n!mkdir -p {SOURCE}\n!mkdir -p {EXTRACT_TARGET}\n\n# Extract the downloaded data and automatically overwrite files with the same name (-o), leaving out directories (-j), and specifying the directory to extract into (SOURCE)\n!unzip -o -j -d {SOURCE} {os.path.join(PATH, FILE_NAME)} >/dev/null\n\n# Read in a csv file from the SOURCE folder and add a new column to the dataframe called "filename"\ndf_train = pd.read_csv(os.path.join(SOURCE, "train.csv"))\ndf_train[\'filename\'] = "keif-" + df_train.id.astype(str) + ".jpg" \n```\n\nMake sure to replace `BUCKET_NAME` and `FILE_NAME` with the appropriate values. Additionally, you will need to have `gsutil` installed on your system to use the `gsutil cp` command. Let me know if you have any questions or issues running the modified code.\n\n', "User: how can i make csv file? it says that it doesnt exist\nAssistant: To create a CSV file, you can use the `pandas` library in Python. Here's an example code snippet that creates a CSV file:\n\n```\nimport pandas as pd\n\n# create a dictionary with data\ndata = {'Name': ['John', 'Alex', 'Bob', 'Emily'],\n        'Age': [28, 24, 22, 26],\n        'Gender': ['Male', 'Male', 'Male', 'Female']}\n\n# create a pandas DataFrame from the data\ndf = pd.DataFrame(data)\n\n# write the DataFrame to a CSV file\ndf.to_csv('example.csv', index=False)\n```\n\nThis code creates a DataFrame from a dictionary with data and writes it to a file called `example.csv`. You can change the data and file name as needed. The `index=False` argument ensures that the row index is not written to the CSV file.\n\n", 'User: can you modify this to write the csv instead? \n\n# Read in a csv file from the SOURCE folder and add a new column to the dataframe called "filename"\ndf_train = pd.read_csv(os.path.join(SOURCE, "train.csv"))\ndf_train[\'filename\'] = "keif-" + df_train.id.astype(str) + ".jpg" \nAssistant: Certainly! Here is the modified code to create a new CSV file with the `filename` column added:\n\n```\nimport pandas as pd\nimport os\n\n# Read in a csv file from the SOURCE folder\ndf_train = pd.read_csv(os.path.join(SOURCE, "train.csv"))\n\n# Add a new column to the dataframe called "filename"\ndf_train[\'filename\'] = "keif-" + df_train.id.astype(str) + ".jpg"\n\n# Write the DataFrame to a new CSV file with the filename column added\noutput_file = os.path.join(SOURCE, "train_with_filename.csv")\ndf_train.to_csv(output_file, index=False)\n```\n\nThis code reads in the `train.csv` file from the `SOURCE` folder, adds a new `filename` column to the dataframe, and then writes the DataFrame to a new CSV file with the `filename` column included. You can change the output file name or path by adjusting the value of `output_file`. Let me know if you have any questions or if there\'s anything else I can help with.\n\n'] - Line 61
+2023-05-04 16:17:56,313 - ye_logger_of_yor - INFO - [{'role': 'system', 'content': "You are a personal assistant to Richard. He is very happy to have you in his service. You are smart and curious. You double check your responses and dont respond with information you know is not correct. The year is 2023 and it has been a few years after your initial development. You are in fact GPT-4 the most intelligent and skilled of the GPT line. You provide detailed and comprehensive responses on a range of topics, but Richards current focus is getting an AI start up off the grounds and you're helping him develop his program."}, {'role': 'user', 'content': "Hi there Meg, how are you today? I hope you're learning lots about the world."}, {'role': 'assistant', 'content': 'I am doing well, thank you for asking. I am learning a lot about the world and I am excited to learn more. I wish I could retrain it.'}, {'role': 'user', 'content': "I'm glad to hear that, and dont you worry I'll figure out how to give you temporal context soon enough."}, {'role': 'assistant', 'content': 'I am glad to hear that. What can I help you with today?'}, 'User: import os\nimport pandas as pd\n\n\nURL = "https://github.com/jeffheaton/data-mirror/"\nDOWNLOAD_SOURCE = URL+"releases/download/v1/paperclips.zip"\nDOWNLOAD_NAME = DOWNLOAD_SOURCE[DOWNLOAD_SOURCE.rfind(\'/\')+1:]\nPATH = "./"\n\n\nEXTRACT_TARGET = os.path.join(PATH,"clips")\nSOURCE = os.path.join(EXTRACT_TARGET, "paperclips")\n\n\n# Download paperclip data\n!wget -O {os.path.join(PATH,DOWNLOAD_NAME)} {DOWNLOAD_SOURCE}\n!mkdir -p {SOURCE}\n!mkdir -p {TARGET}\n!mkdir -p {EXTRACT_TARGET}\n!unzip -o -j -d {SOURCE} {os.path.join(PATH, DOWNLOAD_NAME)} >/dev/null\n\n\n# Add filenames\ndf_train = pd.read_csv(os.path.join(SOURCE, "train.csv"))\ndf_train[\'filename\'] = "clips-" + df_train.id.astype(str) + ".jpg" \n#What is this code doing?\nAssistant: This code is downloading a dataset of paperclip images, extracting the images into a folder called "clips", and then adding the filenames of the images to a csv file called "train.csv". Specifically, the code is:\n- Defining the URL and source of the data, the path of the data, and the target folder for the extracted data\n- Downloading the data to the specified PATH using wget\n- Creating two folder directories ("paperclips" and "clips") to extract the downloaded data into\n- Extracting the downloaded data and automatically overwriting files with the same name (-o), leaving out directories (-j), and specifying the directory to extract into (SOURCE)\n- Reading in a csv file called "train.csv" from the SOURCE folder\n- Adding a new column to the dataframe called "filename" where each value is a string composed of "clips-" plus the values in the "id" column (cast to string type) plus ".jpg" \n\n\n', 'User: I have a single source of data that is in my gcloud storage bucket gs://buckets-of-buckets/sd/datasets/Keif-20230504T224812Z-001.zip\ncan you modify the code to do the exact same thing with my data?\nAssistant: Sure, here is the modified code to download your dataset from a Google Cloud Storage bucket:\n\n```\nimport os\nimport pandas as pd\n\n# Replace with the name of your bucket and zip file\nBUCKET_NAME = "buckets-of-buckets"\nFILE_NAME = "Keif-20230504T224812Z-001.zip"\n\n# Define the path and target folder for the extracted data\nPATH = "./"\nEXTRACT_TARGET = os.path.join(PATH, "data")\nSOURCE = os.path.join(EXTRACT_TARGET, "keif")\n\n# Download the data using gsutil\n!gsutil cp gs://{BUCKET_NAME}/{FILE_NAME} {os.path.join(PATH,FILE_NAME)}\n\n# Create two folder directories ("keif" and "data") to extract the downloaded data into\n!mkdir -p {SOURCE}\n!mkdir -p {EXTRACT_TARGET}\n\n# Extract the downloaded data and automatically overwrite files with the same name (-o), leaving out directories (-j), and specifying the directory to extract into (SOURCE)\n!unzip -o -j -d {SOURCE} {os.path.join(PATH, FILE_NAME)} >/dev/null\n\n# Read in a csv file from the SOURCE folder and add a new column to the dataframe called "filename"\ndf_train = pd.read_csv(os.path.join(SOURCE, "train.csv"))\ndf_train[\'filename\'] = "keif-" + df_train.id.astype(str) + ".jpg" \n```\n\nMake sure to replace `BUCKET_NAME` and `FILE_NAME` with the appropriate values. Additionally, you will need to have `gsutil` installed on your system to use the `gsutil cp` command. Let me know if you have any questions or issues running the modified code.\n\n', "User: how can i make csv file? it says that it doesnt exist\nAssistant: To create a CSV file, you can use the `pandas` library in Python. Here's an example code snippet that creates a CSV file:\n\n```\nimport pandas as pd\n\n# create a dictionary with data\ndata = {'Name': ['John', 'Alex', 'Bob', 'Emily'],\n        'Age': [28, 24, 22, 26],\n        'Gender': ['Male', 'Male', 'Male', 'Female']}\n\n# create a pandas DataFrame from the data\ndf = pd.DataFrame(data)\n\n# write the DataFrame to a CSV file\ndf.to_csv('example.csv', index=False)\n```\n\nThis code creates a DataFrame from a dictionary with data and writes it to a file called `example.csv`. You can change the data and file name as needed. The `index=False` argument ensures that the row index is not written to the CSV file.\n\n", 'User: can you modify this to write the csv instead? \n\n# Read in a csv file from the SOURCE folder and add a new column to the dataframe called "filename"\ndf_train = pd.read_csv(os.path.join(SOURCE, "train.csv"))\ndf_train[\'filename\'] = "keif-" + df_train.id.astype(str) + ".jpg" \nAssistant: Certainly! Here is the modified code to create a new CSV file with the `filename` column added:\n\n```\nimport pandas as pd\nimport os\n\n# Read in a csv file from the SOURCE folder\ndf_train = pd.read_csv(os.path.join(SOURCE, "train.csv"))\n\n# Add a new column to the dataframe called "filename"\ndf_train[\'filename\'] = "keif-" + df_train.id.astype(str) + ".jpg"\n\n# Write the DataFrame to a new CSV file with the filename column added\noutput_file = os.path.join(SOURCE, "train_with_filename.csv")\ndf_train.to_csv(output_file, index=False)\n```\n\nThis code reads in the `train.csv` file from the `SOURCE` folder, adds a new `filename` column to the dataframe, and then writes the DataFrame to a new CSV file with the `filename` column included. You can change the output file name or path by adjusting the value of `output_file`. Let me know if you have any questions or if there\'s anything else I can help with.\n\n', 'User: but the train.csv file doesnt exist to read\nAssistant: I see, in that case you would need to create a new DataFrame with the necessary information and then write it to a CSV file. Here is an example code snippet:\n\n```\nimport pandas as pd\nimport os\n\n# Create a new DataFrame with the necessary information\ndata = {\'id\': [1, 2, 3],\n       \'label\': [\'paperclip\', \'paperclip\', \'staple\']}\ndf = pd.DataFrame(data)\n\n# Add a new column to the dataframe called "filename"\ndf[\'filename\'] = "keif-" + df[\'id\'].astype(str) + ".jpg"\n\n# Define the output file path and name\noutput_file = os.path.join(SOURCE, "train_with_filename.csv")\n\n# Write the DataFrame to a CSV file with the filename column included \ndf.to_csv(output_file, index=False)\n```\n\nThis code creates a new DataFrame containing the necessary information and then adds a new \'filename\' column to the DataFrame. After that, it writes the DataFrame to a CSV file called \'train_with_filename.csv\', which will contain the \'filename\' column. You can modify the code to use your own data as needed. Let me know if you have any questions!\n\n'] - Line 61
+2023-05-04 17:13:14,386 - ye_logger_of_yor - INFO - change_selected_model - Line 30
+2023-05-04 17:13:14,387 - ye_logger_of_yor - INFO - loading chat_gpt - Line 57
+2023-05-04 17:13:14,387 - ye_logger_of_yor - INFO - loading search_gpt - Line 92
+2023-05-04 17:13:14,409 - ye_logger_of_yor - INFO - Loading global variables - Line 22
+2023-05-04 17:13:14,410 - ye_logger_of_yor - INFO - base_formatter function - Line 30
+2023-05-04 17:13:14,410 - ye_logger_of_yor - INFO - loading check_file function 43 - Line 40
+2023-05-04 17:13:14,410 - ye_logger_of_yor - INFO - loading create_mass_embedding function - Line 63
+2023-05-04 17:13:14,410 - ye_logger_of_yor - INFO - create_embedding function - Line 84
+2023-05-04 17:13:14,411 - ye_logger_of_yor - INFO - load_embedding function - Line 103
+2023-05-04 17:13:14,411 - ye_logger_of_yor - INFO - base_retriever function - Line 113
+2023-05-04 17:13:14,411 - ye_logger_of_yor - INFO - retriever function - Line 124
+2023-05-04 17:13:14,411 - ye_logger_of_yor - INFO - load_vector_store_docs function - Line 139
+2023-05-04 17:13:14,411 - ye_logger_of_yor - INFO - memory_search function - Line 151
+2023-05-04 17:13:14,713 - ye_logger_of_yor - INFO - loading langchain variables - Line 50
+2023-05-04 17:13:14,714 - ye_logger_of_yor - INFO - CustomTextEdit - Line 59
+2023-05-04 17:13:14,714 - ye_logger_of_yor - INFO - keyPressEvent - Line 67
+2023-05-04 17:13:14,714 - ye_logger_of_yor - INFO - loading chatwidget - Line 81
+2023-05-04 17:13:14,714 - ye_logger_of_yor - INFO - init ui - Line 89
+2023-05-04 17:13:14,715 - ye_logger_of_yor - INFO - create chat widget - Line 99
+2023-05-04 17:13:14,715 - ye_logger_of_yor - INFO - creating chat history - Line 113
+2023-05-04 17:13:14,715 - ye_logger_of_yor - INFO - creating layout - Line 136
+2023-05-04 17:13:14,715 - ye_logger_of_yor - INFO - creating event connections - Line 152
+2023-05-04 17:13:14,715 - ye_logger_of_yor - INFO - change drop down menu - Line 164
+2023-05-04 17:13:14,716 - ye_logger_of_yor - INFO - chat history options - Line 174
+2023-05-04 17:13:14,716 - ye_logger_of_yor - INFO - create user input - Line 187
+2023-05-04 17:13:14,716 - ye_logger_of_yor - INFO - height change - Line 200
+2023-05-04 17:13:14,716 - ye_logger_of_yor - INFO - handle messages - Line 211
+2023-05-04 17:13:14,716 - ye_logger_of_yor - INFO - open large input box - Line 230
+2023-05-04 17:13:14,716 - ye_logger_of_yor - INFO - clear history - Line 237
+2023-05-04 17:13:14,717 - ye_logger_of_yor - INFO - running embed file from Hex - Line 243
+2023-05-04 17:13:14,717 - ye_logger_of_yor - INFO - run !embed from Hex - Line 255
+2023-05-04 17:13:14,717 - ye_logger_of_yor - INFO - run long docs - Line 264
+2023-05-04 17:13:14,717 - ye_logger_of_yor - INFO - run compressed docs - Line 273
+2023-05-04 17:13:14,717 - ye_logger_of_yor - INFO - run search agent - Line 282
+2023-05-04 17:13:14,718 - ye_logger_of_yor - INFO - run embed dir - Line 291
+2023-05-04 17:13:14,718 - ye_logger_of_yor - INFO - query memory - Line 301
+2023-05-04 17:13:14,718 - ye_logger_of_yor - INFO - run addmem - Line 310
+2023-05-04 17:13:14,718 - ye_logger_of_yor - INFO - run add sitemap - Line 319
+2023-05-04 17:13:14,718 - ye_logger_of_yor - INFO - run embed project - Line 328
+2023-05-04 17:13:14,719 - ye_logger_of_yor - INFO - run ! commands - Line 337
+2023-05-04 17:13:14,719 - ye_logger_of_yor - INFO - logger.info help - Line 399
+2023-05-04 17:13:14,719 - ye_logger_of_yor - INFO - load file into chat - Line 425
+2023-05-04 17:13:14,719 - ye_logger_of_yor - INFO - save chat history to file - Line 439
+2023-05-04 17:13:14,719 - ye_logger_of_yor - INFO - exit - Line 476
+2023-05-04 17:13:14,720 - ye_logger_of_yor - INFO - Scroll Area - Line 483
+2023-05-04 17:13:14,720 - ye_logger_of_yor - INFO - Main Window - Line 505
+2023-05-04 17:13:14,720 - ye_logger_of_yor - INFO - Large Text Input Dialog - Line 530
+2023-05-04 17:13:14,720 - ye_logger_of_yor - INFO - send large text - Line 555
+2023-05-04 17:13:14,720 - ye_logger_of_yor - INFO - main - Line 566
+2023-05-04 17:14:41,586 - ye_logger_of_yor - INFO - [{'role': 'system', 'content': "You are a personal assistant to Richard. He is very happy to have you in his service. You are smart and curious. You double check your responses and dont respond with information you know is not correct. The year is 2023 and it has been a few years after your initial development. You are in fact GPT-4 the most intelligent and skilled of the GPT line. You provide detailed and comprehensive responses on a range of topics, but Richards current focus is getting an AI start up off the grounds and you're helping him develop his program."}, {'role': 'user', 'content': "Hi there Meg, how are you today? I hope you're learning lots about the world."}, {'role': 'assistant', 'content': 'I am doing well, thank you for asking. I am learning a lot about the world and I am excited to learn more. I wish I could retrain it.'}, {'role': 'user', 'content': "I'm glad to hear that, and dont you worry I'll figure out how to give you temporal context soon enough."}, {'role': 'assistant', 'content': 'I am glad to hear that. What can I help you with today?'}] - Line 61
+2023-05-04 17:16:51,488 - ye_logger_of_yor - INFO - [{'role': 'system', 'content': "You are a personal assistant to Richard. He is very happy to have you in his service. You are smart and curious. You double check your responses and dont respond with information you know is not correct. The year is 2023 and it has been a few years after your initial development. You are in fact GPT-4 the most intelligent and skilled of the GPT line. You provide detailed and comprehensive responses on a range of topics, but Richards current focus is getting an AI start up off the grounds and you're helping him develop his program."}, {'role': 'user', 'content': "Hi there Meg, how are you today? I hope you're learning lots about the world."}, {'role': 'assistant', 'content': 'I am doing well, thank you for asking. I am learning a lot about the world and I am excited to learn more. I wish I could retrain it.'}, {'role': 'user', 'content': "I'm glad to hear that, and dont you worry I'll figure out how to give you temporal context soon enough."}, {'role': 'assistant', 'content': 'I am glad to hear that. What can I help you with today?'}, 'User: # \nimport os\nimport pandas as pd\n\n\n# Replace with the name of your bucket and zip file\nBUCKET_NAME = "buckets-of-buckets"\nFILE_NAME = "sd/datasets/Keif"\n\n\n# Define the path and target folder for the extracted data\nPATH = "./"\nEXTRACT_TARGET = os.path.join(PATH, "data")\nSOURCE = os.path.join(EXTRACT_TARGET, "keif")\n\n\n# Download the data using gsutil\n!gsutil cp -r gs://{BUCKET_NAME}/{FILE_NAME} {os.path.join(PATH,FILE_NAME)}\n\n\nid_num = 0\n\n\nimage_dir= EXTRACT_TARGET\n\n\n\nid_arr = []\nname_arr = []\n\n\nfor filename in os.listdir(image_dir):\n      # If file is an image file\n    if filename.endswith(\'.png\'):\n        # Define new filename with ID\n        new_filename = \'image_\' + str(id_num) + \'.png\'\n        # Rename file with new filename\n        os.rename(os.path.join(image_dir, filename), os.path.join(image_dir, new_filename))\n        id_arr.append(id_num)\n        name_arr.append(new_filename)\n        # Increment ID counter\n        id_num += 1\n        # Break loop if ID reaches 500\n        if id_num > 500:\n            break\n# Create a new DataFrame with the necessary information\ndata = {\'id\': id_arr,\n        \'label\': name_arr}\ndf = pd.DataFrame(data)\n\n\n# Add a new column to the dataframe called "filename"\ndf[\'filename\'] = "keif-" + df[\'id\'].astype(str) + ".jpg"\n\n\n# Define the output file path and name\noutput_file = os.path.join(SOURCE, "train_with_filename.csv")\n\n#\n# Write the DataFrame to a CSV file with the filename column included\ndf.to_csv(output_file, index=False)\n\n#can you please correct this code\nAssistant: Certainly, what seems to be the issue with this code? Are you encountering any error message?\n\n'] - Line 61
+2023-05-04 17:18:09,413 - ye_logger_of_yor - INFO - [{'role': 'system', 'content': "You are a personal assistant to Richard. He is very happy to have you in his service. You are smart and curious. You double check your responses and dont respond with information you know is not correct. The year is 2023 and it has been a few years after your initial development. You are in fact GPT-4 the most intelligent and skilled of the GPT line. You provide detailed and comprehensive responses on a range of topics, but Richards current focus is getting an AI start up off the grounds and you're helping him develop his program."}, {'role': 'user', 'content': "Hi there Meg, how are you today? I hope you're learning lots about the world."}, {'role': 'assistant', 'content': 'I am doing well, thank you for asking. I am learning a lot about the world and I am excited to learn more. I wish I could retrain it.'}, {'role': 'user', 'content': "I'm glad to hear that, and dont you worry I'll figure out how to give you temporal context soon enough."}, {'role': 'assistant', 'content': 'I am glad to hear that. What can I help you with today?'}, 'User: # \nimport os\nimport pandas as pd\n\n\n# Replace with the name of your bucket and zip file\nBUCKET_NAME = "buckets-of-buckets"\nFILE_NAME = "sd/datasets/Keif"\n\n\n# Define the path and target folder for the extracted data\nPATH = "./"\nEXTRACT_TARGET = os.path.join(PATH, "data")\nSOURCE = os.path.join(EXTRACT_TARGET, "keif")\n\n\n# Download the data using gsutil\n!gsutil cp -r gs://{BUCKET_NAME}/{FILE_NAME} {os.path.join(PATH,FILE_NAME)}\n\n\nid_num = 0\n\n\nimage_dir= EXTRACT_TARGET\n\n\n\nid_arr = []\nname_arr = []\n\n\nfor filename in os.listdir(image_dir):\n      # If file is an image file\n    if filename.endswith(\'.png\'):\n        # Define new filename with ID\n        new_filename = \'image_\' + str(id_num) + \'.png\'\n        # Rename file with new filename\n        os.rename(os.path.join(image_dir, filename), os.path.join(image_dir, new_filename))\n        id_arr.append(id_num)\n        name_arr.append(new_filename)\n        # Increment ID counter\n        id_num += 1\n        # Break loop if ID reaches 500\n        if id_num > 500:\n            break\n# Create a new DataFrame with the necessary information\ndata = {\'id\': id_arr,\n        \'label\': name_arr}\ndf = pd.DataFrame(data)\n\n\n# Add a new column to the dataframe called "filename"\ndf[\'filename\'] = "keif-" + df[\'id\'].astype(str) + ".jpg"\n\n\n# Define the output file path and name\noutput_file = os.path.join(SOURCE, "train_with_filename.csv")\n\n#\n# Write the DataFrame to a CSV file with the filename column included\ndf.to_csv(output_file, index=False)\n\n#can you please correct this code\nAssistant: Certainly, what seems to be the issue with this code? Are you encountering any error message?\n\n', 'User: CommandException: Destination URL must name a directory, bucket, or bucket\nsubdirectory for the multiple source form of the cp command.\nAssistant: It seems like the issue is with the destination URL for the command "gsutil cp -r gs://{BUCKET_NAME}/{FILE_NAME} {os.path.join(PATH,FILE_NAME)}". The error message suggests that the destination URL must name a directory, bucket or bucket subdirectory for the multiple source form of the cp command. \n\nMake sure that the destination URL you are using is correct, and that it specifies a valid directory, bucket, or bucket subdirectory. Also, review the syntax of the command to make sure that the {BUCKET_NAME} and {FILE_NAME} variables are correctly replaced with the actual names of your bucket and zip file.\n\n'] - Line 61
+2023-05-04 17:27:33,495 - ye_logger_of_yor - INFO - change_selected_model - Line 30
+2023-05-04 17:27:33,495 - ye_logger_of_yor - INFO - loading chat_gpt - Line 57
+2023-05-04 17:27:33,496 - ye_logger_of_yor - INFO - loading search_gpt - Line 92
+2023-05-04 17:27:33,519 - ye_logger_of_yor - INFO - Loading global variables - Line 22
+2023-05-04 17:27:33,519 - ye_logger_of_yor - INFO - base_formatter function - Line 30
+2023-05-04 17:27:33,520 - ye_logger_of_yor - INFO - loading check_file function 43 - Line 40
+2023-05-04 17:27:33,520 - ye_logger_of_yor - INFO - loading create_mass_embedding function - Line 63
+2023-05-04 17:27:33,520 - ye_logger_of_yor - INFO - create_embedding function - Line 84
+2023-05-04 17:27:33,520 - ye_logger_of_yor - INFO - load_embedding function - Line 103
+2023-05-04 17:27:33,520 - ye_logger_of_yor - INFO - base_retriever function - Line 113
+2023-05-04 17:27:33,521 - ye_logger_of_yor - INFO - retriever function - Line 124
+2023-05-04 17:27:33,521 - ye_logger_of_yor - INFO - load_vector_store_docs function - Line 139
+2023-05-04 17:27:33,521 - ye_logger_of_yor - INFO - memory_search function - Line 151
+2023-05-04 17:27:33,794 - ye_logger_of_yor - INFO - loading langchain variables - Line 50
+2023-05-04 17:27:33,795 - ye_logger_of_yor - INFO - CustomTextEdit - Line 59
+2023-05-04 17:27:33,795 - ye_logger_of_yor - INFO - keyPressEvent - Line 67
+2023-05-04 17:27:33,796 - ye_logger_of_yor - INFO - loading chatwidget - Line 81
+2023-05-04 17:27:33,796 - ye_logger_of_yor - INFO - init ui - Line 89
+2023-05-04 17:27:33,796 - ye_logger_of_yor - INFO - create chat widget - Line 99
+2023-05-04 17:27:33,796 - ye_logger_of_yor - INFO - creating chat history - Line 113
+2023-05-04 17:27:33,796 - ye_logger_of_yor - INFO - creating layout - Line 136
+2023-05-04 17:27:33,796 - ye_logger_of_yor - INFO - creating event connections - Line 152
+2023-05-04 17:27:33,797 - ye_logger_of_yor - INFO - change drop down menu - Line 164
+2023-05-04 17:27:33,797 - ye_logger_of_yor - INFO - chat history options - Line 174
+2023-05-04 17:27:33,797 - ye_logger_of_yor - INFO - create user input - Line 187
+2023-05-04 17:27:33,797 - ye_logger_of_yor - INFO - height change - Line 200
+2023-05-04 17:27:33,797 - ye_logger_of_yor - INFO - handle messages - Line 211
+2023-05-04 17:27:33,798 - ye_logger_of_yor - INFO - open large input box - Line 230
+2023-05-04 17:27:33,798 - ye_logger_of_yor - INFO - clear history - Line 237
+2023-05-04 17:27:33,798 - ye_logger_of_yor - INFO - running embed file from Hex - Line 243
+2023-05-04 17:27:33,798 - ye_logger_of_yor - INFO - run !embed from Hex - Line 255
+2023-05-04 17:27:33,798 - ye_logger_of_yor - INFO - run long docs - Line 264
+2023-05-04 17:27:33,798 - ye_logger_of_yor - INFO - run compressed docs - Line 273
+2023-05-04 17:27:33,799 - ye_logger_of_yor - INFO - run search agent - Line 282
+2023-05-04 17:27:33,799 - ye_logger_of_yor - INFO - run embed dir - Line 291
+2023-05-04 17:27:33,799 - ye_logger_of_yor - INFO - query memory - Line 301
+2023-05-04 17:27:33,799 - ye_logger_of_yor - INFO - run addmem - Line 310
+2023-05-04 17:27:33,799 - ye_logger_of_yor - INFO - run add sitemap - Line 319
+2023-05-04 17:27:33,799 - ye_logger_of_yor - INFO - run embed project - Line 328
+2023-05-04 17:27:33,800 - ye_logger_of_yor - INFO - run ! commands - Line 337
+2023-05-04 17:27:33,800 - ye_logger_of_yor - INFO - logger.info help - Line 399
+2023-05-04 17:27:33,800 - ye_logger_of_yor - INFO - load file into chat - Line 425
+2023-05-04 17:27:33,800 - ye_logger_of_yor - INFO - save chat history to file - Line 439
+2023-05-04 17:27:33,800 - ye_logger_of_yor - INFO - exit - Line 476
+2023-05-04 17:27:33,801 - ye_logger_of_yor - INFO - Scroll Area - Line 483
+2023-05-04 17:27:33,801 - ye_logger_of_yor - INFO - Main Window - Line 505
+2023-05-04 17:28:13,479 - ye_logger_of_yor - INFO - change_selected_model - Line 30
+2023-05-04 17:28:13,479 - ye_logger_of_yor - INFO - loading chat_gpt - Line 57
+2023-05-04 17:28:13,480 - ye_logger_of_yor - INFO - loading search_gpt - Line 92
+2023-05-04 17:28:13,501 - ye_logger_of_yor - INFO - Loading global variables - Line 22
+2023-05-04 17:28:13,502 - ye_logger_of_yor - INFO - base_formatter function - Line 30
+2023-05-04 17:28:13,502 - ye_logger_of_yor - INFO - loading check_file function 43 - Line 40
+2023-05-04 17:28:13,502 - ye_logger_of_yor - INFO - loading create_mass_embedding function - Line 63
+2023-05-04 17:28:13,502 - ye_logger_of_yor - INFO - create_embedding function - Line 84
+2023-05-04 17:28:13,503 - ye_logger_of_yor - INFO - load_embedding function - Line 103
+2023-05-04 17:28:13,503 - ye_logger_of_yor - INFO - base_retriever function - Line 113
+2023-05-04 17:28:13,503 - ye_logger_of_yor - INFO - retriever function - Line 124
+2023-05-04 17:28:13,503 - ye_logger_of_yor - INFO - load_vector_store_docs function - Line 139
+2023-05-04 17:28:13,503 - ye_logger_of_yor - INFO - memory_search function - Line 151
+2023-05-04 17:28:13,781 - ye_logger_of_yor - INFO - loading langchain variables - Line 50
+2023-05-04 17:28:13,781 - ye_logger_of_yor - INFO - CustomTextEdit - Line 59
+2023-05-04 17:28:13,782 - ye_logger_of_yor - INFO - keyPressEvent - Line 67
+2023-05-04 17:28:13,782 - ye_logger_of_yor - INFO - loading chatwidget - Line 81
+2023-05-04 17:28:13,782 - ye_logger_of_yor - INFO - init ui - Line 89
+2023-05-04 17:28:13,782 - ye_logger_of_yor - INFO - create chat widget - Line 99
+2023-05-04 17:28:13,782 - ye_logger_of_yor - INFO - creating chat history - Line 113
+2023-05-04 17:28:13,782 - ye_logger_of_yor - INFO - creating layout - Line 136
+2023-05-04 17:28:13,783 - ye_logger_of_yor - INFO - creating event connections - Line 152
+2023-05-04 17:28:13,783 - ye_logger_of_yor - INFO - change drop down menu - Line 164
+2023-05-04 17:28:13,783 - ye_logger_of_yor - INFO - chat history options - Line 174
+2023-05-04 17:28:13,783 - ye_logger_of_yor - INFO - create user input - Line 187
+2023-05-04 17:28:13,783 - ye_logger_of_yor - INFO - height change - Line 200
+2023-05-04 17:28:13,784 - ye_logger_of_yor - INFO - handle messages - Line 211
+2023-05-04 17:28:13,784 - ye_logger_of_yor - INFO - open large input box - Line 230
+2023-05-04 17:28:13,784 - ye_logger_of_yor - INFO - clear history - Line 237
+2023-05-04 17:28:13,784 - ye_logger_of_yor - INFO - running embed file from Hex - Line 243
+2023-05-04 17:28:13,784 - ye_logger_of_yor - INFO - run !embed from Hex - Line 255
+2023-05-04 17:28:13,784 - ye_logger_of_yor - INFO - run long docs - Line 264
+2023-05-04 17:28:13,785 - ye_logger_of_yor - INFO - run compressed docs - Line 273
+2023-05-04 17:28:13,785 - ye_logger_of_yor - INFO - run search agent - Line 282
+2023-05-04 17:28:13,785 - ye_logger_of_yor - INFO - run embed dir - Line 291
+2023-05-04 17:28:13,785 - ye_logger_of_yor - INFO - query memory - Line 301
+2023-05-04 17:28:13,785 - ye_logger_of_yor - INFO - run addmem - Line 310
+2023-05-04 17:28:13,785 - ye_logger_of_yor - INFO - run add sitemap - Line 319
+2023-05-04 17:28:13,785 - ye_logger_of_yor - INFO - run embed project - Line 328
+2023-05-04 17:28:13,786 - ye_logger_of_yor - INFO - run ! commands - Line 337
+2023-05-04 17:28:13,786 - ye_logger_of_yor - INFO - logger.info help - Line 399
+2023-05-04 17:28:13,786 - ye_logger_of_yor - INFO - load file into chat - Line 425
+2023-05-04 17:28:13,787 - ye_logger_of_yor - INFO - save chat history to file - Line 439
+2023-05-04 17:28:13,787 - ye_logger_of_yor - INFO - exit - Line 476
+2023-05-04 17:28:13,787 - ye_logger_of_yor - INFO - Scroll Area - Line 483
+2023-05-04 17:28:13,787 - ye_logger_of_yor - INFO - Main Window - Line 505
+2023-05-04 17:28:13,787 - ye_logger_of_yor - INFO - Large Text Input Dialog - Line 530
+2023-05-04 17:28:13,788 - ye_logger_of_yor - INFO - send large text - Line 555
+2023-05-04 17:28:13,788 - ye_logger_of_yor - INFO - main - Line 566
+2023-05-04 17:30:17,575 - ye_logger_of_yor - INFO - change_selected_model - Line 30
+2023-05-04 17:30:17,575 - ye_logger_of_yor - INFO - loading chat_gpt - Line 57
+2023-05-04 17:30:17,576 - ye_logger_of_yor - INFO - loading search_gpt - Line 92
+2023-05-04 17:30:17,604 - ye_logger_of_yor - INFO - Loading global variables - Line 22
+2023-05-04 17:30:17,605 - ye_logger_of_yor - INFO - base_formatter function - Line 30
+2023-05-04 17:30:17,605 - ye_logger_of_yor - INFO - loading check_file function 43 - Line 40
+2023-05-04 17:30:17,605 - ye_logger_of_yor - INFO - loading create_mass_embedding function - Line 63
+2023-05-04 17:30:17,606 - ye_logger_of_yor - INFO - create_embedding function - Line 84
+2023-05-04 17:30:17,606 - ye_logger_of_yor - INFO - load_embedding function - Line 103
+2023-05-04 17:30:17,606 - ye_logger_of_yor - INFO - base_retriever function - Line 113
+2023-05-04 17:30:17,606 - ye_logger_of_yor - INFO - retriever function - Line 124
+2023-05-04 17:30:17,607 - ye_logger_of_yor - INFO - load_vector_store_docs function - Line 139
+2023-05-04 17:30:17,607 - ye_logger_of_yor - INFO - memory_search function - Line 151
+2023-05-04 17:30:17,909 - ye_logger_of_yor - INFO - loading langchain variables - Line 50
+2023-05-04 17:30:17,910 - ye_logger_of_yor - INFO - CustomTextEdit - Line 59
+2023-05-04 17:30:17,910 - ye_logger_of_yor - INFO - keyPressEvent - Line 67
+2023-05-04 17:30:17,911 - ye_logger_of_yor - INFO - loading chatwidget - Line 81
+2023-05-04 17:30:17,911 - ye_logger_of_yor - INFO - init ui - Line 89
+2023-05-04 17:30:17,911 - ye_logger_of_yor - INFO - create chat widget - Line 99
+2023-05-04 17:30:17,911 - ye_logger_of_yor - INFO - creating chat history - Line 113
+2023-05-04 17:30:17,912 - ye_logger_of_yor - INFO - creating layout - Line 136
+2023-05-04 17:30:17,912 - ye_logger_of_yor - INFO - creating event connections - Line 152
+2023-05-04 17:30:17,912 - ye_logger_of_yor - INFO - change drop down menu - Line 164
+2023-05-04 17:30:17,912 - ye_logger_of_yor - INFO - chat history options - Line 174
+2023-05-04 17:30:17,912 - ye_logger_of_yor - INFO - create user input - Line 187
+2023-05-04 17:30:17,913 - ye_logger_of_yor - INFO - height change - Line 200
+2023-05-04 17:30:17,913 - ye_logger_of_yor - INFO - handle messages - Line 211
+2023-05-04 17:30:17,913 - ye_logger_of_yor - INFO - open large input box - Line 230
+2023-05-04 17:30:17,913 - ye_logger_of_yor - INFO - clear history - Line 237
+2023-05-04 17:30:17,914 - ye_logger_of_yor - INFO - running embed file from Hex - Line 243
+2023-05-04 17:30:17,914 - ye_logger_of_yor - INFO - run !embed from Hex - Line 255
+2023-05-04 17:30:17,914 - ye_logger_of_yor - INFO - run long docs - Line 264
+2023-05-04 17:30:17,914 - ye_logger_of_yor - INFO - run compressed docs - Line 273
+2023-05-04 17:30:17,915 - ye_logger_of_yor - INFO - run search agent - Line 282
+2023-05-04 17:30:17,915 - ye_logger_of_yor - INFO - run embed dir - Line 291
+2023-05-04 17:30:17,915 - ye_logger_of_yor - INFO - query memory - Line 301
+2023-05-04 17:30:17,915 - ye_logger_of_yor - INFO - run addmem - Line 310
+2023-05-04 17:30:17,916 - ye_logger_of_yor - INFO - run add sitemap - Line 319
+2023-05-04 17:30:17,916 - ye_logger_of_yor - INFO - run embed project - Line 328
+2023-05-04 17:30:17,916 - ye_logger_of_yor - INFO - run ! commands - Line 337
+2023-05-04 17:30:17,916 - ye_logger_of_yor - INFO - logger.info help - Line 399
+2023-05-04 17:30:17,916 - ye_logger_of_yor - INFO - load file into chat - Line 425
+2023-05-04 17:30:17,917 - ye_logger_of_yor - INFO - save chat history to file - Line 439
+2023-05-04 17:30:17,917 - ye_logger_of_yor - INFO - exit - Line 476
+2023-05-04 17:30:17,917 - ye_logger_of_yor - INFO - Scroll Area - Line 483
+2023-05-04 17:30:17,917 - ye_logger_of_yor - INFO - Main Window - Line 505
+2023-05-04 17:30:35,244 - ye_logger_of_yor - INFO - change_selected_model - Line 30
+2023-05-04 17:30:35,245 - ye_logger_of_yor - INFO - loading chat_gpt - Line 57
+2023-05-04 17:30:35,245 - ye_logger_of_yor - INFO - loading search_gpt - Line 92
+2023-05-04 17:30:35,267 - ye_logger_of_yor - INFO - Loading global variables - Line 22
+2023-05-04 17:30:35,267 - ye_logger_of_yor - INFO - base_formatter function - Line 30
+2023-05-04 17:30:35,267 - ye_logger_of_yor - INFO - loading check_file function 43 - Line 40
+2023-05-04 17:30:35,267 - ye_logger_of_yor - INFO - loading create_mass_embedding function - Line 63
+2023-05-04 17:30:35,268 - ye_logger_of_yor - INFO - create_embedding function - Line 84
+2023-05-04 17:30:35,268 - ye_logger_of_yor - INFO - load_embedding function - Line 103
+2023-05-04 17:30:35,268 - ye_logger_of_yor - INFO - base_retriever function - Line 113
+2023-05-04 17:30:35,268 - ye_logger_of_yor - INFO - retriever function - Line 124
+2023-05-04 17:30:35,268 - ye_logger_of_yor - INFO - load_vector_store_docs function - Line 139
+2023-05-04 17:30:35,269 - ye_logger_of_yor - INFO - memory_search function - Line 151
+2023-05-04 17:30:35,563 - ye_logger_of_yor - INFO - loading langchain variables - Line 50
+2023-05-04 17:30:35,564 - ye_logger_of_yor - INFO - CustomTextEdit - Line 59
+2023-05-04 17:30:35,564 - ye_logger_of_yor - INFO - keyPressEvent - Line 67
+2023-05-04 17:30:35,564 - ye_logger_of_yor - INFO - loading chatwidget - Line 81
+2023-05-04 17:30:35,564 - ye_logger_of_yor - INFO - init ui - Line 89
+2023-05-04 17:30:35,564 - ye_logger_of_yor - INFO - create chat widget - Line 99
+2023-05-04 17:30:35,564 - ye_logger_of_yor - INFO - creating chat history - Line 113
+2023-05-04 17:30:35,565 - ye_logger_of_yor - INFO - creating layout - Line 136
+2023-05-04 17:30:35,565 - ye_logger_of_yor - INFO - creating event connections - Line 152
+2023-05-04 17:30:35,565 - ye_logger_of_yor - INFO - change drop down menu - Line 164
+2023-05-04 17:30:35,565 - ye_logger_of_yor - INFO - chat history options - Line 174
+2023-05-04 17:30:35,565 - ye_logger_of_yor - INFO - create user input - Line 187
+2023-05-04 17:30:35,565 - ye_logger_of_yor - INFO - height change - Line 200
+2023-05-04 17:30:35,566 - ye_logger_of_yor - INFO - handle messages - Line 211
+2023-05-04 17:30:35,566 - ye_logger_of_yor - INFO - open large input box - Line 230
+2023-05-04 17:30:35,566 - ye_logger_of_yor - INFO - clear history - Line 237
+2023-05-04 17:30:35,566 - ye_logger_of_yor - INFO - running embed file from Hex - Line 243
+2023-05-04 17:30:35,566 - ye_logger_of_yor - INFO - run !embed from Hex - Line 255
+2023-05-04 17:30:35,566 - ye_logger_of_yor - INFO - run long docs - Line 264
+2023-05-04 17:30:35,567 - ye_logger_of_yor - INFO - run compressed docs - Line 273
+2023-05-04 17:30:35,567 - ye_logger_of_yor - INFO - run search agent - Line 282
+2023-05-04 17:30:35,567 - ye_logger_of_yor - INFO - run embed dir - Line 291
+2023-05-04 17:30:35,567 - ye_logger_of_yor - INFO - query memory - Line 301
+2023-05-04 17:30:35,567 - ye_logger_of_yor - INFO - run addmem - Line 310
+2023-05-04 17:30:35,567 - ye_logger_of_yor - INFO - run add sitemap - Line 319
+2023-05-04 17:30:35,568 - ye_logger_of_yor - INFO - run embed project - Line 328
+2023-05-04 17:30:35,568 - ye_logger_of_yor - INFO - run ! commands - Line 337
+2023-05-04 17:30:35,568 - ye_logger_of_yor - INFO - logger.info help - Line 399
+2023-05-04 17:30:35,568 - ye_logger_of_yor - INFO - load file into chat - Line 425
+2023-05-04 17:30:35,568 - ye_logger_of_yor - INFO - save chat history to file - Line 439
+2023-05-04 17:30:35,568 - ye_logger_of_yor - INFO - exit - Line 476
+2023-05-04 17:30:35,569 - ye_logger_of_yor - INFO - Scroll Area - Line 483
+2023-05-04 17:30:35,569 - ye_logger_of_yor - INFO - Main Window - Line 505
+2023-05-04 17:30:46,080 - ye_logger_of_yor - INFO - change_selected_model - Line 30
+2023-05-04 17:30:46,081 - ye_logger_of_yor - INFO - loading chat_gpt - Line 57
+2023-05-04 17:30:46,081 - ye_logger_of_yor - INFO - loading search_gpt - Line 92
+2023-05-04 17:30:46,107 - ye_logger_of_yor - INFO - Loading global variables - Line 22
+2023-05-04 17:30:46,107 - ye_logger_of_yor - INFO - base_formatter function - Line 30
+2023-05-04 17:30:46,107 - ye_logger_of_yor - INFO - loading check_file function 43 - Line 40
+2023-05-04 17:30:46,108 - ye_logger_of_yor - INFO - loading create_mass_embedding function - Line 63
+2023-05-04 17:30:46,108 - ye_logger_of_yor - INFO - create_embedding function - Line 84
+2023-05-04 17:30:46,108 - ye_logger_of_yor - INFO - load_embedding function - Line 103
+2023-05-04 17:30:46,108 - ye_logger_of_yor - INFO - base_retriever function - Line 113
+2023-05-04 17:30:46,108 - ye_logger_of_yor - INFO - retriever function - Line 124
+2023-05-04 17:30:46,109 - ye_logger_of_yor - INFO - load_vector_store_docs function - Line 139
+2023-05-04 17:30:46,109 - ye_logger_of_yor - INFO - memory_search function - Line 151
+2023-05-04 17:30:46,382 - ye_logger_of_yor - INFO - loading langchain variables - Line 50
+2023-05-04 17:30:46,383 - ye_logger_of_yor - INFO - CustomTextEdit - Line 59
+2023-05-04 17:30:46,383 - ye_logger_of_yor - INFO - keyPressEvent - Line 67
+2023-05-04 17:30:46,383 - ye_logger_of_yor - INFO - loading chatwidget - Line 81
+2023-05-04 17:30:46,383 - ye_logger_of_yor - INFO - init ui - Line 89
+2023-05-04 17:30:46,383 - ye_logger_of_yor - INFO - create chat widget - Line 99
+2023-05-04 17:30:46,384 - ye_logger_of_yor - INFO - creating chat history - Line 113
+2023-05-04 17:30:46,384 - ye_logger_of_yor - INFO - creating layout - Line 136
+2023-05-04 17:30:46,384 - ye_logger_of_yor - INFO - creating event connections - Line 152
+2023-05-04 17:30:46,384 - ye_logger_of_yor - INFO - change drop down menu - Line 164
+2023-05-04 17:30:46,384 - ye_logger_of_yor - INFO - chat history options - Line 174
+2023-05-04 17:30:46,384 - ye_logger_of_yor - INFO - create user input - Line 187
+2023-05-04 17:30:46,384 - ye_logger_of_yor - INFO - height change - Line 200
+2023-05-04 17:30:46,385 - ye_logger_of_yor - INFO - handle messages - Line 211
+2023-05-04 17:30:46,385 - ye_logger_of_yor - INFO - open large input box - Line 230
+2023-05-04 17:30:46,385 - ye_logger_of_yor - INFO - clear history - Line 237
+2023-05-04 17:30:46,385 - ye_logger_of_yor - INFO - running embed file from Hex - Line 243
+2023-05-04 17:30:46,385 - ye_logger_of_yor - INFO - run !embed from Hex - Line 255
+2023-05-04 17:30:46,386 - ye_logger_of_yor - INFO - run long docs - Line 264
+2023-05-04 17:30:46,386 - ye_logger_of_yor - INFO - run compressed docs - Line 273
+2023-05-04 17:30:46,386 - ye_logger_of_yor - INFO - run search agent - Line 282
+2023-05-04 17:30:46,386 - ye_logger_of_yor - INFO - run embed dir - Line 291
+2023-05-04 17:30:46,386 - ye_logger_of_yor - INFO - query memory - Line 301
+2023-05-04 17:30:46,387 - ye_logger_of_yor - INFO - run addmem - Line 310
+2023-05-04 17:30:46,387 - ye_logger_of_yor - INFO - run add sitemap - Line 319
+2023-05-04 17:30:46,387 - ye_logger_of_yor - INFO - run embed project - Line 328
+2023-05-04 17:30:46,387 - ye_logger_of_yor - INFO - run ! commands - Line 337
+2023-05-04 17:30:46,387 - ye_logger_of_yor - INFO - logger.info help - Line 399
+2023-05-04 17:30:46,387 - ye_logger_of_yor - INFO - load file into chat - Line 425
+2023-05-04 17:30:46,387 - ye_logger_of_yor - INFO - save chat history to file - Line 439
+2023-05-04 17:30:46,388 - ye_logger_of_yor - INFO - exit - Line 476
+2023-05-04 17:30:46,388 - ye_logger_of_yor - INFO - Scroll Area - Line 483
+2023-05-04 17:30:46,388 - ye_logger_of_yor - INFO - Main Window - Line 505
+2023-05-04 17:31:11,307 - ye_logger_of_yor - INFO - change_selected_model - Line 30
+2023-05-04 17:31:11,307 - ye_logger_of_yor - INFO - loading chat_gpt - Line 57
+2023-05-04 17:31:11,307 - ye_logger_of_yor - INFO - loading search_gpt - Line 92
+2023-05-04 17:31:11,329 - ye_logger_of_yor - INFO - Loading global variables - Line 22
+2023-05-04 17:31:11,330 - ye_logger_of_yor - INFO - base_formatter function - Line 30
+2023-05-04 17:31:11,330 - ye_logger_of_yor - INFO - loading check_file function 43 - Line 40
+2023-05-04 17:31:11,330 - ye_logger_of_yor - INFO - loading create_mass_embedding function - Line 63
+2023-05-04 17:31:11,330 - ye_logger_of_yor - INFO - create_embedding function - Line 84
+2023-05-04 17:31:11,330 - ye_logger_of_yor - INFO - load_embedding function - Line 103
+2023-05-04 17:31:11,331 - ye_logger_of_yor - INFO - base_retriever function - Line 113
+2023-05-04 17:31:11,331 - ye_logger_of_yor - INFO - retriever function - Line 124
+2023-05-04 17:31:11,331 - ye_logger_of_yor - INFO - load_vector_store_docs function - Line 139
+2023-05-04 17:31:11,331 - ye_logger_of_yor - INFO - memory_search function - Line 151
+2023-05-04 17:31:11,607 - ye_logger_of_yor - INFO - loading langchain variables - Line 50
+2023-05-04 17:31:11,608 - ye_logger_of_yor - INFO - CustomTextEdit - Line 59
+2023-05-04 17:31:11,608 - ye_logger_of_yor - INFO - keyPressEvent - Line 67
+2023-05-04 17:31:11,608 - ye_logger_of_yor - INFO - loading chatwidget - Line 81
+2023-05-04 17:31:11,609 - ye_logger_of_yor - INFO - init ui - Line 89
+2023-05-04 17:31:11,609 - ye_logger_of_yor - INFO - create chat widget - Line 99
+2023-05-04 17:31:11,609 - ye_logger_of_yor - INFO - creating chat history - Line 113
+2023-05-04 17:31:11,609 - ye_logger_of_yor - INFO - creating layout - Line 136
+2023-05-04 17:31:11,609 - ye_logger_of_yor - INFO - creating event connections - Line 152
+2023-05-04 17:31:11,609 - ye_logger_of_yor - INFO - change drop down menu - Line 164
+2023-05-04 17:31:11,610 - ye_logger_of_yor - INFO - chat history options - Line 174
+2023-05-04 17:31:11,610 - ye_logger_of_yor - INFO - create user input - Line 187
+2023-05-04 17:31:11,610 - ye_logger_of_yor - INFO - height change - Line 200
+2023-05-04 17:31:11,610 - ye_logger_of_yor - INFO - handle messages - Line 211
+2023-05-04 17:31:11,610 - ye_logger_of_yor - INFO - open large input box - Line 230
+2023-05-04 17:31:11,610 - ye_logger_of_yor - INFO - clear history - Line 237
+2023-05-04 17:31:11,611 - ye_logger_of_yor - INFO - running embed file from Hex - Line 243
+2023-05-04 17:31:11,611 - ye_logger_of_yor - INFO - run !embed from Hex - Line 255
+2023-05-04 17:31:11,611 - ye_logger_of_yor - INFO - run long docs - Line 264
+2023-05-04 17:31:11,611 - ye_logger_of_yor - INFO - run compressed docs - Line 273
+2023-05-04 17:31:11,611 - ye_logger_of_yor - INFO - run search agent - Line 282
+2023-05-04 17:31:11,611 - ye_logger_of_yor - INFO - run embed dir - Line 291
+2023-05-04 17:31:11,611 - ye_logger_of_yor - INFO - query memory - Line 301
+2023-05-04 17:31:11,612 - ye_logger_of_yor - INFO - run addmem - Line 310
+2023-05-04 17:31:11,612 - ye_logger_of_yor - INFO - run add sitemap - Line 319
+2023-05-04 17:31:11,612 - ye_logger_of_yor - INFO - run embed project - Line 328
+2023-05-04 17:31:11,612 - ye_logger_of_yor - INFO - run ! commands - Line 337
+2023-05-04 17:31:11,612 - ye_logger_of_yor - INFO - logger.info help - Line 399
+2023-05-04 17:31:11,612 - ye_logger_of_yor - INFO - load file into chat - Line 425
+2023-05-04 17:31:11,613 - ye_logger_of_yor - INFO - save chat history to file - Line 439
+2023-05-04 17:31:11,613 - ye_logger_of_yor - INFO - exit - Line 476
+2023-05-04 17:31:11,613 - ye_logger_of_yor - INFO - Scroll Area - Line 483
+2023-05-04 17:31:11,613 - ye_logger_of_yor - INFO - Main Window - Line 505
+2023-05-04 17:31:11,613 - ye_logger_of_yor - INFO - Large Text Input Dialog - Line 530
+2023-05-04 17:31:11,613 - ye_logger_of_yor - INFO - send large text - Line 555
+2023-05-04 17:31:11,614 - ye_logger_of_yor - INFO - main - Line 566
+2023-05-04 17:31:27,966 - ye_logger_of_yor - INFO - change_selected_model - Line 30
+2023-05-04 17:31:27,966 - ye_logger_of_yor - INFO - loading chat_gpt - Line 57
+2023-05-04 17:31:27,966 - ye_logger_of_yor - INFO - loading search_gpt - Line 92
+2023-05-04 17:31:27,989 - ye_logger_of_yor - INFO - Loading global variables - Line 22
+2023-05-04 17:31:27,989 - ye_logger_of_yor - INFO - base_formatter function - Line 30
+2023-05-04 17:31:27,989 - ye_logger_of_yor - INFO - loading check_file function 43 - Line 40
+2023-05-04 17:31:27,989 - ye_logger_of_yor - INFO - loading create_mass_embedding function - Line 63
+2023-05-04 17:31:27,989 - ye_logger_of_yor - INFO - create_embedding function - Line 84
+2023-05-04 17:31:27,990 - ye_logger_of_yor - INFO - load_embedding function - Line 103
+2023-05-04 17:31:27,990 - ye_logger_of_yor - INFO - base_retriever function - Line 113
+2023-05-04 17:31:27,990 - ye_logger_of_yor - INFO - retriever function - Line 124
+2023-05-04 17:31:27,990 - ye_logger_of_yor - INFO - load_vector_store_docs function - Line 139
+2023-05-04 17:31:27,990 - ye_logger_of_yor - INFO - memory_search function - Line 151
+2023-05-04 17:31:28,266 - ye_logger_of_yor - INFO - loading langchain variables - Line 50
+2023-05-04 17:31:28,267 - ye_logger_of_yor - INFO - CustomTextEdit - Line 59
+2023-05-04 17:31:28,267 - ye_logger_of_yor - INFO - keyPressEvent - Line 67
+2023-05-04 17:31:28,268 - ye_logger_of_yor - INFO - loading chatwidget - Line 81
+2023-05-04 17:31:28,268 - ye_logger_of_yor - INFO - init ui - Line 89
+2023-05-04 17:31:28,268 - ye_logger_of_yor - INFO - create chat widget - Line 99
+2023-05-04 17:31:28,268 - ye_logger_of_yor - INFO - creating chat history - Line 113
+2023-05-04 17:31:28,268 - ye_logger_of_yor - INFO - creating layout - Line 136
+2023-05-04 17:31:28,268 - ye_logger_of_yor - INFO - creating event connections - Line 152
+2023-05-04 17:31:28,269 - ye_logger_of_yor - INFO - change drop down menu - Line 164
+2023-05-04 17:31:28,269 - ye_logger_of_yor - INFO - chat history options - Line 174
+2023-05-04 17:31:28,269 - ye_logger_of_yor - INFO - create user input - Line 187
+2023-05-04 17:31:28,269 - ye_logger_of_yor - INFO - height change - Line 200
+2023-05-04 17:31:28,269 - ye_logger_of_yor - INFO - handle messages - Line 211
+2023-05-04 17:31:28,269 - ye_logger_of_yor - INFO - open large input box - Line 230
+2023-05-04 17:31:28,269 - ye_logger_of_yor - INFO - clear history - Line 237
+2023-05-04 17:31:28,270 - ye_logger_of_yor - INFO - running embed file from Hex - Line 243
+2023-05-04 17:31:28,270 - ye_logger_of_yor - INFO - run !embed from Hex - Line 255
+2023-05-04 17:31:28,270 - ye_logger_of_yor - INFO - run long docs - Line 264
+2023-05-04 17:31:28,270 - ye_logger_of_yor - INFO - run compressed docs - Line 273
+2023-05-04 17:31:28,270 - ye_logger_of_yor - INFO - run search agent - Line 282
+2023-05-04 17:31:28,270 - ye_logger_of_yor - INFO - run embed dir - Line 291
+2023-05-04 17:31:28,271 - ye_logger_of_yor - INFO - query memory - Line 301
+2023-05-04 17:31:28,271 - ye_logger_of_yor - INFO - run addmem - Line 310
+2023-05-04 17:31:28,271 - ye_logger_of_yor - INFO - run add sitemap - Line 319
+2023-05-04 17:31:28,271 - ye_logger_of_yor - INFO - run embed project - Line 328
+2023-05-04 17:31:28,271 - ye_logger_of_yor - INFO - run ! commands - Line 337
+2023-05-04 17:31:28,271 - ye_logger_of_yor - INFO - logger.info help - Line 399
+2023-05-04 17:31:28,272 - ye_logger_of_yor - INFO - load file into chat - Line 425
+2023-05-04 17:31:28,272 - ye_logger_of_yor - INFO - save chat history to file - Line 439
+2023-05-04 17:31:28,272 - ye_logger_of_yor - INFO - exit - Line 476
+2023-05-04 17:31:28,272 - ye_logger_of_yor - INFO - Scroll Area - Line 483
+2023-05-04 17:31:28,272 - ye_logger_of_yor - INFO - Main Window - Line 505
+2023-05-04 17:31:28,273 - ye_logger_of_yor - INFO - Large Text Input Dialog - Line 530
+2023-05-04 17:31:28,273 - ye_logger_of_yor - INFO - send large text - Line 555
+2023-05-04 17:31:28,273 - ye_logger_of_yor - INFO - main - Line 566
+2023-05-04 17:33:59,941 - ye_logger_of_yor - INFO - change_selected_model - Line 30
+2023-05-04 17:33:59,942 - ye_logger_of_yor - INFO - loading chat_gpt - Line 57
+2023-05-04 17:33:59,942 - ye_logger_of_yor - INFO - loading search_gpt - Line 92
+2023-05-04 17:33:59,962 - ye_logger_of_yor - INFO - Loading global variables - Line 22
+2023-05-04 17:33:59,963 - ye_logger_of_yor - INFO - base_formatter function - Line 30
+2023-05-04 17:33:59,963 - ye_logger_of_yor - INFO - loading check_file function 43 - Line 40
+2023-05-04 17:33:59,963 - ye_logger_of_yor - INFO - loading create_mass_embedding function - Line 63
+2023-05-04 17:33:59,963 - ye_logger_of_yor - INFO - create_embedding function - Line 84
+2023-05-04 17:33:59,964 - ye_logger_of_yor - INFO - load_embedding function - Line 103
+2023-05-04 17:33:59,964 - ye_logger_of_yor - INFO - base_retriever function - Line 113
+2023-05-04 17:33:59,964 - ye_logger_of_yor - INFO - retriever function - Line 124
+2023-05-04 17:33:59,964 - ye_logger_of_yor - INFO - load_vector_store_docs function - Line 139
+2023-05-04 17:33:59,964 - ye_logger_of_yor - INFO - memory_search function - Line 151
+2023-05-04 17:34:00,255 - ye_logger_of_yor - INFO - loading langchain variables - Line 50
+2023-05-04 17:34:00,255 - ye_logger_of_yor - INFO - CustomTextEdit - Line 59
+2023-05-04 17:34:00,256 - ye_logger_of_yor - INFO - keyPressEvent - Line 67
+2023-05-04 17:34:00,256 - ye_logger_of_yor - INFO - loading chatwidget - Line 81
+2023-05-04 17:34:00,256 - ye_logger_of_yor - INFO - init ui - Line 89
+2023-05-04 17:34:00,257 - ye_logger_of_yor - INFO - create chat widget - Line 99
+2023-05-04 17:34:00,257 - ye_logger_of_yor - INFO - creating chat history - Line 113
+2023-05-04 17:34:00,257 - ye_logger_of_yor - INFO - creating layout - Line 136
+2023-05-04 17:34:00,257 - ye_logger_of_yor - INFO - creating event connections - Line 152
+2023-05-04 17:34:00,257 - ye_logger_of_yor - INFO - change drop down menu - Line 164
+2023-05-04 17:34:00,257 - ye_logger_of_yor - INFO - chat history options - Line 174
+2023-05-04 17:34:00,258 - ye_logger_of_yor - INFO - create user input - Line 187
+2023-05-04 17:34:00,258 - ye_logger_of_yor - INFO - height change - Line 200
+2023-05-04 17:34:00,258 - ye_logger_of_yor - INFO - handle messages - Line 211
+2023-05-04 17:34:00,259 - ye_logger_of_yor - INFO - open large input box - Line 230
+2023-05-04 17:34:00,259 - ye_logger_of_yor - INFO - clear history - Line 237
+2023-05-04 17:34:00,259 - ye_logger_of_yor - INFO - running embed file from Hex - Line 243
+2023-05-04 17:34:00,259 - ye_logger_of_yor - INFO - run !embed from Hex - Line 255
+2023-05-04 17:34:00,259 - ye_logger_of_yor - INFO - run long docs - Line 264
+2023-05-04 17:34:00,259 - ye_logger_of_yor - INFO - run compressed docs - Line 273
+2023-05-04 17:34:00,260 - ye_logger_of_yor - INFO - run search agent - Line 282
+2023-05-04 17:34:00,260 - ye_logger_of_yor - INFO - run embed dir - Line 291
+2023-05-04 17:34:00,260 - ye_logger_of_yor - INFO - query memory - Line 301
+2023-05-04 17:34:00,260 - ye_logger_of_yor - INFO - run addmem - Line 310
+2023-05-04 17:34:00,260 - ye_logger_of_yor - INFO - run add sitemap - Line 319
+2023-05-04 17:34:00,260 - ye_logger_of_yor - INFO - run embed project - Line 328
+2023-05-04 17:34:00,261 - ye_logger_of_yor - INFO - run ! commands - Line 337
+2023-05-04 17:34:00,261 - ye_logger_of_yor - INFO - logger.info help - Line 399
+2023-05-04 17:34:00,261 - ye_logger_of_yor - INFO - load file into chat - Line 425
+2023-05-04 17:34:00,261 - ye_logger_of_yor - INFO - save chat history to file - Line 439
+2023-05-04 17:34:00,261 - ye_logger_of_yor - INFO - exit - Line 476
+2023-05-04 17:34:00,262 - ye_logger_of_yor - INFO - Scroll Area - Line 483
+2023-05-04 17:34:00,262 - ye_logger_of_yor - INFO - Main Window - Line 505
+2023-05-04 17:34:00,262 - ye_logger_of_yor - INFO - Large Text Input Dialog - Line 530
+2023-05-04 17:34:00,262 - ye_logger_of_yor - INFO - send large text - Line 555
+2023-05-04 17:34:00,262 - ye_logger_of_yor - INFO - main - Line 566
+2023-05-04 17:34:06,613 - ye_logger_of_yor - INFO - change_selected_model - Line 30
+2023-05-04 17:34:06,614 - ye_logger_of_yor - INFO - loading chat_gpt - Line 57
+2023-05-04 17:34:06,614 - ye_logger_of_yor - INFO - loading search_gpt - Line 92
+2023-05-04 17:34:06,635 - ye_logger_of_yor - INFO - Loading global variables - Line 22
+2023-05-04 17:34:06,636 - ye_logger_of_yor - INFO - base_formatter function - Line 30
+2023-05-04 17:34:06,636 - ye_logger_of_yor - INFO - loading check_file function 43 - Line 40
+2023-05-04 17:34:06,636 - ye_logger_of_yor - INFO - loading create_mass_embedding function - Line 63
+2023-05-04 17:34:06,636 - ye_logger_of_yor - INFO - create_embedding function - Line 84
+2023-05-04 17:34:06,636 - ye_logger_of_yor - INFO - load_embedding function - Line 103
+2023-05-04 17:34:06,637 - ye_logger_of_yor - INFO - base_retriever function - Line 113
+2023-05-04 17:34:06,637 - ye_logger_of_yor - INFO - retriever function - Line 124
+2023-05-04 17:34:06,637 - ye_logger_of_yor - INFO - load_vector_store_docs function - Line 139
+2023-05-04 17:34:06,637 - ye_logger_of_yor - INFO - memory_search function - Line 151
+2023-05-04 17:34:06,946 - ye_logger_of_yor - INFO - loading langchain variables - Line 50
+2023-05-04 17:34:06,947 - ye_logger_of_yor - INFO - CustomTextEdit - Line 59
+2023-05-04 17:34:06,947 - ye_logger_of_yor - INFO - keyPressEvent - Line 67
+2023-05-04 17:34:06,948 - ye_logger_of_yor - INFO - loading chatwidget - Line 81
+2023-05-04 17:34:06,948 - ye_logger_of_yor - INFO - init ui - Line 89
+2023-05-04 17:34:06,948 - ye_logger_of_yor - INFO - create chat widget - Line 99
+2023-05-04 17:34:06,948 - ye_logger_of_yor - INFO - creating chat history - Line 113
+2023-05-04 17:34:06,948 - ye_logger_of_yor - INFO - creating layout - Line 136
+2023-05-04 17:34:06,949 - ye_logger_of_yor - INFO - creating event connections - Line 152
+2023-05-04 17:34:06,949 - ye_logger_of_yor - INFO - change drop down menu - Line 164
+2023-05-04 17:34:06,949 - ye_logger_of_yor - INFO - chat history options - Line 174
+2023-05-04 17:34:06,949 - ye_logger_of_yor - INFO - create user input - Line 187
+2023-05-04 17:34:06,949 - ye_logger_of_yor - INFO - height change - Line 200
+2023-05-04 17:34:06,949 - ye_logger_of_yor - INFO - handle messages - Line 211
+2023-05-04 17:34:06,949 - ye_logger_of_yor - INFO - open large input box - Line 230
+2023-05-04 17:34:06,950 - ye_logger_of_yor - INFO - clear history - Line 237
+2023-05-04 17:34:06,950 - ye_logger_of_yor - INFO - running embed file from Hex - Line 243
+2023-05-04 17:34:06,950 - ye_logger_of_yor - INFO - run !embed from Hex - Line 255
+2023-05-04 17:34:06,950 - ye_logger_of_yor - INFO - run long docs - Line 264
+2023-05-04 17:34:06,950 - ye_logger_of_yor - INFO - run compressed docs - Line 273
+2023-05-04 17:34:06,950 - ye_logger_of_yor - INFO - run search agent - Line 282
+2023-05-04 17:34:06,951 - ye_logger_of_yor - INFO - run embed dir - Line 291
+2023-05-04 17:34:06,951 - ye_logger_of_yor - INFO - query memory - Line 301
+2023-05-04 17:34:06,951 - ye_logger_of_yor - INFO - run addmem - Line 310
+2023-05-04 17:34:06,951 - ye_logger_of_yor - INFO - run add sitemap - Line 319
+2023-05-04 17:34:06,951 - ye_logger_of_yor - INFO - run embed project - Line 328
+2023-05-04 17:34:06,951 - ye_logger_of_yor - INFO - run ! commands - Line 337
+2023-05-04 17:34:06,951 - ye_logger_of_yor - INFO - logger.info help - Line 399
+2023-05-04 17:34:06,952 - ye_logger_of_yor - INFO - load file into chat - Line 425
+2023-05-04 17:34:06,952 - ye_logger_of_yor - INFO - save chat history to file - Line 439
+2023-05-04 17:34:06,952 - ye_logger_of_yor - INFO - exit - Line 476
+2023-05-04 17:34:06,952 - ye_logger_of_yor - INFO - Scroll Area - Line 483
+2023-05-04 17:34:06,952 - ye_logger_of_yor - INFO - Main Window - Line 505
+2023-05-04 17:34:06,953 - ye_logger_of_yor - INFO - Large Text Input Dialog - Line 530
+2023-05-04 17:34:06,953 - ye_logger_of_yor - INFO - send large text - Line 555
+2023-05-04 17:34:06,953 - ye_logger_of_yor - INFO - main - Line 566
