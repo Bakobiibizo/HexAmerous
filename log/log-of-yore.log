@@ -4884,3 +4884,70 @@
 2023-05-06 23:31:05,057 - ye_logger_of_yor - INFO - running memory_search - Line 156
 2023-05-06 23:31:05,058 - ye_logger_of_yor - INFO - running base_retriever - Line 118
 2023-05-06 23:31:05,058 - ye_logger_of_yor - INFO - loading embedding - Line 107
+2023-05-06 23:53:08,543 - ye_logger_of_yor - INFO - change_selected_model - Line 30
+2023-05-06 23:53:08,543 - ye_logger_of_yor - INFO - loading chat_gpt - Line 62
+2023-05-06 23:53:08,543 - ye_logger_of_yor - INFO - loading search_gpt - Line 97
+2023-05-06 23:53:08,577 - ye_logger_of_yor - INFO - Loading global variables - Line 22
+2023-05-06 23:53:08,577 - ye_logger_of_yor - INFO - base_formatter function - Line 30
+2023-05-06 23:53:08,577 - ye_logger_of_yor - INFO - loading check_file function 43 - Line 40
+2023-05-06 23:53:08,577 - ye_logger_of_yor - INFO - loading create_mass_embedding function - Line 61
+2023-05-06 23:53:08,577 - ye_logger_of_yor - INFO - create_embedding function - Line 83
+2023-05-06 23:53:08,577 - ye_logger_of_yor - INFO - load_embedding function - Line 102
+2023-05-06 23:53:08,577 - ye_logger_of_yor - INFO - base_retriever function - Line 112
+2023-05-06 23:53:08,578 - ye_logger_of_yor - INFO - retriever function - Line 123
+2023-05-06 23:53:08,578 - ye_logger_of_yor - INFO - load_vector_store_docs function - Line 139
+2023-05-06 23:53:08,578 - ye_logger_of_yor - INFO - memory_search function - Line 152
+2023-05-06 23:53:08,927 - ye_logger_of_yor - INFO - loading langchain variables - Line 49
+2023-05-06 23:53:08,927 - ye_logger_of_yor - INFO - CustomTextEdit - Line 55
+2023-05-06 23:53:08,928 - ye_logger_of_yor - INFO - keyPressEvent - Line 60
+2023-05-06 23:53:08,928 - ye_logger_of_yor - INFO - loading chatwidget - Line 71
+2023-05-06 23:53:08,928 - ye_logger_of_yor - INFO - init ui - Line 76
+2023-05-06 23:53:08,928 - ye_logger_of_yor - INFO - create chat widget - Line 84
+2023-05-06 23:53:08,928 - ye_logger_of_yor - INFO - creating chat history - Line 96
+2023-05-06 23:53:08,928 - ye_logger_of_yor - INFO - creating layout - Line 112
+2023-05-06 23:53:08,928 - ye_logger_of_yor - INFO - creating event connections - Line 123
+2023-05-06 23:53:08,928 - ye_logger_of_yor - INFO - change drop down menu - Line 133
+2023-05-06 23:53:08,928 - ye_logger_of_yor - INFO - chat history options - Line 141
+2023-05-06 23:53:08,928 - ye_logger_of_yor - INFO - create user input - Line 152
+2023-05-06 23:53:08,928 - ye_logger_of_yor - INFO - height change - Line 163
+2023-05-06 23:53:08,928 - ye_logger_of_yor - INFO - handle messages - Line 172
+2023-05-06 23:53:08,928 - ye_logger_of_yor - INFO - open large input box - Line 189
+2023-05-06 23:53:08,928 - ye_logger_of_yor - INFO - clear history - Line 194
+2023-05-06 23:53:08,928 - ye_logger_of_yor - INFO - running embed file from Hex - Line 198
+2023-05-06 23:53:08,929 - ye_logger_of_yor - INFO - run !embed from Hex - Line 208
+2023-05-06 23:53:08,929 - ye_logger_of_yor - INFO - run long docs - Line 215
+2023-05-06 23:53:08,929 - ye_logger_of_yor - INFO - run compressed docs - Line 222
+2023-05-06 23:53:08,929 - ye_logger_of_yor - INFO - run search agent - Line 229
+2023-05-06 23:53:08,929 - ye_logger_of_yor - INFO - run embed dir - Line 236
+2023-05-06 23:53:08,929 - ye_logger_of_yor - INFO - query memory - Line 244
+2023-05-06 23:53:08,929 - ye_logger_of_yor - INFO - run addmem - Line 251
+2023-05-06 23:53:08,929 - ye_logger_of_yor - INFO - run add sitemap - Line 258
+2023-05-06 23:53:08,929 - ye_logger_of_yor - INFO - run embed project - Line 265
+2023-05-06 23:53:08,929 - ye_logger_of_yor - INFO - run ! commands - Line 272
+2023-05-06 23:53:08,929 - ye_logger_of_yor - INFO - logger.info help - Line 326
+2023-05-06 23:53:08,929 - ye_logger_of_yor - INFO - load file into chat - Line 349
+2023-05-06 23:53:08,930 - ye_logger_of_yor - INFO - save chat history to file - Line 361
+2023-05-06 23:53:08,930 - ye_logger_of_yor - INFO - exit - Line 373
+2023-05-06 23:53:08,930 - ye_logger_of_yor - INFO - mouse press event - Line 415
+2023-05-06 23:53:08,930 - ye_logger_of_yor - INFO - mouse move event - Line 421
+2023-05-06 23:53:08,930 - ye_logger_of_yor - INFO - paint event - Line 429
+2023-05-06 23:53:08,930 - ye_logger_of_yor - INFO - Main Window - Line 477
+2023-05-06 23:53:08,930 - ye_logger_of_yor - INFO - Scroll Area - Line 479
+2023-05-06 23:53:08,930 - ye_logger_of_yor - INFO - Large Text Input Dialog - Line 525
+2023-05-06 23:53:08,930 - ye_logger_of_yor - INFO - send large text - Line 543
+2023-05-06 23:53:08,930 - ye_logger_of_yor - INFO - main - Line 551
+2023-05-06 23:54:05,337 - ye_logger_of_yor - INFO - running memory_search - Line 157
+2023-05-06 23:54:05,338 - ye_logger_of_yor - INFO - running base_retriever - Line 117
+2023-05-06 23:54:05,338 - ye_logger_of_yor - INFO - loading embedding - Line 106
+2023-05-06 23:56:50,335 - ye_logger_of_yor - INFO - change_selected_model - Line 30
+2023-05-06 23:56:50,335 - ye_logger_of_yor - INFO - loading chat_gpt - Line 62
+2023-05-06 23:56:50,335 - ye_logger_of_yor - INFO - loading search_gpt - Line 97
+2023-05-06 23:56:50,368 - ye_logger_of_yor - INFO - Loading global variables - Line 22
+2023-05-06 23:56:50,368 - ye_logger_of_yor - INFO - base_formatter function - Line 30
+2023-05-06 23:56:50,368 - ye_logger_of_yor - INFO - loading check_file function 43 - Line 40
+2023-05-06 23:56:50,368 - ye_logger_of_yor - INFO - loading create_mass_embedding function - Line 63
+2023-05-06 23:56:50,368 - ye_logger_of_yor - INFO - create_embedding function - Line 85
+2023-05-06 23:56:50,368 - ye_logger_of_yor - INFO - base_retriever function - Line 103
+2023-05-06 23:56:50,369 - ye_logger_of_yor - INFO - retriever function - Line 114
+2023-05-06 23:56:50,369 - ye_logger_of_yor - INFO - load_vector_store_docs function - Line 130
+2023-05-06 23:56:50,369 - ye_logger_of_yor - INFO - memory_search function - Line 143

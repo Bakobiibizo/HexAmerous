@@ -33,12 +33,14 @@ logger.info('base_formatter function')
 def base_formatter(docs):
     logger.info('formatting')
     logger.info(f"\n{'-' * 100}\n".join([f"Document {i+1}:\n\n" +
-          d.page_content for i, d in enumerate(docs)]))
+                                         d.page_content for i, d in enumerate(docs)]))
     return (f"\n{'-' * 100}\n".join([f"Document {i+1}:\n\n" + d.page_content for i, d in enumerate(docs)]))
 
 
 logger.info('loading check_file function 43')
 # Check if the files are valid
+
+
 def check_file(file_path):
     logger.info('checking file')
     if file_path.endswith('.txt'):
@@ -93,20 +95,9 @@ def create_embedding(file_path, optional_arg="metadata"):
     else:
         meta = 'file_path'
     vectordb = Chroma.from_documents(
-        documents=data, metadata=meta, embedding=embeddings, persist_directory='docs/')
+        documents=data, metadata=meta, embedding=embeddings, persist_directory='docs/index')
     vectordb.persist()
     return "Embedding created"
-
-
-# Load vectorstore database
-logger.info('load_embedding function')
-
-
-def load_embedding():
-    logger.info('loading embedding')
-    chromadb = Chroma(persist_directory=vectorstore,
-                      embedding_function=embeddings)
-    return chromadb
 
 
 logger.info('base_retriever function')
@@ -115,7 +106,7 @@ logger.info('base_retriever function')
 
 def base_retriever(user_query):
     logger.info('running base_retriever')
-    retriever = load_embedding().as_retriever(llm=llm)
+    retriever = load_vector_store_docs().as_retriever(llm=llm)
     docs = retriever.get_relevant_documents(user_query)
     return docs
 
@@ -127,7 +118,7 @@ logger.info('retriever function')
 def retriever(user_query):
     logger.info('running retriever')
     compressor = LLMChainExtractor.from_llm(llm)
-    retriever = load_embedding().as_retriever(llm=llm)
+    retriever = load_vector_store_docs().as_retriever(llm=llm)
     cc_retriever = ContextualCompressionRetriever(
         base_compressor=compressor, base_retriever=retriever)
     compressed_docs = cc_retriever.get_relevant_documents(user_query)
