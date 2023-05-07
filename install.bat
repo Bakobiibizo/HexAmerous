@@ -11,8 +11,7 @@ echo Done
 
 REM Activate the virtual environment
 echo Activating the virtual environment
-call "%CD%\.venv\Scripts\activate.bat"
-echo export PATH="$PATH:%CD%\.venv\Lib\site-packages" >> ~\.bashrc
+call %CD%\.venv\Scripts\activate.bat
 echo Done
 
 REM Install the required packages from requirements.txt

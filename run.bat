@@ -1,6 +1,5 @@
 REM activating env
 call "%CD%\.venv\Scripts\activate.bat"
-echo export PATH="$PATH:%CD%\.venv\Lib\site-packages" >> ~\.bashrc
 echo done
 
 

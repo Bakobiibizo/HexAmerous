@@ -1,4 +1,0 @@
-```python
-"""OpenAPI spec agent."""
-
-```

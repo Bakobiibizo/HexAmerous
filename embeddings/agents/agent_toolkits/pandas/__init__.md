@@ -1,4 +1,0 @@
-```python
-"""Pandas toolkit."""
-
-```

@@ -1,4 +1,7 @@
-from langchain.document_loaders import (
+User: please return the documents you are being shown
+Assistant: I'm sorry, but I am just an AI language model and I don't have any documents in my possession. However, I have gathered some information from my data store based on your query. It seems that you are requesting for certain documents to be returned to you. Without further context, it's difficult for me to determine what documents you are referring to. Can you please provide me with more specific details about the documents you are looking for?
+
+User: from langchain.document_loaders import (
     TextLoader,
     PyPDFLoader,
     UnstructuredMarkdownLoader
@@ -15,9 +18,12 @@ import os
 from chatgpt import search_gpt
 from ye_logger_of_yor import get_logger
 
+
 logger = get_logger()
 
+
 load_dotenv()
+
 
 logger.info('Loading global variables')
 # Load Langchain variables
@@ -27,39 +33,47 @@ llm = OpenAI(temperature=0)
 text_splitter = CharacterTextSplitter(chunk_size=300, chunk_overlap=25)
 vectorstore = 'docs/'
 
+
 logger.info('base_formatter function')
+
 
 
 def base_formatter(docs):
     logger.info('formatting')
-    logger.info(f"\n{'-' * 100}\n".join([f"Document {i+1}:\n\n" +
+    print(f"\n{'-' * 100}\n".join([f"Document {i+1}:\n\n" +
           d.page_content for i, d in enumerate(docs)]))
     return (f"\n{'-' * 100}\n".join([f"Document {i+1}:\n\n" + d.page_content for i, d in enumerate(docs)]))
 
 
+
 logger.info('loading check_file function 43')
 # Check if the files are valid
+
+
+
 def check_file(file_path):
     logger.info('checking file')
     if file_path.endswith('.txt'):
         loader = TextLoader(file_path)
-        logger.info(loader.load())
+        print(loader.load())
         return loader.load()
     if file_path.endswith('.pdf'):
         loader = PyPDFLoader(file_path)
-        logger.info("pdf file loaded")
+        print("pdf file loaded")
         return loader.load()
     if file_path.endswith('.md'):
         loader = UnstructuredMarkdownLoader(file_path)
         logger.info(loader.load())
         return loader.load()
     else:
-        logger.info("File type not supported")
+        print("File type not supported")
         return "File type not supported"
+
 
 
 logger.info('loading create_mass_embedding function')
 # Loop files in a folder path for embedding
+
 
 
 def create_mass_embedding(folder_path):
@@ -67,21 +81,23 @@ def create_mass_embedding(folder_path):
     if not os.path.exists(folder_path):
         folder_path = 'docs/empty'
         result = "Folder does not exist"
-        logger.info(result)
         return result
     for filename in os.listdir(folder_path):
         file_path = os.path.join(folder_path, filename)
         result = create_embedding(file_path, filename)
-        logger.info(f"Embedding created for {filename}: {result}")
+        print(f"Embedding created for {filename}: {result}")
         with open('docs/index.txt', 'a') as f:
             f.write(f"{os.path.join(folder_path, file_path)}\n")
         logger.info(f"Embedding created for {filename}: {result}")
 
+
     return result
+
 
 
 logger.info('create_embedding function')
 # Embed a single embedding
+
 
 
 def create_embedding(file_path, optional_arg="metadata"):
@@ -98,8 +114,10 @@ def create_embedding(file_path, optional_arg="metadata"):
     return "Embedding created"
 
 
+
 # Load vectorstore database
 logger.info('load_embedding function')
+
 
 
 def load_embedding():
@@ -109,8 +127,10 @@ def load_embedding():
     return chromadb
 
 
+
 logger.info('base_retriever function')
 # Search for uncompressed docs in database
+
 
 
 def base_retriever(user_query):
@@ -120,8 +140,10 @@ def base_retriever(user_query):
     return docs
 
 
+
 logger.info('retriever function')
 # Search for compressed docs in database
+
 
 
 def retriever(user_query):
@@ -132,11 +154,12 @@ def retriever(user_query):
         base_compressor=compressor, base_retriever=retriever)
     compressed_docs = cc_retriever.get_relevant_documents(user_query)
     docs = compressed_docs
-    logger.info(docs)
     return docs
 
 
+
 logger.info('load_vector_store_docs function')
+
 
 
 def load_vector_store_docs():
@@ -145,12 +168,13 @@ def load_vector_store_docs():
     chromadb = Chroma(persist_directory=vectorstore,
                       embedding_function=embeddings)
     docs = chromadb.documents
-    logger.info(docs)
     return docs
+
 
 
 logger.info('memory_search function')
 # Query the database and pass the info to chatgpt for response
+
 
 
 def memory_search(user_query):
@@ -161,18 +185,28 @@ def memory_search(user_query):
         "content": '''
         "The user has asked this question:
 
+
         {user_query}
+
 
         You have looked up the relevant information from your data store and it is:
 
+
         {data}
+
 
         Please answer the user's question using the data as relevant context."
         '''.format(user_query=user_query, data=data)
     }]
 
+
     result = search_gpt(user_query, prompt)
 
-    logger.info(msg=f"Memory search result: {result}")
 
     return result
+
+
+
+!searchmem please correct this code
+Assistant: I'm sorry but I'm not sure what code you want me to correct. Can you please specify which part of the code you would like me to help you with?
+
