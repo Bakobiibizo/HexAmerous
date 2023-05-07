@@ -1,0 +1,3 @@
+User: what is the unicode for the fire emoji?
+Assistant: The Unicode for the fire emoji is U+1F525. To use it in code, you can represent it as "\u1F525".
+
