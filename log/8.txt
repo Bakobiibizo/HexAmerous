@@ -1,0 +1,3 @@
+User: what are the documents in your document store?
+Assistant: Based on the information in our document store, it appears that the document "Adding Message Memory backed by a database to an Agent" discusses storing messages in a database. This information is based on the metadata of the relevant documents stored in our data store.
+

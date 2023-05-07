@@ -1,4 +1,0 @@
-```python
-"""Power BI agent."""
-
-```
