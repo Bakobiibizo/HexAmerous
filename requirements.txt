@@ -16,3 +16,4 @@ bs4
 logging
 libmagic
 tesseract
+larq

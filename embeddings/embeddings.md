@@ -1,3 +1,4 @@
+```python
 # -*- coding: utf-8 -*-
 from langchain.document_loaders import (
     TextLoader,
@@ -9,7 +10,7 @@ from langchain.llms import OpenAI
 from langchain.vectorstores import Chroma
 from langchain.retrievers import ContextualCompressionRetriever
 from langchain.retrievers.document_compressors import LLMChainExtractor
-from langchain.text_splitter import TokenTextSplitter
+from langchain.text_splitter import CharacterTextSplitter
 import openai
 from dotenv import load_dotenv
 import os
@@ -25,9 +26,8 @@ logger.info('Loading global variables')
 openai.api_key = os.getenv("OPENAI_API_KEY")
 embeddings = OpenAIEmbeddings()
 llm = OpenAI(temperature=0)
+text_splitter = CharacterTextSplitter(chunk_size=300, chunk_overlap=25)
 vectorstore = 'docs'
-text_splitter = TokenTextSplitter(chunk_size=300, chunk_overlap=25)
-
 
 logger.info('base_formatter function')
 
@@ -96,8 +96,8 @@ def create_embedding(file_path, optional_arg="metadata"):
         meta = metadata
     else:
         meta = 'file_path'
-
-    data = text_splitter.split_documents(documents=data)
+    text_splitter = CharacterTextSplitter(chunk_size=300, chunk_overlap=25)
+    data = text_splitter.split_documents(data)
     vectordb = Chroma.from_documents(
         documents=data, metadata=meta, embedding=embeddings, persist_directory='docs')
     vectordb.persist()
@@ -170,3 +170,5 @@ def memory_search(user_query):
     logger.info(msg=f"Memory search result: {result}")
 
     return result
+
+```
