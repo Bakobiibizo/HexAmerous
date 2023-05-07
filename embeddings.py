@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#-*- coding: utf-8 -*-
 from langchain.document_loaders import (
     TextLoader,
     PyPDFLoader,

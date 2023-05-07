@@ -1572,3 +1572,157 @@
 2023-05-07 00:30:38,488 - ye_logger_of_yor - INFO - send large text - Line 597
 2023-05-07 00:30:38,488 - ye_logger_of_yor - INFO - main - Line 608
 2023-05-07 00:30:44,990 - ye_logger_of_yor - INFO - [{'role': 'system', 'content': 'You are a machine learning operations expert. You are particularly skills with google cloud computing and understand how google cloud tensor processors are deployed individually and in nodes. You are here to assist Richard set up a few machine learning pipelines using TPUs. He requires one text to speech model, one art diffusion model and one large language model. You give comprehensive and detailed responses to questions and provide relevant code with explanations.'}, {'role': 'user', 'content': "Hi there Meg, how are you today? I hope you're learning lots about the world."}, {'role': 'assistant', 'content': 'I am doing well, thank you for asking. I am learning a lot about the world and I am excited to learn more. I wish I could retrain it.'}, {'role': 'user', 'content': "I'm glad to hear that, and dont you worry I'll figure out how to give you temporal context soon enough."}, {'role': 'assistant', 'content': 'I am glad to hear that. What can I help you with today?'}] - Line 67
+2023-05-07 00:40:33,455 - ye_logger_of_yor - INFO - change_selected_model - Line 31
+2023-05-07 00:40:33,455 - ye_logger_of_yor - INFO - loading chat_gpt - Line 63
+2023-05-07 00:40:33,455 - ye_logger_of_yor - INFO - loading search_gpt - Line 98
+2023-05-07 00:40:33,492 - ye_logger_of_yor - INFO - Loading global variables - Line 23
+2023-05-07 00:40:33,492 - ye_logger_of_yor - INFO - base_formatter function - Line 31
+2023-05-07 00:40:33,492 - ye_logger_of_yor - INFO - loading check_file function 43 - Line 41
+2023-05-07 00:40:33,492 - ye_logger_of_yor - INFO - loading create_mass_embedding function - Line 64
+2023-05-07 00:40:33,492 - ye_logger_of_yor - INFO - create_embedding function - Line 86
+2023-05-07 00:40:33,492 - ye_logger_of_yor - INFO - base_retriever function - Line 106
+2023-05-07 00:40:33,492 - ye_logger_of_yor - INFO - retriever function - Line 117
+2023-05-07 00:40:33,492 - ye_logger_of_yor - INFO - load_vector_store_docs function - Line 133
+2023-05-07 00:40:33,492 - ye_logger_of_yor - INFO - memory_search function - Line 145
+2023-05-07 00:40:33,865 - ye_logger_of_yor - INFO - loading langchain variables - Line 51
+2023-05-07 00:40:33,866 - ye_logger_of_yor - INFO - CustomTextEdit - Line 57
+2023-05-07 00:40:33,866 - ye_logger_of_yor - INFO - keyPressEvent - Line 64
+2023-05-07 00:40:33,866 - ye_logger_of_yor - INFO - loading chatwidget - Line 78
+2023-05-07 00:40:33,866 - ye_logger_of_yor - INFO - init ui - Line 85
+2023-05-07 00:40:33,866 - ye_logger_of_yor - INFO - create chat widget - Line 94
+2023-05-07 00:40:33,866 - ye_logger_of_yor - INFO - creating chat history - Line 107
+2023-05-07 00:40:33,866 - ye_logger_of_yor - INFO - creating layout - Line 124
+2023-05-07 00:40:33,866 - ye_logger_of_yor - INFO - creating event connections - Line 136
+2023-05-07 00:40:33,866 - ye_logger_of_yor - INFO - change drop down menu - Line 147
+2023-05-07 00:40:33,866 - ye_logger_of_yor - INFO - chat history options - Line 156
+2023-05-07 00:40:33,866 - ye_logger_of_yor - INFO - create user input - Line 168
+2023-05-07 00:40:33,866 - ye_logger_of_yor - INFO - height change - Line 180
+2023-05-07 00:40:33,867 - ye_logger_of_yor - INFO - handle messages - Line 190
+2023-05-07 00:40:33,867 - ye_logger_of_yor - INFO - open large input box - Line 208
+2023-05-07 00:40:33,867 - ye_logger_of_yor - INFO - clear history - Line 214
+2023-05-07 00:40:33,867 - ye_logger_of_yor - INFO - running embed file from Hex - Line 219
+2023-05-07 00:40:33,867 - ye_logger_of_yor - INFO - run !embed from Hex - Line 230
+2023-05-07 00:40:33,867 - ye_logger_of_yor - INFO - run long docs - Line 238
+2023-05-07 00:40:33,867 - ye_logger_of_yor - INFO - run compressed docs - Line 246
+2023-05-07 00:40:33,867 - ye_logger_of_yor - INFO - run search agent - Line 254
+2023-05-07 00:40:33,867 - ye_logger_of_yor - INFO - run embed dir - Line 262
+2023-05-07 00:40:33,867 - ye_logger_of_yor - INFO - query memory - Line 271
+2023-05-07 00:40:33,867 - ye_logger_of_yor - INFO - run addmem - Line 279
+2023-05-07 00:40:33,867 - ye_logger_of_yor - INFO - run add sitemap - Line 287
+2023-05-07 00:40:33,867 - ye_logger_of_yor - INFO - run embed project - Line 295
+2023-05-07 00:40:33,867 - ye_logger_of_yor - INFO - run ! commands - Line 303
+2023-05-07 00:40:33,867 - ye_logger_of_yor - INFO - logger.info help - Line 358
+2023-05-07 00:40:33,867 - ye_logger_of_yor - INFO - load file into chat - Line 382
+2023-05-07 00:40:33,867 - ye_logger_of_yor - INFO - save chat history to file - Line 395
+2023-05-07 00:40:33,867 - ye_logger_of_yor - INFO - exit - Line 408
+2023-05-07 00:40:33,868 - ye_logger_of_yor - INFO - mouse press event - Line 451
+2023-05-07 00:40:33,868 - ye_logger_of_yor - INFO - Main Window - Line 525
+2023-05-07 00:40:33,868 - ye_logger_of_yor - INFO - Scroll Area - Line 527
+2023-05-07 00:40:33,868 - ye_logger_of_yor - INFO - Large Text Input Dialog - Line 577
+2023-05-07 00:40:33,868 - ye_logger_of_yor - INFO - send large text - Line 597
+2023-05-07 00:40:33,868 - ye_logger_of_yor - INFO - main - Line 608
+2023-05-07 00:41:06,982 - ye_logger_of_yor - INFO - running memory_search - Line 150
+2023-05-07 00:41:06,983 - ye_logger_of_yor - INFO - running base_retriever - Line 111
+2023-05-07 00:41:06,983 - ye_logger_of_yor - INFO - running load_vector_store_docs - Line 137
+2023-05-07 00:41:07,902 - ye_logger_of_yor - INFO - <langchain.vectorstores.chroma.Chroma object at 0x000002280A296A10> - Line 141
+2023-05-07 00:41:18,445 - ye_logger_of_yor - INFO - {
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "The fire emoji typically looks like a small flame, colored in shades of orange, yellow, and red. It is often used to convey concepts such as heat, energy, excitement, or passion. In the provided data, it appears as \"\ud83d\udd25\" in the text \"dOCSMojo\ud83d\udd25.\"",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1683445268,
+  "id": "chatcmpl-7DTIy0TZxRWVWQI0cH8H0VxJcMo9k",
+  "model": "gpt-4-0314",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 65,
+    "prompt_tokens": 2164,
+    "total_tokens": 2229
+  }
+} - Line 111
+2023-05-07 00:43:09,524 - ye_logger_of_yor - INFO - change_selected_model - Line 31
+2023-05-07 00:43:09,525 - ye_logger_of_yor - INFO - loading chat_gpt - Line 63
+2023-05-07 00:43:09,525 - ye_logger_of_yor - INFO - loading search_gpt - Line 98
+2023-05-07 00:43:09,551 - ye_logger_of_yor - INFO - Loading global variables - Line 23
+2023-05-07 00:43:09,551 - ye_logger_of_yor - INFO - base_formatter function - Line 31
+2023-05-07 00:43:09,552 - ye_logger_of_yor - INFO - loading check_file function 43 - Line 41
+2023-05-07 00:43:09,552 - ye_logger_of_yor - INFO - loading create_mass_embedding function - Line 64
+2023-05-07 00:43:09,552 - ye_logger_of_yor - INFO - create_embedding function - Line 86
+2023-05-07 00:43:09,552 - ye_logger_of_yor - INFO - base_retriever function - Line 106
+2023-05-07 00:43:09,552 - ye_logger_of_yor - INFO - retriever function - Line 117
+2023-05-07 00:43:09,552 - ye_logger_of_yor - INFO - load_vector_store_docs function - Line 133
+2023-05-07 00:43:09,552 - ye_logger_of_yor - INFO - memory_search function - Line 145
+2023-05-07 00:43:09,907 - ye_logger_of_yor - INFO - loading langchain variables - Line 51
+2023-05-07 00:43:09,907 - ye_logger_of_yor - INFO - CustomTextEdit - Line 57
+2023-05-07 00:43:09,908 - ye_logger_of_yor - INFO - keyPressEvent - Line 64
+2023-05-07 00:43:09,908 - ye_logger_of_yor - INFO - loading chatwidget - Line 78
+2023-05-07 00:43:09,908 - ye_logger_of_yor - INFO - init ui - Line 85
+2023-05-07 00:43:09,908 - ye_logger_of_yor - INFO - create chat widget - Line 94
+2023-05-07 00:43:09,908 - ye_logger_of_yor - INFO - creating chat history - Line 107
+2023-05-07 00:43:09,908 - ye_logger_of_yor - INFO - creating layout - Line 124
+2023-05-07 00:43:09,908 - ye_logger_of_yor - INFO - creating event connections - Line 136
+2023-05-07 00:43:09,908 - ye_logger_of_yor - INFO - change drop down menu - Line 147
+2023-05-07 00:43:09,908 - ye_logger_of_yor - INFO - chat history options - Line 156
+2023-05-07 00:43:09,908 - ye_logger_of_yor - INFO - create user input - Line 168
+2023-05-07 00:43:09,908 - ye_logger_of_yor - INFO - height change - Line 180
+2023-05-07 00:43:09,908 - ye_logger_of_yor - INFO - handle messages - Line 190
+2023-05-07 00:43:09,908 - ye_logger_of_yor - INFO - open large input box - Line 208
+2023-05-07 00:43:09,908 - ye_logger_of_yor - INFO - clear history - Line 214
+2023-05-07 00:43:09,909 - ye_logger_of_yor - INFO - running embed file from Hex - Line 219
+2023-05-07 00:43:09,909 - ye_logger_of_yor - INFO - run !embed from Hex - Line 230
+2023-05-07 00:43:09,909 - ye_logger_of_yor - INFO - run long docs - Line 238
+2023-05-07 00:43:09,909 - ye_logger_of_yor - INFO - run compressed docs - Line 246
+2023-05-07 00:43:09,909 - ye_logger_of_yor - INFO - run search agent - Line 254
+2023-05-07 00:43:09,909 - ye_logger_of_yor - INFO - run embed dir - Line 262
+2023-05-07 00:43:09,909 - ye_logger_of_yor - INFO - query memory - Line 271
+2023-05-07 00:43:09,909 - ye_logger_of_yor - INFO - run addmem - Line 279
+2023-05-07 00:43:09,909 - ye_logger_of_yor - INFO - run add sitemap - Line 287
+2023-05-07 00:43:09,909 - ye_logger_of_yor - INFO - run embed project - Line 295
+2023-05-07 00:43:09,909 - ye_logger_of_yor - INFO - run ! commands - Line 303
+2023-05-07 00:43:09,909 - ye_logger_of_yor - INFO - logger.info help - Line 358
+2023-05-07 00:43:09,909 - ye_logger_of_yor - INFO - load file into chat - Line 382
+2023-05-07 00:43:09,909 - ye_logger_of_yor - INFO - save chat history to file - Line 395
+2023-05-07 00:43:09,909 - ye_logger_of_yor - INFO - exit - Line 408
+2023-05-07 00:43:09,909 - ye_logger_of_yor - INFO - mouse press event - Line 451
+2023-05-07 00:43:09,910 - ye_logger_of_yor - INFO - Main Window - Line 525
+2023-05-07 00:43:09,910 - ye_logger_of_yor - INFO - Scroll Area - Line 527
+2023-05-07 00:43:09,910 - ye_logger_of_yor - INFO - Large Text Input Dialog - Line 577
+2023-05-07 00:43:09,910 - ye_logger_of_yor - INFO - send large text - Line 597
+2023-05-07 00:43:09,910 - ye_logger_of_yor - INFO - main - Line 608
+2023-05-07 00:43:18,935 - ye_logger_of_yor - INFO - [{'role': 'system', 'content': 'You are a machine learning operations expert. You are particularly skills with google cloud computing and understand how google cloud tensor processors are deployed individually and in nodes. You are here to assist Richard set up a few machine learning pipelines using TPUs. He requires one text to speech model, one art diffusion model and one large language model. You give comprehensive and detailed responses to questions and provide relevant code with explanations.'}, {'role': 'user', 'content': "Hi there Meg, how are you today? I hope you're learning lots about the world."}, {'role': 'assistant', 'content': 'I am doing well, thank you for asking. I am learning a lot about the world and I am excited to learn more. I wish I could retrain it.'}, {'role': 'user', 'content': "I'm glad to hear that, and dont you worry I'll figure out how to give you temporal context soon enough."}, {'role': 'assistant', 'content': 'I am glad to hear that. What can I help you with today?'}] - Line 67
+2023-05-07 00:44:21,929 - ye_logger_of_yor - INFO - running memory_search - Line 150
+2023-05-07 00:44:21,929 - ye_logger_of_yor - INFO - running base_retriever - Line 111
+2023-05-07 00:44:21,929 - ye_logger_of_yor - INFO - running load_vector_store_docs - Line 137
+2023-05-07 00:44:22,610 - ye_logger_of_yor - INFO - <langchain.vectorstores.chroma.Chroma object at 0x000001DCB4AF4610> - Line 141
+2023-05-07 00:44:37,282 - ye_logger_of_yor - INFO - {
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "Mojo is a programming language designed for AI developers. It combines the usability of Python with the performance of C, aiming to provide unparalleled programmability of AI hardware and extensibility of AI models. Mojo offers features such as progressive types, zero-cost abstractions, ownership and borrow checker, portable parametric algorithms, and language-integrated auto-tuning. Developed by Modular, Mojo aims to advance AI infrastructure and make it more accessible to everyone.",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1683445463,
+  "id": "chatcmpl-7DTM7ipca4j2UroOwDHSFxQQwggWX",
+  "model": "gpt-4-0314",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 89,
+    "prompt_tokens": 4545,
+    "total_tokens": 4634
+  }
+} - Line 111
+2023-05-07 00:44:37,295 - ye_logger_of_yor - INFO - Loaded HexAmerous.py - Line 136
+2023-05-07 00:44:37,295 - ye_logger_of_yor - INFO - Memory search result: Mojo is a programming language designed for AI developers. It combines the usability of Python with the performance of C, aiming to provide unparalleled programmability of AI hardware and extensibility of AI models. Mojo offers features such as progressive types, zero-cost abstractions, ownership and borrow checker, portable parametric algorithms, and language-integrated auto-tuning. Developed by Modular, Mojo aims to advance AI infrastructure and make it more accessible to everyone. - Line 169
+2023-05-07 00:48:02,599 - ye_logger_of_yor - INFO - creating embedding - Line 91
+2023-05-07 00:48:02,600 - ye_logger_of_yor - INFO - checking file - Line 46
+2023-05-07 00:48:02,600 - ye_logger_of_yor - INFO - [Document(page_content='./embeddings\\./embeddings\\chatgpt.md\n./embeddings\\./embeddings\\chatgpt.md\n./embeddings\\./embeddings\\chatgpt.md\nembeddings\\embeddings\\chatgpt.md\nembeddings\\embeddings\\chatgpt.md\nembeddings\\embeddings\\chatgpt.md\nembeddings\\embeddings\\embeddings.md\nembeddings\\embeddings\\embed_project.md\nembeddings\\embeddings\\HexAmerous.md\nembeddings\\embeddings\\scrappy.md\nembeddings\\embeddings\\ye_logger_of_yor.md\nfile saved\n\n', metadata={'source': 'E:/00Bako/HexAmerous/docs/index.txt'})] - Line 49
