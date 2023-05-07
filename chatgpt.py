@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import openai
 
@@ -24,7 +25,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 print("Welcome to HexAmerous your coding assistant")
 
-selected_model = "gpt-3.5-turbo"
+selected_model = "gpt-4"
 
 
 logger.info('change_selected_model')
@@ -79,7 +80,7 @@ def chat_gpt(user_message):
     )
 
     # Read the current value of the counter from a file
-    with open("./log/log_count.txt", "r") as f:
+    with open("./log/log_count.txt", "r", encoding='utf-8') as f:
         log_count = str(f.read().strip())
     # get response from OpenAI
 
@@ -109,7 +110,7 @@ def search_gpt(user_query, prompt):
     response = result['choices'][0]['message']['content']
     logger.info(result)
     # Read the current value of the counter from a file
-    with open("./log/log_count.txt", "r") as f:
+    with open("./log/log_count.txt", "r", encoding='utf-8') as f:
         log_count = int(f.read().strip())
 
     # Increment log counter

@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*-
 import sys
 import os
 import random
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import (
-        QTextCursor,
+    QTextCursor,
     QPixmap,
     QPalette,
     QBrush,
@@ -12,7 +13,7 @@ from PyQt5.QtGui import (
     QImage
 )
 from PyQt5.QtWidgets import (
-        QApplication,
+    QApplication,
     QWidget,
     QVBoxLayout,
     QHBoxLayout,
@@ -25,14 +26,15 @@ from PyQt5.QtWidgets import (
     QFileDialog,
     QMessageBox,
     QComboBox,
-    QSizeGrip
+    QSizeGrip,
+    QStylePainter
 )
 from chatgpt import (
-        chat_gpt,
+    chat_gpt,
     change_selected_model
 )
 from embeddings import (
-        create_embedding,
+    create_embedding,
     base_retriever,
     retriever,
     create_mass_embedding,
@@ -50,14 +52,17 @@ logger.info('loading langchain variables')
 llm = OpenAI(temperature=0)
 tools = load_tools(["google-serper"], llm=llm)
 agent = initialize_agent(
-        tools, llm, agent="zero-shot-react-description", verbose=True)
+    tools, llm, agent="zero-shot-react-description", verbose=True)
 # Text Edit Widget
 logger.info('CustomTextEdit')
+
+
 class CustomTextEdit(QTextEdit):
     def __init__(self, *args, **kwargs):
         super(CustomTextEdit, self).__init__(*args, **kwargs)
     # Handling key events
     logger.info('keyPressEvent')
+
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Return and event.modifiers() == Qt.ShiftModifier:
             self.insertPlainText("\n")
@@ -67,14 +72,19 @@ class CustomTextEdit(QTextEdit):
             self.parent().send_message('')
         else:
             super().keyPressEvent(event)
+
+
 # Chat Widget
 logger.info('loading chatwidget')
+
+
 class ChatWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.init_ui()
     logger.info('init ui')
     # Initialize the UI
+
     def init_ui(self):
         self.create_widgets()
         self.set_widget_properties()
@@ -83,6 +93,7 @@ class ChatWidget(QWidget):
         self.setLayout(self.layout)
     logger.info('create chat widget')
     # Create the widgets
+
     def create_widgets(self):
         self.layout = QVBoxLayout()
         self.chat_history = self.create_chat_history()
@@ -95,22 +106,24 @@ class ChatWidget(QWidget):
         self.button_layout = QHBoxLayout()
     logger.info('creating chat history')
     # Create the chat history widget
+
     def set_widget_properties(self):
         self.user_input.setFocus()
         self.send_button.setStyleSheet(
-                "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold; height: 50px; width: 100px;")
+            "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold; height: 50px; width: 100px;")
         self.clear_button.setStyleSheet(
-                "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold; height: 50px; width: 100px;")
+            "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold; height: 50px; width: 100px;")
         self.large_text_input_button.setStyleSheet(
-                "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold; height: 50px; width: 100px;")
+            "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold; height: 50px; width: 100px;")
         self.upload_button.setStyleSheet(
-                "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold; height: 50px; width: 100px;")
+            "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold; height: 50px; width: 100px;")
         self.combo_box.addItem("gpt-3.5-turbo")
         self.combo_box.addItem("gpt-4")
         self.combo_box.setStyleSheet(
-                "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold;height: 50px; width: 100px;")
+            "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold;height: 50px; width: 100px;")
     logger.info('creating layout')
     # Create the layout
+
     def create_widget_layouts(self):
         self.layout.addWidget(self.chat_history)
         self.layout.addWidget(self.user_input)
@@ -122,24 +135,27 @@ class ChatWidget(QWidget):
         self.layout.addLayout(self.button_layout)
     logger.info('creating event connections')
     # Create the event connections
+
     def set_widget_connections(self):
         self.send_button.clicked.connect(self.send_message)
         self.clear_button.clicked.connect(self.clear_chat_history)
         self.large_text_input_button.clicked.connect(
-                self.open_large_text_input)
+            self.open_large_text_input)
         self.upload_button.clicked.connect(self.open_file_dialog)
         self.combo_box.currentIndexChanged.connect(
-                self.on_combobox_changed)
+            self.on_combobox_changed)
     logger.info('change drop down menu')
     # Drop down menu change
+
     def on_combobox_changed(self, index):
         selected_option = self.combo_box.itemText(index)
         change_selected_model(selected_option)
         self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + selected_option + "\n\n")
+            self.chat_history.toPlainText() + selected_option + "\n\n")
         self.chat_history.moveCursor(QTextCursor.End)
     logger.info('chat history options')
     # Create Chat History
+
     def create_chat_history(self):
         chat_history = QTextEdit()
         chat_history.setReadOnly(True)
@@ -147,21 +163,23 @@ class ChatWidget(QWidget):
         chat_history.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         chat_history.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         chat_history.setStyleSheet(
-                "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-size: 12pt; font-weight: bold;")
+            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-size: 12pt; font-weight: bold;")
         return chat_history
     logger.info('create user input')
     # Create User Input
+
     def create_user_input(self):
         user_input = CustomTextEdit()
         user_input.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         user_input.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         user_input.setStyleSheet(
-                "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-size: 14pt; font-weight: bold;")
+            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-size: 14pt; font-weight: bold;")
         user_input.setFixedHeight(50)
         user_input.textChanged.connect(self.adjust_user_input_height)
         return user_input
     logger.info('height change')
     # Adjust if program height is changed
+
     def adjust_user_input_height(self):
         cursor = self.user_input.textCursor()
         cursor.movePosition(QTextCursor.End)
@@ -171,6 +189,7 @@ class ChatWidget(QWidget):
             self.user_input.setFixedHeight(round(height))
     logger.info('handle messages')
     # Send a message
+
     def send_message(self, user_message):
         user_message = self.user_input.toPlainText()
         self.user_input.clear()
@@ -180,97 +199,110 @@ class ChatWidget(QWidget):
                 self.user_input.clear()
             elif user_message.strip():
                 self.chat_history.setPlainText(
-                        self.chat_history.toPlainText() + "You: " + user_message + "\n\n")
+                    self.chat_history.toPlainText() + "You: " + user_message + "\n\n")
                 self.chat_history.moveCursor(QTextCursor.End)
                 response = chat_gpt(user_message)
                 self.chat_history.setPlainText(
-                        self.chat_history.toPlainText() + "Assistant: " + response + "\n\n")
+                    self.chat_history.toPlainText() + "Assistant: " + response + "\n\n")
                 self.chat_history.moveCursor(QTextCursor.End)
     logger.info('open large input box')
     # /Open the large input text box
+
     def open_large_text_input(self):
         self.large_text_input_dialog = LargeTextInputDialog(self)
         self.large_text_input_dialog.show()
     logger.info('clear history')
     # Clear the Chat History
+
     def clear_chat_history(self):
         self.chat_history.clear()
     logger.info('running embed file from Hex')
     # Open a file dialog for embedding a file
+
     def open_file_dialog(self):
         file_dialog = QFileDialog(self)
         file_dialog.setStyleSheet(
-                "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold;")
+            "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold;")
         file_dialog.setFileMode(QFileDialog.ExistingFile)
         if file_dialog.exec_() == QFileDialog.Accepted:
             file_name = file_dialog.selectedFiles()[0]
             self.process_file(file_name)
     logger.info('run !embed from Hex')
     # Process the selected file for embedding
+
     def process_file(self, file_path):
         create_embedding(file_path)
         self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str("Embedding created, use !docslong and !docs to pull relevant documents" + "\n\n"))
+            self.chat_history.toPlainText() + str("Embedding created, use !docslong and !docs to pull relevant documents" + "\n\n"))
         self.chat_history.moveCursor(QTextCursor.End)
     logger.info('run long docs')
     # Pull uncompressed documents from database
+
     def base_retrieve(self, text):
         results = base_retriever(text)
         self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str("Base search results: \n" + str(results) + "\n\n"))
+            self.chat_history.toPlainText() + str("Base search results: \n" + str(results) + "\n\n"))
         self.chat_history.moveCursor(QTextCursor.End)
     logger.info('run compressed docs')
     # Pull compressed documents from database
+
     def retrieve(self, text):
         results = retriever(text)
         self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str("Compression search results: \n" + str(results + "\n\n")))
+            self.chat_history.toPlainText() + str("Compression search results: \n" + str(results + "\n\n")))
         self.chat_history.moveCursor(QTextCursor.End)
     logger.info('run search agent')
     # Search the internet for a query
+
     def search_agent(self, text):
         results = agent.run(text)
         self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str("Simple internet search results: \n" + str(results) + "\n\n"))
+            self.chat_history.toPlainText() + str("Simple internet search results: \n" + str(results) + "\n\n"))
         self.chat_history.moveCursor(QTextCursor.End)
     logger.info('run embed dir')
     # Embed an entire directory
+
     def mass_embed(self, text):
         folder_path = text
         result = create_mass_embedding(folder_path)
         self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str("Embedding created, use !docslong and !docs to pull relevant documents, and !searchmem to query the database" + str(result) + "\n\n"))
+            self.chat_history.toPlainText() + str("Embedding created, use !docslong and !docs to pull relevant documents, and !searchmem to query the database" + str(result) + "\n\n"))
         self.chat_history.moveCursor(QTextCursor.End)
     logger.info('query memory')
     # Query the database
+
     def search_memory(self, text):
         results = memory_search(text)
         self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str("Memory search results: \n" + str(results)) + "\n\n")
+            self.chat_history.toPlainText() + str("Memory search results: \n" + str(results)) + "\n\n")
         self.chat_history.moveCursor(QTextCursor.End)
     logger.info('run addmem')
     # Add a file to the database
+
     def add_to_db(self, text):
         results = scrape_site(url=text)
         self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str("Added to database: \n" + str(results) + "\n\n"))
+            self.chat_history.toPlainText() + str("Added to database: \n" + str(results) + "\n\n"))
         self.chat_history.moveCursor(QTextCursor.End)
     logger.info('run add sitemap')
+
     def add_map_db(self, text, collection_name):
         url = text
         results = scrape_site_map(url, collection_name)
         self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str("Added to database: \n" + str(results) + "\n\n"))
+            self.chat_history.toPlainText() + str("Added to database: \n" + str(results) + "\n\n"))
         self.chat_history.moveCursor(QTextCursor.End)
     logger.info('run embed project')
     # Add a project to the database
+
     def add_project_to_db(self, text):
         results = run_embed_project(file_path=text)
         self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str("Added to database: \n" + str(results) + "\n\n"))
+            self.chat_history.toPlainText() + str("Added to database: \n" + str(results) + "\n\n"))
         self.chat_history.moveCursor(QTextCursor.End)
     logger.info('run ! commands')
     # Run the ! commands
+
     def run_command(self, text):
         if text == "!clear":
             self.clear_chat_history()
@@ -321,14 +353,15 @@ class ChatWidget(QWidget):
 
         elif text.startswith("!"):
             self.chat_history.setPlainText(
-                    self.chat_history.toPlainText() + str("Command not found. Type !help for a list of commands \n\n"))
+                self.chat_history.toPlainText() + str("Command not found. Type !help for a list of commands \n\n"))
             self.chat_history.moveCursor(QTextCursor.End)
     logger.info('logger.info help')
     # Help info
+
     def display_help(self):
         self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str(
-                    """
+            self.chat_history.toPlainText() + str(
+                """
     Commands:
         !help - Display this help message.
         !save - Save chat history.
@@ -347,31 +380,34 @@ class ChatWidget(QWidget):
         !background - Change the background image.
         """))
     logger.info('load file into chat')
-    #Load file into chat
+    # Load file into chat
+
     def load_chat_history(self):
         file_dialog = QFileDialog(self)
         file_dialog.setStyleSheet(
-                "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold;")
+            "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold;")
         file_dialog.setFileMode(QFileDialog.ExistingFile)
         if file_dialog.exec_() == QFileDialog.Accepted:
             file_name = file_dialog.selectedFiles()[0]
             with open(file_name, "r") as file:
                 self.chat_history.setPlainText(
-                        self.chat_history.toPlainText() + str(file.read()) + "\n\n")
+                    self.chat_history.toPlainText() + str(file.read()) + "\n\n")
     logger.info('save chat history to file')
     # save chat history to file
+
     def save_chat_history(self):
         file_dialog = QFileDialog(self)
         file_dialog.setStyleSheet(
-                "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold;")
+            "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold;")
         file_dialog.setFileMode(QFileDialog.ExistingFile)
         if file_dialog.exec_() == QFileDialog.Accepted:
             file_name = file_dialog.selectedFiles()[0]
             with open(file_name, "a") as file:
                 file.write(str(self.chat_history.setPlainText(
-                        self.chat_history.toPlainText() + "\n\n")))
+                    self.chat_history.toPlainText() + "\n\n")))
     logger.info('exit')
     # Exit
+
     def exit():
         sys.exit(0)
 
@@ -413,53 +449,64 @@ class CustomTitleBar(QWidget):
             }
         """)
     logger.info('mouse press event')
-    # Mouse press event
+
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
             self.dragPos = event.globalPos()
             event.accept()
-    logger.info('mouse move event')
+            logger.info('mouse press event')
 
-    # Mouse move event
     def mouseMoveEvent(self, event):
-        if event.buttons() == Qt.LeftButton:
+        if event.buttons() == Qt.LeftButton and self.dragPos is not None:
             self.parent().move(self.parent().pos() + event.globalPos() - self.dragPos)
             self.dragPos = event.globalPos()
             event.accept()
-    logger.info('paint event')
+            logger.info('mouse move event')
+
+    def mouseReleaseEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.dragPos = None
+            event.accept()
+
+    def paintEvent(self, event):
+        super(CustomTitleBar, self).paintEvent(event)
+        painter = QStylePainter(self)
+        painter.setPen(Qt.NoPen)
+        painter.setBrush(Qt.black)
+        painter.drawRect(self.rect())
 
     # Buttons
     def buttons(self):
         close_button = QPushButton()
         close_button.clicked.connect(self.parent().close)
         close_button.setFixedSize(30, 30)
-        close_pix = QPixmap("imgs/close.jpg")
+        close_pix = QPixmap("imgs/close.png")
         close_button_palette = QPalette()
         close_button_palette.setBrush(QPalette.Background, QBrush(close_pix.scaled(
             self.size())))
         close_button.setPalette(close_button_palette)
         close_button.setStyleSheet(
-                "QPushButton {background-color: transparent;}""QPushButton:hover {background-color: #ff0000;}")
+            "QPushButton {background-color: transparent;}""QPushButton:hover {background-color: #ff0000;}")
         min_button = QPushButton()
         min_button.clicked.connect(self.parent().showMinimized)
         min_button.setFixedSize(30, 30)
-        min_pix = QPixmap("imgs/min.jpg")
+        min_pix = QPixmap("imgs/min.png")
         min_button_palette = QPalette()
         min_button_palette.setBrush(QPalette.Background, QBrush(min_pix.scaled(
             self.size())))
         min_button.setPalette(close_button_palette)
         min_button.setStyleSheet(
-                "QPushButton {background-color: transparent;}""QPushButton:hover {background-color: #ff0000;}")
+            "QPushButton {background-color: transparent;}""QPushButton:hover {background-color: #ff0000;}")
         max_button = QPushButton()
         max_button.clicked.connect(self.maximumSize)
         max_button.setFixedSize(30, 30)
-        max_pix = QPixmap('imgs/max.jpg')
+        max_pix = QPixmap('imgs/max.png')
         max_button_palette = QPalette()
         max_button_palette.setBrush(QPalette.Background, QBrush(max_pix.scaled(
             self.size())))
         max_button.setPalette(close_button_palette)
         max_button.setStyleSheet(
-                "QPushButton {background-color: transparent;}""QPushButton:hover {background-color: #ff0000;}")
+            "QPushButton {background-color: transparent;}""QPushButton:hover {background-color: #ff0000;}")
         button_layout = QHBoxLayout()
         button_layout.addWidget(min_button)
         button_layout.addWidget(max_button)
@@ -474,9 +521,12 @@ class CustomTitleBar(QWidget):
         widget.setStyleSheet("background-color: transparent; color: white;")
         return widget
 
+
 logger.info('Main Window')
 
 logger.info('Scroll Area')
+
+
 class ScrollArea(QScrollArea):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -493,12 +543,14 @@ class ScrollArea(QScrollArea):
         self.chat_widget = ChatWidget()
         self.content_widget_layout.addWidget(self.chat_widget)
 
+
 class MainWindow(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("HexAmerous - AI Assistant")
         self.resize(800, 800)
-        self.flags = Qt.WindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Window | Qt.WindowMinimizeButtonHint | Qt.WindowMaximizeButtonHint | Qt.WindowCloseButtonHint)
+        self.flags = Qt.WindowFlags(Qt.FramelessWindowHint | Qt.WindowMinimizeButtonHint |
+                                    Qt.WindowMaximizeButtonHint | Qt.WindowCloseButtonHint)
         self.setWindowFlags(self.flags)
 
         self.layout = QVBoxLayout()
@@ -523,6 +575,8 @@ class MainWindow(QWidget):
 
 
 logger.info('Large Text Input Dialog')
+
+
 class LargeTextInputDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -532,23 +586,28 @@ class LargeTextInputDialog(QDialog):
         self.text_input.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.text_input.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.text_input.setStyleSheet(
-                "background-color: #430351; color: #f9f9f9; font-size: 12pt; font-weight: bold;")
+            "background-color: #430351; color: #f9f9f9; font-size: 12pt; font-weight: bold;")
         self.send_button = QPushButton("Send")
         self.send_button.setStyleSheet(
-                "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold;")
+            "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold;")
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.text_input)
         self.layout.addWidget(self.send_button)
         self.send_button.clicked.connect(self.send_large_text)
     logger.info('send large text')
     # Send the large textbox message
+
     def send_large_text(self):
         large_text = self.text_input.toPlainText()
         if large_text.strip():
             self.parent().send_message(large_text)
         self.close()
+
+
 # -------------- Main Program -------------- #
 logger.info('main')
+
+
 def main():
     app = QApplication(sys.argv)
     main_window = MainWindow()
@@ -556,5 +615,7 @@ def main():
     app.setWindowIcon(icon)
     main_window.show()
     sys.exit(app.exec_())
+
+
 if __name__ == '__main__':
     main()

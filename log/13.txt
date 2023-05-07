@@ -1,0 +1,3 @@
+User: what is modular?
+Assistant: Modular is a suite of AI infrastructure tools designed to streamline AI workflows and provide unmatched industry performance. The company aims to rebuild AI in the face of a new economy, focusing on creating value for customers, employees, and investors. They are currently working on developing a unified and extensible platform to enhance AI capabilities. The Modular platform includes a high-performance inference engine and Mojo🔥, a programming language that combines the usability of Python and the performance of C to improve AI software development. Modular is focused on making AI accessible to anyone, anywhere, and is constantly working towards innovations in AI infrastructure.
+

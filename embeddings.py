@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from langchain.document_loaders import (
     TextLoader,
     PyPDFLoader,
@@ -25,7 +26,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 embeddings = OpenAIEmbeddings()
 llm = OpenAI(temperature=0)
 text_splitter = CharacterTextSplitter(chunk_size=300, chunk_overlap=25)
-vectorstore = 'docs/'
+vectorstore = 'docs'
 
 logger.info('base_formatter function')
 
@@ -75,7 +76,7 @@ def create_mass_embedding(folder_path):
         file_path = os.path.join(folder_path, filename)
         result = create_embedding(file_path, filename)
         logger.info(f"Embedding created for {filename}: {result}")
-        with open('docs/index.txt', 'a') as f:
+        with open('docs.txt', 'a') as f:
             f.write(f"{os.path.join(folder_path, file_path)}\n")
         logger.info(f"Embedding created for {filename}: {result}")
 
@@ -94,8 +95,10 @@ def create_embedding(file_path, optional_arg="metadata"):
         meta = metadata
     else:
         meta = 'file_path'
+    text_splitter = CharacterTextSplitter(chunk_size=150, chunk_overlap=20)
+    data = text_splitter.split(data)
     vectordb = Chroma.from_documents(
-        documents=data, metadata=meta, embedding=embeddings, persist_directory='docs/index')
+        documents=data, metadata=meta, embedding=embeddings, persist_directory='docs')
     vectordb.persist()
     return "Embedding created"
 
@@ -132,10 +135,9 @@ logger.info('load_vector_store_docs function')
 
 def load_vector_store_docs():
     logger.info('running load_vector_store_docs')
-    vectorstore = 'docs/index'
-    chromadb = Chroma(persist_directory=vectorstore,
+    vectorstore = 'docs'
+    docs = Chroma(persist_directory=vectorstore,
                       embedding_function=embeddings)
-    docs = chromadb.documents
     logger.info(docs)
     return docs
 

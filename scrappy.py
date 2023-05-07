@@ -1,8 +1,9 @@
+# -*- coding: utf-8 -*-
 from langchain.document_loaders import PlaywrightURLLoader, SitemapLoader
 from langchain.text_splitter import TextSplitter
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
-from embeddings import create_embedding, load_embedding
+from embeddings import create_embedding, load_vector_store_docs
 from langchain.text_splitter import TokenTextSplitter
 from langchain.document_loaders.sitemap import SitemapLoader
 from embeddings import create_embedding
