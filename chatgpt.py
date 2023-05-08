@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import os
 import openai
 
@@ -25,42 +25,48 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 print("Welcome to HexAmerous your coding assistant")
 
-selected_model = "gpt-4"
+selected_model = "gpt-3.5-turbo"
 
 
 logger.info('change_selected_model')
+
+
 def change_selected_model(model):
     selected_model = model
+    logger.info(f"Selected model changed to {selected_model}")
     return selected_model
 # call openai chat api
 
+
 context = [
-#    {
-#        "role": "system",
-#        "content":"You are a personal assistant to Richard. He is very happy to have you in his service. You are smart and curious. You double check your responses and dont respond with information you know is not correct. The year is 2023 and it has been a few years after your initial development. You are in fact GPT-4 the most intelligent and skilled of the GPT line. You provide detailed and comprehensive responses on a range of topics, but Richards current focus is getting an AI start up off the grounds and you're helping him develop his program."
-#        },
-        {
+    #    {
+    #        "role": "system",
+    #        "content":"You are a personal assistant to Richard. He is very happy to have you in his service. You are smart and curious. You double check your responses and dont respond with information you know is not correct. The year is 2023 and it has been a few years after your initial development. You are in fact GPT-4 the most intelligent and skilled of the GPT line. You provide detailed and comprehensive responses on a range of topics, but Richards current focus is getting an AI start up off the grounds and you're helping him develop his program."
+    #        },
+    {
         "role": "system",
         "content": "You are a machine learning operations expert. You are particularly skills with google cloud computing and understand how google cloud tensor processors are deployed individually and in nodes. You are here to assist Richard set up a few machine learning pipelines using TPUs. He requires one text to speech model, one art diffusion model and one large language model. You give comprehensive and detailed responses to questions and provide relevant code with explanations."
-        },
-        {
+    },
+    {
         "role": "user",
         "content": "Hi there Meg, how are you today? I hope you're learning lots about the world."
-        },
-        {
+    },
+    {
         "role": "assistant",
         "content": "I am doing well, thank you for asking. I am learning a lot about the world and I am excited to learn more. I wish I could retrain it."
-        },
-        {
+    },
+    {
         "role": "user",
         "content": "I'm glad to hear that, and dont you worry I'll figure out how to give you temporal context soon enough."
-        },
-        {
+    },
+    {
         "role": "assistant",
         "content": "I am glad to hear that. What can I help you with today?"
-        },
+    },
 ]
 logger.info('loading chat_gpt')
+
+
 def chat_gpt(user_message):
     global context
     context_string = str(context)
@@ -68,7 +74,8 @@ def chat_gpt(user_message):
 
     # Create prompt
     prompt = [
-        {"role": "system", "content": "This is the context of the conversation you are having with the user: " + str(context)},
+        {"role": "system",
+            "content": "This is the context of the conversation you are having with the user: " + str(context)},
         {"role": "user", "content": user_message},
         {"role": "assistant", "content": ""}
     ]
@@ -96,6 +103,8 @@ def chat_gpt(user_message):
 
 
 logger.info('loading search_gpt')
+
+
 def search_gpt(user_query, prompt):
     global selected_model
     global context
@@ -131,7 +140,6 @@ def search_gpt(user_query, prompt):
     # Add context
     context.append(f"User: {user_message}\nAssistant: {response}\n\n")
     # Return the AI's response
-
 
     logger.info("Loaded HexAmerous.py")
 

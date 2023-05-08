@@ -1,4 +1,13 @@
 # -*- coding: utf-8 -*-
+from ye_logger_of_yor import get_logger
+from embed_project import run_embed_project
+from scrappy import scrape_site, scrape_site_map
+from custom_agents import (
+    base_retriever,
+    retriever,
+    memory_search
+)
+from highlighter import CustomSyntaxHighlighter
 import sys
 import os
 import random
@@ -10,7 +19,8 @@ from PyQt5.QtGui import (
     QBrush,
     QMovie,
     QIcon,
-    QImage
+    QImage,
+    QColor
 )
 from PyQt5.QtWidgets import (
     QApplication,
@@ -27,7 +37,7 @@ from PyQt5.QtWidgets import (
     QMessageBox,
     QComboBox,
     QSizeGrip,
-    QStylePainter
+    QStylePainter,
 )
 from chatgpt import (
     chat_gpt,
@@ -35,24 +45,32 @@ from chatgpt import (
 )
 from embeddings import (
     create_embedding,
-    base_retriever,
-    retriever,
     create_mass_embedding,
-    memory_search
 )
-from langchain import OpenAI
+from langchain import OpenAI, Wikipedia
 from langchain.utilities import GoogleSerperAPIWrapper, GoogleSearchAPIWrapper
-from langchain.agents import initialize_agent, load_tools
-from scrappy import scrape_site, scrape_site_map
-from embed_project import run_embed_project
-from ye_logger_of_yor import get_logger
+from langchain.agents import initialize_agent, load_tools, Tool
+from langchain.agents import AgentType
+from langchain.agents.react.base import DocstoreExplorer
+docstore = DocstoreExplorer(Wikipedia())
+
+
 logger = get_logger()
 # Global Variables
 logger.info('loading langchain variables')
 llm = OpenAI(temperature=0)
-tools = load_tools(["google-serper"], llm=llm)
-agent = initialize_agent(
-    tools, llm, agent="zero-shot-react-description", verbose=True)
+tools = [
+    Tool(
+        name="Search",
+        func=docstore.search,
+        description="useful for when you need to ask with search"
+    ),
+    Tool(name="Lookup",
+         func=docstore.lookup,
+         description="useful for when you need to ask with lookup"
+         )
+]
+agent = initialize_agent(tools, llm, agent="react-docstore", verbose=True)
 # Text Edit Widget
 logger.info('CustomTextEdit')
 
@@ -110,17 +128,17 @@ class ChatWidget(QWidget):
     def set_widget_properties(self):
         self.user_input.setFocus()
         self.send_button.setStyleSheet(
-            "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold; height: 50px; width: 100px;")
+            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold; height: 50px; width: 100px;")
         self.clear_button.setStyleSheet(
-            "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold; height: 50px; width: 100px;")
+            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9;font-family: 'Cascadia Code';  font-size: 14pt; font-weight: bold; height: 50px; width: 100px;")
         self.large_text_input_button.setStyleSheet(
-            "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold; height: 50px; width: 100px;")
+            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold; height: 50px; width: 100px;")
         self.upload_button.setStyleSheet(
-            "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold; height: 50px; width: 100px;")
-        self.combo_box.addItem("gpt-3.5-turbo")
-        self.combo_box.addItem("gpt-4")
+            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold; height: 50px; width: 100px;")
+        self.combo_box.addItem("GPT-3.5-Turbo")
+        self.combo_box.addItem("GPT-4")
         self.combo_box.setStyleSheet(
-            "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold;height: 50px; width: 100px;")
+            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold;height: 50px; width: 100px;")
     logger.info('creating layout')
     # Create the layout
 
@@ -133,6 +151,7 @@ class ChatWidget(QWidget):
         self.button_layout.addWidget(self.large_text_input_button)
         self.button_layout.addWidget(self.upload_button)
         self.layout.addLayout(self.button_layout)
+
     logger.info('creating event connections')
     # Create the event connections
 
@@ -162,8 +181,9 @@ class ChatWidget(QWidget):
         chat_history.ensureCursorVisible()
         chat_history.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         chat_history.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        custom_highlighter = CustomSyntaxHighlighter(chat_history.document())
         chat_history.setStyleSheet(
-            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-size: 12pt; font-weight: bold;")
+            "background-color: rgba(67, 3, 81, 0.8); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold;")
         return chat_history
     logger.info('create user input')
     # Create User Input
@@ -173,7 +193,7 @@ class ChatWidget(QWidget):
         user_input.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         user_input.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         user_input.setStyleSheet(
-            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-size: 14pt; font-weight: bold;")
+            "background-color: rgba(67, 3, 81, 0.8); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold;")
         user_input.setFixedHeight(50)
         user_input.textChanged.connect(self.adjust_user_input_height)
         return user_input
@@ -222,7 +242,7 @@ class ChatWidget(QWidget):
     def open_file_dialog(self):
         file_dialog = QFileDialog(self)
         file_dialog.setStyleSheet(
-            "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold;")
+            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold;")
         file_dialog.setFileMode(QFileDialog.ExistingFile)
         if file_dialog.exec_() == QFileDialog.Accepted:
             file_name = file_dialog.selectedFiles()[0]
@@ -263,16 +283,16 @@ class ChatWidget(QWidget):
     # Embed an entire directory
 
     def mass_embed(self, text):
-        folder_path = text
-        result = create_mass_embedding(folder_path)
-        self.chat_history.setPlainText(
-            self.chat_history.toPlainText() + str("Embedding created, use !docslong and !docs to pull relevant documents, and !searchmem to query the database" + str(result) + "\n\n"))
-        self.chat_history.moveCursor(QTextCursor.End)
+        result = create_mass_embedding(folder_path=text)
+        if result:
+            self.chat_history.setPlainText(
+                self.chat_history.toPlainText() + str("Embedding created, use !docslong and !docs to pull relevant documents, and !searchmem to query the database" + str(result) + "\n\n"))
+            self.chat_history.moveCursor(QTextCursor.End)
     logger.info('query memory')
     # Query the database
 
     def search_memory(self, text):
-        results = memory_search(text)
+        results = memory_search_with_score(text)
         self.chat_history.setPlainText(
             self.chat_history.toPlainText() + str("Memory search results: \n" + str(results)) + "\n\n")
         self.chat_history.moveCursor(QTextCursor.End)
@@ -306,36 +326,49 @@ class ChatWidget(QWidget):
     def run_command(self, text):
         if text == "!clear":
             self.clear_chat_history()
+            return
         if text == "!save":
             self.save_chat_history()
+            return
         if text == "!load":
             self.load_chat_history()
+            return
         if text == "!exit":
             exit()
+            return
         if text == "!help":
             self.display_help()
+            return
         if text == "!large":
             self.open_large_text_input()
+            return
         if text == "!embed":
             self.open_file_dialog()
-        if text.startswith("!mass_embed"):
-            text = text.removeprefix("!mass_embed ")
+            return
+        if text.startswith("!massembed"):
+            text = text.removeprefix("!massembed ")
             self.mass_embed(text)
-        if text.startswith("!docslong"):
-            text = text.removeprefix("!docslong ")
-            self.base_retrieve(text)
+            return
         if text.startswith("!docs"):
             text = text.removeprefix("!docs ")
-            self.retrieve(text)
+            self.base_retrieve(text)
+            return
         if text.startswith("!search"):
             text = text.removeprefix("!search ")
+            data_base_memory_search(text)
+            return
+        if text.startswith("!hybrid"):
+            text = text.removeprefix("!hybrid ")
             self.search_agent(text)
+            return
         if text.startswith("!searchmem"):
             text = text.removeprefix("!searchmem ")
-            self.search_memory(text)
+            self.memory_search_with_score(text)
+            return
         if text.startswith("!addmem"):
             text = text.removeprefix("!addmem ")
             self.add_to_db(text)
+            return
         if text.startswith("!addmap"):
             text = text.removeprefix("!addmap ")
             split_text = text.split(" ")
@@ -343,18 +376,23 @@ class ChatWidget(QWidget):
             collection_name = split_text[1]
             logger.info(text, collection_name)
             self.add_map_db(text, collection_name)
+            return
         if text.startswith("!addproject"):
             text = text.removeprefix("!addproject ")
             self.add_project_to_db(text)
+            return
         if text.startswith("!background"):
             text = text.removeprefix("!background ")
             image = QPixmap("img/0000"+str(text)+".png")
             result = MainWindow.change_background_image(image)
+            return
+        else:
+            if text.startswith("!"):
+                self.chat_history.setPlainText(
+                    self.chat_history.toPlainText() + str("Command not found. Type !help for a list of commands \n\n"))
+                self.chat_history.moveCursor(QTextCursor.End)
+                return
 
-        elif text.startswith("!"):
-            self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str("Command not found. Type !help for a list of commands \n\n"))
-            self.chat_history.moveCursor(QTextCursor.End)
     logger.info('logger.info help')
     # Help info
 
@@ -368,14 +406,14 @@ class ChatWidget(QWidget):
         !load - Load chat history.
         !clear - Clear chat history.
         !exit - Exit the application.
-        !docslong - Uncompressed search of documents.
-        !docs - Compressed search the documents.
+        !docs - Pull documents from the vectore store related to your query.
         !search - Search the internet for context on a prompt then ask the prompt.
-        !searchmem - Search the memory for context on a prompt then ask the prompt.
+        !searchmem - Search the database for context on a prompt then ask the prompt.
+        !hybrid - Search docs and/or internet for context.
         !addmem - [http] Add a list of comma delineated website to the database.
         !addmap [.xml] - Find site map and add all the sites from it to the database.
         !embed - Upload a file to create embeddings.
-        !mass_embed [dir] - Upload multiple files to create embeddings. Follow with a space then folder path.
+        !massembed [dir] - Upload multiple files to create embeddings. Follow with a space then folder path.
         !addproject [dir] - Add python project files to the database. Follow with a space then folder path. Note this sends your project file information to the OpenAI API.
         !background - Change the background image.
         """))
@@ -385,7 +423,7 @@ class ChatWidget(QWidget):
     def load_chat_history(self):
         file_dialog = QFileDialog(self)
         file_dialog.setStyleSheet(
-            "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold;")
+            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold;")
         file_dialog.setFileMode(QFileDialog.ExistingFile)
         if file_dialog.exec_() == QFileDialog.Accepted:
             file_name = file_dialog.selectedFiles()[0]
@@ -398,7 +436,7 @@ class ChatWidget(QWidget):
     def save_chat_history(self):
         file_dialog = QFileDialog(self)
         file_dialog.setStyleSheet(
-            "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold;")
+            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold;")
         file_dialog.setFileMode(QFileDialog.ExistingFile)
         if file_dialog.exec_() == QFileDialog.Accepted:
             file_name = file_dialog.selectedFiles()[0]
@@ -417,38 +455,44 @@ class CustomTitleBar(QWidget):
     def __init__(self, parent=None):
         super(CustomTitleBar, self).__init__(parent)
         self.setFixedHeight(30)
-        layout = QVBoxLayout(self)
-        layout.addWidget(self.buttons())
+        layout = QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(1)
 
         # Add title label
         self.titleLabel = QLabel(self)
         layout.addWidget(self.titleLabel)
-        self.size_grip = QSizeGrip(self)
-        layout.addWidget(self.size_grip)
-        self.titleLabel.setObjectName("titleLabel")
+        self.titleLabel.setObjectName("HexAmerous")
+        self.titleLabel.setText("HexAmerous")
         self.titleLabel.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         self.titleLabel.setFixedHeight(30)
-
-        # Add spacer
-        spacer = QWidget(self)
-        spacer.setFixedHeight(1)
-        spacer.setObjectName("spacer")
-        layout.addWidget(spacer)
+        layout.addWidget(self.buttons())
 
         # Set stylesheet
         self.setStyleSheet("""
-            #titleLabel {
-                color: white;
-                font-size: 20px;
-                padding-left: 10px;
+            QPushButton {
+                border: none;
+                background-color: rgba(67, 3, 81, 0.3);
+                color: #f9f9f9;
             }
-            #spacer {
-                background-color: white;
+            QPushButton:hover {
+                background-color: rgba(67, 3, 81, 0.7);;
+                color: #f9f9f9;
+            }
+            QPushButton:pressed {
+                background-color: #430351;
+                color: #f9f9f9;
+            }
+            QLabel {
+                background-color: rgba(67, 3, 81, 0.7);
+                color: #f9f9f9;
+                font-size: 20pt;
+                font-weight: bold;
+                text-align: center;
+                font-family: 'Cascadia Code';
+
             }
         """)
-    logger.info('mouse press event')
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -472,7 +516,7 @@ class CustomTitleBar(QWidget):
         super(CustomTitleBar, self).paintEvent(event)
         painter = QStylePainter(self)
         painter.setPen(Qt.NoPen)
-        painter.setBrush(Qt.black)
+        painter.setBrush(QColor(0, 0, 0, 0))
         painter.drawRect(self.rect())
 
     # Buttons
@@ -480,34 +524,32 @@ class CustomTitleBar(QWidget):
         close_button = QPushButton()
         close_button.clicked.connect(self.parent().close)
         close_button.setFixedSize(30, 30)
-        close_pix = QPixmap("imgs/close.png")
-        close_button_palette = QPalette()
-        close_button_palette.setBrush(QPalette.Background, QBrush(close_pix.scaled(
-            self.size())))
-        close_button.setPalette(close_button_palette)
+        close_button.setIconSize(QSize(30, 30))
+        close_button.setIcon(QIcon("imgs/close.png"))
         close_button.setStyleSheet(
-            "QPushButton {background-color: transparent;}""QPushButton:hover {background-color: #ff0000;}")
+            "QPushButton {background-color: rgba(67, 3, 81, 0.4);}"
+            "QPushButton:hover {background-color: #430351;}")
+
         min_button = QPushButton()
         min_button.clicked.connect(self.parent().showMinimized)
         min_button.setFixedSize(30, 30)
-        min_pix = QPixmap("imgs/min.png")
-        min_button_palette = QPalette()
-        min_button_palette.setBrush(QPalette.Background, QBrush(min_pix.scaled(
-            self.size())))
-        min_button.setPalette(close_button_palette)
+        min_button.setIconSize(QSize(30, 30))
+        min_button.setIcon(QIcon("imgs/min.png"))
         min_button.setStyleSheet(
-            "QPushButton {background-color: transparent;}""QPushButton:hover {background-color: #ff0000;}")
+            "QPushButton {background-color: rgba(67, 3, 81, 0.4);}"
+            "QPushButton:hover {background-color: #430351;}")
+
         max_button = QPushButton()
         max_button.clicked.connect(self.maximumSize)
         max_button.setFixedSize(30, 30)
-        max_pix = QPixmap('imgs/max.png')
-        max_button_palette = QPalette()
-        max_button_palette.setBrush(QPalette.Background, QBrush(max_pix.scaled(
-            self.size())))
-        max_button.setPalette(close_button_palette)
+        max_button.setIconSize(QSize(30, 30))
+        max_button.setIcon(QIcon("imgs/max.png"))
         max_button.setStyleSheet(
-            "QPushButton {background-color: transparent;}""QPushButton:hover {background-color: #ff0000;}")
+            "QPushButton {background-color: rgba(67, 3, 81, 0.4);}"
+            "QPushButton:hover {background-color: #430351;}")
+
         button_layout = QHBoxLayout()
+
         button_layout.addWidget(min_button)
         button_layout.addWidget(max_button)
         button_layout.addWidget(close_button)
@@ -517,14 +559,10 @@ class CustomTitleBar(QWidget):
         widget = QWidget()
         widget.setLayout(button_layout)
         widget.setFixedHeight(30)
+        widget.setFixedWidth(90)
         widget.setContentsMargins(0, 0, 0, 0)
-        widget.setStyleSheet("background-color: transparent; color: white;")
+        widget.setStyleSheet("background-color: rgba(67, 3, 81, 0.7);")
         return widget
-
-
-logger.info('Main Window')
-
-logger.info('Scroll Area')
 
 
 class ScrollArea(QScrollArea):
@@ -540,14 +578,11 @@ class ScrollArea(QScrollArea):
         self.content_widget_layout = QVBoxLayout()
         self.content_widget.setLayout(self.content_widget_layout)
         self.setWidget(self.content_widget)
-        self.chat_widget = ChatWidget()
-        self.content_widget_layout.addWidget(self.chat_widget)
 
 
 class MainWindow(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("HexAmerous - AI Assistant")
         self.resize(800, 800)
         self.flags = Qt.WindowFlags(Qt.FramelessWindowHint | Qt.WindowMinimizeButtonHint |
                                     Qt.WindowMaximizeButtonHint | Qt.WindowCloseButtonHint)
@@ -555,16 +590,18 @@ class MainWindow(QWidget):
 
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
+        self.size_grip = QSizeGrip(self)
+        self.size_grip.setStyleSheet("width: 10px; height: 5px; margin 0px;")
+        self.layout.addWidget(self.size_grip)
         self.titleBar = CustomTitleBar(self)
-
-        self.scroll_area = ScrollArea()
         self.layout.addWidget(self.titleBar)
-        self.layout.addWidget(self.scroll_area)
+        self.chat_widget = ChatWidget()
+        self.layout.addWidget(self.chat_widget)
 
         self.image = ''
         self.background = self.change_background_image()
 
-    def change_background_image(self, image="./imgs/00003.png"):
+    def change_background_image(self, image="./imgs/00001.png"):
         self.image = image
         image_choice = QPixmap(self.image)
         palette = QPalette()
@@ -586,10 +623,10 @@ class LargeTextInputDialog(QDialog):
         self.text_input.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.text_input.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.text_input.setStyleSheet(
-            "background-color: #430351; color: #f9f9f9; font-size: 12pt; font-weight: bold;")
+            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-family 'Cascadia Code'; font-size: 12pt; font-weight: bold;")
         self.send_button = QPushButton("Send")
         self.send_button.setStyleSheet(
-            "background-color: #430351; color: #f9f9f9; font-size: 14pt; font-weight: bold;")
+            "background-color:rgba(67, 3, 81, 0.7); color: #f9f9f9; font-family 'Cascadia Code'; font-size: 14pt; font-weight: bold;")
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.text_input)
         self.layout.addWidget(self.send_button)

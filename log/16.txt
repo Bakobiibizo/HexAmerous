@@ -1,3 +1,0 @@
-User: what is mojo?
-Assistant: Mojo is a programming language designed for AI developers. It combines the usability of Python with the performance of C, aiming to provide unparalleled programmability of AI hardware and extensibility of AI models. Mojo offers features such as progressive types, zero-cost abstractions, ownership and borrow checker, portable parametric algorithms, and language-integrated auto-tuning. Developed by Modular, Mojo aims to advance AI infrastructure and make it more accessible to everyone.
-

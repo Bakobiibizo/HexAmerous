@@ -2,6 +2,9 @@
 import os
 import glob
 from embeddings import create_embedding
+from ye_logger_of_yor import get_logger
+
+logger = get_logger()
 
 def run_embed_project(file_path):
     project_folder = file_path
@@ -11,7 +14,7 @@ def run_embed_project(file_path):
 
     # Ensure the output folder exists
     os.makedirs(output_folder, exist_ok=True)
-    print("Converting files to Markdown")
+    logger.info("Converting files to Markdown")
 
 
     def convert_files(project_files):
@@ -39,11 +42,11 @@ def run_embed_project(file_path):
                 f.write(code_md)
 
             # Print progress to the console
-            print(f"File {count}/{len(project_files)} saved: {os.path.relpath(python_file, project_folder)}")
+            logger.info(f"File {count}/{len(project_files)} saved: {os.path.relpath(python_file, project_folder)}")
 
             # Create the embedding
-            print("Creating embedding...")
+            logger.info("Creating embedding...")
             create_embedding(output_file)
     result = convert_files(project_files)
-    print("Done!")
+    logger.info("Done!")
     return result

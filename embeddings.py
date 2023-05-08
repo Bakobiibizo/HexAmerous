@@ -25,7 +25,7 @@ logger.info('Loading global variables')
 openai.api_key = os.getenv("OPENAI_API_KEY")
 embeddings = OpenAIEmbeddings()
 llm = OpenAI(temperature=0)
-vectorstore = 'docs'
+vectorstore_location = './docs/'
 text_splitter = TokenTextSplitter(chunk_size=300, chunk_overlap=25)
 
 
@@ -72,16 +72,17 @@ def create_mass_embedding(folder_path):
         folder_path = 'docs/empty'
         result = "Folder does not exist"
         logger.info(result)
-        return result
-    for filename in os.listdir(folder_path):
-        file_path = os.path.join(folder_path, filename)
-        result = create_embedding(file_path, filename)
-        logger.info(f"Embedding created for {filename}: {result}")
-        with open('docs.txt', 'a') as f:
-            f.write(f"{os.path.join(folder_path, file_path)}\n")
-        logger.info(f"Embedding created for {filename}: {result}")
+        return
+    else:
+        for filename in os.listdir(folder_path):
+            file_path = os.path.join(folder_path, filename)
+            result = create_embedding(file_path, filename)
+            logger.info(f"Embedding created for {filename}: {result}")
+            with open('docs.txt', 'a') as f:
+                f.write(f"{os.path.join(folder_path, file_path)}\n")
+            logger.info(f"Embedding created for {filename}: {result}")
 
-    return result
+        return result
 
 
 logger.info('create_embedding function')
@@ -99,45 +100,16 @@ def create_embedding(file_path, optional_arg="metadata"):
 
     data = text_splitter.split_documents(documents=data)
     vectordb = Chroma.from_documents(
-        documents=data, metadata=meta, embedding=embeddings, persist_directory='docs')
+        documents=data, metadata=meta, embedding=embeddings, persist_directory=vectorstore_location)
     vectordb.persist()
     return "Embedding created"
-
-
-logger.info('base_retriever function')
-# Search for uncompressed docs in database
-
-
-def base_retriever(user_query):
-    logger.info('running base_retriever')
-    retriever = load_vector_store_docs().as_retriever(llm=llm)
-    docs = retriever.get_relevant_documents(user_query)
-    return docs
-
-
-logger.info('retriever function')
-# Search for compressed docs in database
-
-
-def retriever(user_query):
-    logger.info('running retriever')
-    compressor = LLMChainExtractor.from_llm(llm)
-    retriever = load_vector_store_docs().as_retriever(llm=llm)
-    cc_retriever = ContextualCompressionRetriever(
-        base_compressor=compressor, base_retriever=retriever)
-    compressed_docs = cc_retriever.get_relevant_documents(user_query)
-    docs = compressed_docs
-    logger.info(docs)
-    return docs
-
 
 logger.info('load_vector_store_docs function')
 
 
 def load_vector_store_docs():
     logger.info('running load_vector_store_docs')
-    vectorstore = 'docs'
-    docs = Chroma(persist_directory=vectorstore,
+    docs = Chroma(persist_directory=vectorstore_location,
                   embedding_function=embeddings)
     logger.info(docs)
     return docs
@@ -145,28 +117,3 @@ def load_vector_store_docs():
 
 logger.info('memory_search function')
 # Query the database and pass the info to chatgpt for response
-
-
-def memory_search(user_query):
-    logger.info('running memory_search')
-    data = base_retriever(user_query)
-    prompt = [{
-        "role": "system",
-        "content": '''
-        "The user has asked this question:
-
-        {user_query}
-
-        You have looked up the relevant information from your data store and it is:
-
-        {data}
-
-        Please answer the user's question using the data as relevant context."
-        '''.format(user_query=user_query, data=data)
-    }]
-
-    result = search_gpt(user_query, prompt)
-
-    logger.info(msg=f"Memory search result: {result}")
-
-    return result

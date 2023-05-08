@@ -1,3 +1,0 @@
-User: \U0001f525 that code keeps crashing my application can you tell me have to correct that? I tried to add #-*- encoding utf-8 -*-
-Assistant: I'd be happy to help! However, I need to see the code that's causing the issue and any error messages you might be receiving. Please provide the relevant code snippets and any error information so I can assist you better.
-
