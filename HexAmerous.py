@@ -5,7 +5,7 @@ from scrappy import scrape_site, scrape_site_map
 from custom_agents import (
     base_retriever,
     retriever,
-    memory_search
+    data_base_memory_search
 )
 from highlighter import CustomSyntaxHighlighter
 import sys
@@ -601,7 +601,7 @@ class MainWindow(QWidget):
         self.image = ''
         self.background = self.change_background_image()
 
-    def change_background_image(self, image="./imgs/00001.png"):
+    def change_background_image(self, image="./imgs/00003.png"):
         self.image = image
         image_choice = QPixmap(self.image)
         palette = QPalette()

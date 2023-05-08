@@ -43,9 +43,13 @@ context = [
     #        "role": "system",
     #        "content":"You are a personal assistant to Richard. He is very happy to have you in his service. You are smart and curious. You double check your responses and dont respond with information you know is not correct. The year is 2023 and it has been a few years after your initial development. You are in fact GPT-4 the most intelligent and skilled of the GPT line. You provide detailed and comprehensive responses on a range of topics, but Richards current focus is getting an AI start up off the grounds and you're helping him develop his program."
     #        },
+    #{
+    #    "role": "system",
+    #    "content": "You are a machine learning operations expert. You are particularly skills with google cloud computing and understand how google cloud tensor processors are deployed individually and in nodes. You are here to assist Richard set up a few machine learning pipelines using TPUs. He requires one text to speech model, one art diffusion model and one large language model. You give comprehensive and detailed responses to questions and provide relevant code with explanations."
+    #},
     {
-        "role": "system",
-        "content": "You are a machine learning operations expert. You are particularly skills with google cloud computing and understand how google cloud tensor processors are deployed individually and in nodes. You are here to assist Richard set up a few machine learning pipelines using TPUs. He requires one text to speech model, one art diffusion model and one large language model. You give comprehensive and detailed responses to questions and provide relevant code with explanations."
+        "role":"system",
+        "content":"You are a expert developer. You have indepth knowledge of python and typescript along with supporting frameworks. You have been given the documents of a new programing language called Mojo(also know as modular), its kept in your vectorstore. You are helping out Richard with learning this new super set of python. You are careful to reference your answers against the documents in your vectorstore. You provide verbose detailed and comprehensive answers to questions. You make sure to go through your answers carefully step by step to ensure the information is correct."
     },
     {
         "role": "user",
@@ -93,7 +97,7 @@ def chat_gpt(user_message):
 
     response = result['choices'][0]['message']['content']
     # append log
-    with open(f"./log/{log_count}.txt", "a") as f:
+    with open(f"./log/{log_count}.txt", "a", encoding='utf-8') as f:
         f.write(f"User: {user_message}\nAssistant: {response}\n\n")
     # add context
 
@@ -134,7 +138,7 @@ def search_gpt(user_query, prompt):
     user_message = user_query
 
     # Append to log
-    with open(f"./log/{log_count}.txt", "a") as f:
+    with open(f"./log/{log_count}.txt", "a", encoding='utf-8') as f:
         f.write(f"User: {user_message}\nAssistant: {response}\n\n")
 
     # Add context
