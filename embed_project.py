@@ -1,21 +1,19 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import os
 import glob
 from embeddings import create_embedding
-from ye_logger_of_yor import get_logger
 
-logger = get_logger()
 
 def run_embed_project(file_path):
     project_folder = file_path
-    output_folder = 'embeddings'
+    output_folder = 'docs/embeddings'
     # Get all .py files in the project folder and its subdirectories
-    project_files = glob.glob(os.path.join(project_folder, '**/*.py'), recursive=True)
+    project_files = glob.glob(os.path.join(
+        project_folder, '**/*.py'), recursive=True)
 
     # Ensure the output folder exists
     os.makedirs(output_folder, exist_ok=True)
-    logger.info("Converting files to Markdown")
-
+    print("Converting files to Markdown")
 
     def convert_files(project_files):
         count = 0
@@ -31,7 +29,8 @@ def run_embed_project(file_path):
             code_md = f"```python\n{file_content}\n```\n"
 
             # Set output file path
-            output_file = os.path.join(output_folder, os.path.relpath(python_file, project_folder))
+            output_file = os.path.join(
+                output_folder, os.path.relpath(python_file, project_folder))
             output_file = os.path.splitext(output_file)[0] + '.md'
 
             # Ensure the directory for the output file exists
@@ -42,11 +41,12 @@ def run_embed_project(file_path):
                 f.write(code_md)
 
             # Print progress to the console
-            logger.info(f"File {count}/{len(project_files)} saved: {os.path.relpath(python_file, project_folder)}")
+            print(
+                f"File {count}/{len(project_files)} saved: {os.path.relpath(python_file, project_folder)}")
 
             # Create the embedding
-            logger.info("Creating embedding...")
+            print("Creating embedding...")
             create_embedding(output_file)
     result = convert_files(project_files)
-    logger.info("Done!")
+    print("Done!")
     return result

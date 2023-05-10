@@ -1,23 +1,27 @@
 from PyQt5.QtCore import QRegularExpression
 from PyQt5.QtGui import QColor, QTextCharFormat, QSyntaxHighlighter
 
+
 class CustomSyntaxHighlighter(QSyntaxHighlighter):
     def __init__(self, document):
         super().__init__(document)
-            # Regex patterns for each word type
+        # Regex patterns for each word type
         variable_names_pattern = QRegularExpression(r"\b\[A-Za-z_\]\w*\B")
         variable_definitions_pattern = QRegularExpression(r"(?<=\=\s)\w+")
         function_references_pattern = QRegularExpression(r"\b\w+\(")
         function_definitions_pattern = QRegularExpression(r"\bdef \w+\\(")
-        keywords_pattern = QRegularExpression(r"\b(if|else|for|while|True|False)\b")
+        keywords_pattern = QRegularExpression(
+            r"\b(if|else|for|while|True|False)\b")
         property_names_pattern = QRegularExpression(r"(?<=\.)\w+")
         property_definitions_pattern = QRegularExpression(r"(?<=\.)\w+\s*=")
         tag_names_pattern = QRegularExpression(r"</?\w+[^>]*>")
-        type_names_pattern = QRegularExpression(r"\b(?:int|float|str|list|tuple|dict|set)\b")
+        type_names_pattern = QRegularExpression(
+            r"\b(?:int|float|str|list|tuple|dict|set)\b")
         class_names_pattern = QRegularExpression(r"\bclass (\w+)\b")
         attribute_names_pattern = QRegularExpression(r"\bself\.\w+\b")
         comments_pattern = QRegularExpression(r"#.*")
-        strings_pattern = QRegularExpression(r"(?<!\\')'(?:\\.|[^\"])*0'(?<!\\)")
+        strings_pattern = QRegularExpression(
+            r"(?<!\\')'(?:\\.|[^\"])*0'(?<!\\)")
         numbers_pattern = QRegularExpression(r"\b\d+(?:\.\d+)?\b")
         operators_pattern = QRegularExpression(r"[-!%^&*+=|;:,.<>?/\\\\~]")
         square_brackets_pattern = QRegularExpression(r"[[\]]")
@@ -73,14 +77,12 @@ class CustomSyntaxHighlighter(QSyntaxHighlighter):
             (operators_pattern, self.operators_format),
             (square_brackets_pattern, self.square_brackets_format),
             (angle_brackets_pattern, self.angle_brackets_format)
-            ]
-
-
+        ]
 
 
 def highlightBlock(self, text):
-            for pattern, fmt in self.highlighting_rules:
-                iterator = pattern.globalMatch(text)
-                while iterator.hasNext():
-                    match = iterator.next()
-                    self.setFormat(match.capturedStart(), match.capturedLength(), fmt)
+    for pattern, fmt in self.highlighting_rules:
+        iterator = pattern.globalMatch(text)
+        while iterator.hasNext():
+            match = iterator.next()
+            self.setFormat(match.capturedStart(), match.capturedLength(), fmt)

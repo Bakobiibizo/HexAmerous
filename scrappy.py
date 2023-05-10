@@ -7,14 +7,10 @@ from embeddings import create_embedding, load_vector_store_docs
 from langchain.text_splitter import TokenTextSplitter
 from langchain.document_loaders.sitemap import SitemapLoader
 import nest_asyncio
-from ye_logger_of_yor import get_logger
 
 # Load Langchain variables
 embeddings = OpenAIEmbeddings()
 text_splitter = TokenTextSplitter(chunk_size=300, chunk_overlap=25)
-
-logger = get_logger()
-
 # Scrape a website
 
 
@@ -32,11 +28,11 @@ def scrape_site(url):
 
     # Text splitter
     texts = text_splitter.split_text(data)
-    logger.info(texts)
+    print(texts)
 
     # Store in database
     chromadb = Chroma.from_texts(
-        texts, embeddings, persist_directory='docs/index')
+        texts, embeddings, persist_directory='./docs/')
     chromadb.persist()
 
     return chromadb
@@ -57,7 +53,7 @@ def scrape_site_map(site_path, collection_name):
     else:
         meta = 'file_path'
     vectordb = Chroma.from_documents(
-        documents=docs, metadata=meta, embedding=embeddings, persist_directory='docs/')
+        documents=docs, metadata=meta, embedding=embeddings, persist_directory='./docs/')
     vectordb.persist()
 
     return vectordb

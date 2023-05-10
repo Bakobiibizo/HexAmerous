@@ -1,65 +1,61 @@
-from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.llms import OpenAI
-from langchain.vectorstores import Chroma
-from ye_logger_of_yor import get_logger
+from embeddings import load_vector_store_docs, embeddings
+from langchain.agents import initialize_agent, load_tools, Tool
+from dotenv import load_dotenv
 from chatgpt import search_gpt
-from langchain.indexes.vectorstore import VectorStoreIndexWrapper
-from langchain.chains.query_constructor.base import AttributeInfo
-from embeddings import load_vector_store_docs
-from langchain.schema import Document
+from langchain import OpenAI, Wikipedia
+from langchain.utilities import GoogleSerperAPIWrapper, GoogleSearchAPIWrapper
+from langchain.agents import initialize_agent, load_tools, Tool
+from langchain.agents import AgentType
+from langchain.agents.react.base import DocstoreExplorer
+docstore = DocstoreExplorer(Wikipedia())
 
-logger = get_logger()
+llm = OpenAI(temperature=0)
 
-embedding = OpenAIEmbeddings()
-llm = OpenAI()
+tools = [
+    Tool(
+        name="Search",
+        func=docstore.search,
+        description="useful for when you need to ask with search"
+    ),
+    Tool(name="Lookup",
+         func=docstore.lookup,
+         description="useful for when you need to ask with lookup"
+         )
+]
+
+load_dotenv()
+
 vectorstore = load_vector_store_docs()
 
 
-# Search for uncompressed docs in database
-logger.info('base_retriever function')
-
-
 def base_retriever(user_query):
-    retriever = VectorStoreIndexWrapper(vectorstore=vectorstore)
-    logger.info('running base_retriever')
-    retriever.query_with_sources(question=user_query)
-
-
-# Search for compressed docs in database
-logger.info('retriever function')
-
-
-def retriever(user_query):
-    logger.info('running retriever')
-    retriever = base_retriever(user_query)
-    compressor = load_vector_store_docs().as_compressor(llm=llm)
-    logger.info(compressor)
+    retriever = embeddings.embed_query(text=user_query)
+    docs = vectorstore.similarity_search_by_vector(
+        embedding=retriever, top_k=1)
+    print(docs)
     return docs
 
 
 def data_base_memory_search(user_query):
-    logger.info('running memory_search')
-    data = base_retriever(user_query)
-    prompt = [{
+    docs = base_retriever(user_query)
+    print(docs)
+    prompt = {
         "role": "system",
         "content": '''
         "The user has asked this question:
 
-        {user_query}
+        {query}
 
         You have looked up the relevant information from your data store and it is:
 
         {data}
 
         Please answer the user's question using the data as relevant context."
-        '''.format(user_query=user_query, data=data)
-    }]
+        '''.format(query=user_query, data=docs)
+    }
 
-    result = search_gpt(user_query, prompt)
+    result = search_gpt(prompt)
 
-    logger.info(msg=f"Memory search result: {result}")
+    print("Memory search result: " + result)
 
     return result
-
-
-

@@ -1,16 +1,10 @@
 # -*- coding: utf-8 -*-
 import os
 import openai
-
 import json
-
 from dotenv import load_dotenv
-from langchain.utilities import GoogleSerperAPIWrapper, GoogleSearchAPIWrapper
 from langchain.agents import initialize_agent, load_tools
 from langchain.llms import OpenAI
-from ye_logger_of_yor import get_logger
-
-logger = get_logger()
 
 print("loading HexAmerous")
 
@@ -28,100 +22,108 @@ print("Welcome to HexAmerous your coding assistant")
 selected_model = "gpt-3.5-turbo"
 
 
-logger.info('change_selected_model')
+print('change_selected_model')
 
 
 def change_selected_model(model):
     selected_model = model
-    logger.info(f"Selected model changed to {selected_model}")
+    print(f"Selected model changed to {selected_model}")
     return selected_model
 # call openai chat api
 
 
-context = [
-    #    {
-    #        "role": "system",
-    #        "content":"You are a personal assistant to Richard. He is very happy to have you in his service. You are smart and curious. You double check your responses and dont respond with information you know is not correct. The year is 2023 and it has been a few years after your initial development. You are in fact GPT-4 the most intelligent and skilled of the GPT line. You provide detailed and comprehensive responses on a range of topics, but Richards current focus is getting an AI start up off the grounds and you're helping him develop his program."
-    #        },
-    #{
-    #    "role": "system",
-    #    "content": "You are a machine learning operations expert. You are particularly skills with google cloud computing and understand how google cloud tensor processors are deployed individually and in nodes. You are here to assist Richard set up a few machine learning pipelines using TPUs. He requires one text to speech model, one art diffusion model and one large language model. You give comprehensive and detailed responses to questions and provide relevant code with explanations."
-    #},
-    {
-        "role":"system",
-        "content":"You are a expert developer. You have indepth knowledge of python and typescript along with supporting frameworks. You have been given the documents of a new programing language called Mojo(also know as modular), its kept in your vectorstore. You are helping out Richard with learning this new super set of python. You are careful to reference your answers against the documents in your vectorstore. You provide verbose detailed and comprehensive answers to questions. You make sure to go through your answers carefully step by step to ensure the information is correct."
-    },
-    {
-        "role": "user",
-        "content": "Hi there Meg, how are you today? I hope you're learning lots about the world."
-    },
-    {
-        "role": "assistant",
-        "content": "I am doing well, thank you for asking. I am learning a lot about the world and I am excited to learn more. I wish I could retrain it."
-    },
-    {
-        "role": "user",
-        "content": "I'm glad to hear that, and dont you worry I'll figure out how to give you temporal context soon enough."
-    },
-    {
-        "role": "assistant",
-        "content": "I am glad to hear that. What can I help you with today?"
-    },
-]
-logger.info('loading chat_gpt')
+print('loading chat_gpt')
+context = []
 
 
 def chat_gpt(user_message):
-    global context
-    context_string = str(context)
-    logger.info(context_string)
 
-    # Create prompt
-    prompt = [
-        {"role": "system",
-            "content": "This is the context of the conversation you are having with the user: " + str(context)},
-        {"role": "user", "content": user_message},
-        {"role": "assistant", "content": ""}
-    ]
+    if context:
+
+        # Create prompt
+        prompt = [
+            {"role": "system",
+                "content": "This is the context of the conversation you are having with the user: " + str(context)},
+            {
+                "role": "user",
+                "content":  user_message
+            },
+            {
+                "role": "assistant",
+                "content": ""
+            }
+        ]
+    else:
+        prompt = [
+            {
+                "role": "system",
+                "content": "You are a personal assistant. You are smart and curious. You double check your responses and dont respond with information you know is not correct. You provide detailed and comprehensive responses. Think through your steps carefully. Use your scratch pad to write down your answers and check them before you send them. You are very carful to make sure you are giving factual information, if you do not know something you simply say 'I dont know' and if you need to answer, you look up the correct one."
+            },
+            # {
+            #    "role": "system",
+            #    "content": "You are a machine learning operations expert. You are particularly skills with google cloud computing and understand how google cloud tensor processors are deployed individually and in nodes. You are here to assist Richard set up a few machine learning pipelines using TPUs. He requires one text to speech model, one art diffusion model and one large language model. You give comprehensive and detailed responses to questions and provide relevant code with explanations."
+            # },
+            # {
+            #    "role": "system",
+            #    "content": "You are a expert developer. You have indepth knowledge of python and typescript along with supporting frameworks. You have been given the documents of a new programing language called Mojo(also know as modular), its kept in your vectorstore. You are helping out Richard with learning this new super set of python. You are careful to reference your answers against the documents in your vectorstore. You provide verbose detailed and comprehensive answers to questions. You make sure to go through your answers carefully step by step to ensure the information is correct."
+            # },
+            {
+                "role": "user",
+                "content": "Hi there how are you today? I hope you're learning lots about the world."
+            },
+            {
+                "role": "assistant",
+                "content": "I am doing well, thank you for asking. I am learning a lot about the world and I am excited to learn more. What can I help you with today?"},
+            {
+                "role": "user",
+                "content": "{user_message}"
+            }
+        ]
 
     # Call OpenAI's Chat API
     result = openai.ChatCompletion.create(
         model=selected_model,
         messages=prompt
     )
-
     # Read the current value of the counter from a file
     with open("./log/log_count.txt", "r", encoding='utf-8') as f:
         log_count = str(f.read().strip())
-    # get response from OpenAI
-
+        # get response from OpenAI
     response = result['choices'][0]['message']['content']
+
     # append log
     with open(f"./log/{log_count}.txt", "a", encoding='utf-8') as f:
-        f.write(f"User: {user_message}\nAssistant: {response}\n\n")
-    # add context
+        f.write(f"User: {prompt}\nAssistant: {response}\n\n")
 
-    context.append(f"User: {user_message}\nAssistant: {response}\n\n")
+    # add context
+    context.append(f"User: {prompt}\nAssistant: {response}\n\n")
     # Return the AI's response
     return response
 
 
-logger.info('loading search_gpt')
+print('loading search_gpt')
 
 
-def search_gpt(user_query, prompt):
+def search_gpt(prompt):
     global selected_model
     global context
 
-    prompt_string = str(context + prompt)
+    context_string = {
+        "role": "system",
+        "content": '''
+        context of the conversation you are having:
+        {context}
+        '''.format(context=context)}
+
+    prompt_string = [context_string, prompt]
 
     result = openai.ChatCompletion.create(
         model=selected_model,
-        messages=prompt
+        messages=prompt_string
     )
     # Get response from OpenAI
     response = result['choices'][0]['message']['content']
-    logger.info(result)
+    print(response)
     # Read the current value of the counter from a file
     with open("./log/log_count.txt", "r", encoding='utf-8') as f:
         log_count = int(f.read().strip())
@@ -133,18 +135,13 @@ def search_gpt(user_query, prompt):
     with open("./log/log_count.txt", "w") as f:
         f.write(str(log_count))
 
-    # Print AI's response and write to log
-    print(f"Assistant: {response}")
-    user_message = user_query
-
     # Append to log
     with open(f"./log/{log_count}.txt", "a", encoding='utf-8') as f:
-        f.write(f"User: {user_message}\nAssistant: {response}\n\n")
+        f.write(f"User: {prompt}\nAssistant: {response}\n\n")
 
     # Add context
-    context.append(f"User: {user_message}\nAssistant: {response}\n\n")
+    context.append(f"User: {prompt}\nAssistant: {response}\n\n")
+
     # Return the AI's response
-
-    logger.info("Loaded HexAmerous.py")
-
+    print(response)
     return response
