@@ -1,15 +1,17 @@
-from embeddings import load_vector_store_docs, embeddings
-from langchain.agents import initialize_agent, load_tools, Tool
+from embeddings import load_vector_store_docs, OpenAIEmbeddings
 from dotenv import load_dotenv
-from chatgpt import search_gpt
+from chatgpt import chat_gpt
 from langchain import OpenAI, Wikipedia
-from langchain.utilities import GoogleSerperAPIWrapper, GoogleSearchAPIWrapper
-from langchain.agents import initialize_agent, load_tools, Tool
-from langchain.agents import AgentType
+from langchain.agents import Tool
+from langchain.llms import OpenAI
+from langchain.retrievers.self_query.base import SelfQueryRetriever
+from langchain.chains.query_constructor.base import AttributeInfo
 from langchain.agents.react.base import DocstoreExplorer
+from langchain.vectorstores import Chroma
 docstore = DocstoreExplorer(Wikipedia())
 
 llm = OpenAI(temperature=0)
+embeddings = OpenAIEmbeddings()
 
 tools = [
     Tool(
@@ -25,20 +27,28 @@ tools = [
 
 load_dotenv()
 
-vectorstore = load_vector_store_docs()
+metadata_field_info=[
+    AttributeInfo(
+        name='README.md',
+        description='readme file for the hexamerous project',
+        type='string or list[string]'
+    )
+]
 
+document_content_description = 'a readme file from a python project called hexamerous.'
 
 def base_retriever(user_query):
-    retriever = embeddings.embed_query(text=user_query)
-    docs = vectorstore.similarity_search_by_vector(
-        embedding=retriever, top_k=1)
+    vectorstore = load_vector_store_docs()
+    retriever = SelfQueryRetriever.from_llm(llm, vectorstore, document_content_description, metadata_field_info, verbose=True)
+    docs = retriever.get_relevant_documents(user_query)
     print(docs)
     return docs
 
 
+
+
 def data_base_memory_search(user_query):
     docs = base_retriever(user_query)
-    print(docs)
     prompt = {
         "role": "system",
         "content": '''
@@ -53,8 +63,9 @@ def data_base_memory_search(user_query):
         Please answer the user's question using the data as relevant context."
         '''.format(query=user_query, data=docs)
     }
+    print(prompt)
 
-    result = search_gpt(prompt)
+    result = chat_gpt(prompt)
 
     print("Memory search result: " + result)
 

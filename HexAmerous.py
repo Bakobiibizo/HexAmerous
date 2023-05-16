@@ -34,12 +34,10 @@ from PyQt5.QtWidgets import (
 from chatgpt import (
     chat_gpt,
     change_selected_model,
-    search_gpt
 )
 from embeddings import (
     create_embedding,
     create_mass_embedding,
-    load_vector_store_docs
 )
 from embed_project import run_embed_project
 from scrappy import scrape_site, scrape_site_map

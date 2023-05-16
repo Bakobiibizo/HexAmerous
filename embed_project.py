@@ -6,7 +6,7 @@ from embeddings import create_embedding
 
 def run_embed_project(file_path):
     project_folder = file_path
-    output_folder = 'docs/embeddings'
+    output_folder = '/docs/'
     # Get all .py files in the project folder and its subdirectories
     project_files = glob.glob(os.path.join(
         project_folder, '**/*.py'), recursive=True)
