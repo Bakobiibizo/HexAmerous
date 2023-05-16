@@ -1,19 +1,16 @@
 # -*- coding: utf-8 -*-
-from langchain.document_loaders import (
-    TextLoader,
-    PyPDFLoader,
-    UnstructuredMarkdownLoader
-)
+from langchain.document_loaders import  UnstructuredFileLoader
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.llms import OpenAI
 from langchain.vectorstores import Chroma
-from langchain.text_splitter import TokenTextSplitter
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+import nltk
 import openai
 from dotenv import load_dotenv
 import os
-from chatgpt import search_gpt
-
 load_dotenv()
+
+nltk.download('punkt')
 
 print('Loading global variables')
 # Load Langchain variables
@@ -25,43 +22,29 @@ llm = OpenAI(temperature=0)
 
 vectorstore_location = './docs/'
 
-text_splitter = TokenTextSplitter(chunk_size=300, chunk_overlap=25)
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=300, chunk_overlap=25)
 
 print('base_formatter function')
 
+def check_file(file_path):
+    loader = UnstructuredFileLoader(file_path)
+    docs = loader.load()
+    print(docs)
+    return docs
 
 def base_formatter(docs):
     print('formatting')
     print(f"\n{'-' * 100}\n".join([f"Document {i+1}:\n\n" +
                                    d.page_content for i, d in enumerate(docs)]))
-    return (f"\n{'-' * 100}\n".join([f"Document {i+1}:\n\n" + d.page_content for i, d in enumerate(docs)]))
+    return f"\n{'-' * 100}\n".join(
+        [f"Document {i + 1}:\n\n{d.page_content}" for i, d in enumerate(docs)]
+    )
 
 
 print('loading check_file function 43')
 # Check if the files are valid
 
 
-def check_file(file_path):
-    print('checking file')
-    if file_path.endswith('.txt'):
-        loader = TextLoader(file_path)
-        print(loader.load())
-        return loader.load()
-    if file_path.endswith('.pdf'):
-        loader = PyPDFLoader(file_path)
-        print("pdf file loaded")
-        return loader.load()
-    if file_path.endswith('.md'):
-        loader = UnstructuredMarkdownLoader(file_path)
-        print(loader.load())
-        return loader.load()
-    else:
-        print("File type not supported")
-        return "File type not supported"
-
-
-print('loading create_mass_embedding function')
-# Loop files in a folder path for embedding
 
 
 def create_mass_embedding(folder_path):
@@ -96,7 +79,6 @@ def create_embedding(file_path, optional_arg="metadata"):
     else:
         meta = 'file_path'
 
-    data = text_splitter.split_documents(documents=data)
     vectordb = Chroma.from_documents(
         documents=data, metadata=meta, embedding=embeddings, persist_directory=vectorstore_location)
     vectordb.persist()
