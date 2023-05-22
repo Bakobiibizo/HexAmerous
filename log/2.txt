@@ -19,3 +19,49 @@ Assistant: I apologize, but the information you provided from your data store do
 User: [{'role': 'system', 'content': 'You are a expert developer. You have indepth knowledge of python and typescript along with supporting frameworks. You have been given the documents of a new programing language called Mojo(also know as modular), its kept in your vectorstore. You are helping out Richard with learning this new super set of python. You are careful to reference your answers against the documents in your vectorstore. You provide verbose detailed and comprehensive answers to questions. You make sure to go through your answers carefully step by step to ensure the information is correct.'}, {'role': 'system', 'content': '\n        "The user has asked this question:\n\n        what is in the readme file?\n\n        You have looked up the relevant information from your data store and it is:\n\n        [Document(page_content="Coding assistant\\n\\nDescription\\n\\nI have preloaded a prompt that instructs the model that it\'s a typescript and python expert. Just given its base state its very good and sending short complete blocks of code. I find writing out a schema and preplanning my code blocks helps me a lot when writing programs. I ask for the specific code block needed, add it to the program, test it, then continue. You can ask the model for assistance with planning out this process. Once you get past a file at the size of about HexAmerous.py it loses context and cannot provide accurate code any long. So keep sections compartmentalized and brief if possible.\\n\\nFeatures\\n\\nContext window containing all the messages in the chat history.\\n\\nHistorical log with CRUD operations.\\n\\nVector store for long term memory and document search.\\n\\nEmbedding creation and storage.\\n\\nMass embeddings of all PDFs, txt or md in a folder.\\n\\nMass website data collection and storage in vector store.\\n\\nUpload a project file\'s py files to the vector store.\\n\\nSearch for uncompressed and compressed documents in the vector store\\n\\nSend those raw documents to the model as context for a prompt.\\n\\nInternet search for context on a prompt.\\n\\nRequirements\\n\\nPython 3.8 or higher\\n\\nEnvironment variables\\n\\nIncluded is a file called env-example.env, change it to .env and add the corresponding API keys. This API key is stored locally and securely and the .gitignore is set to ignore that file when pushing to the repo, so you don\'t have to worry about your API keys being exposed. You can read more about how it works here.\\nOpenAi API key: https://platform.openai.com/account/api-keys\\nSerpAPI key: https://serpapi.com/dashboard\\nSerperAPI: https://serper.dev/api-key\\nGoogle API key: https://console.cloud.google.com/apis/credentials\\nGoogle CSE ID: https://cse.google.com/cse/all\\n\\nInstallation\\n\\nSelect install.sh or install.bat and run it from your terminal or command prompt. Note that on Unix-based systems, you may need to give the script execution permissions by running chmod +x install.sh before executing it with ./install.sh.\\n\\nCommands\\n\\nUI\\n\\nSend\\n\\nSends the prompt in the input box to the model and displays the response in the chat window.\\n\\nClear\\n\\nClears the chat window. Which is also the context window of the model. You can save the chat history first with !save or load previous or new context with !load.\\n\\nL Input\\n\\nOpens a chat dialog with a lot more space to work with when entering prompts. Useful for entering in large blocks of code.\\n\\nUp File\\n\\nUpload a file to the vector store. This will create an embedding for the file and store it in the database. You can then search for individual docs with the !docs or !docslong commands. Use those docs for context on a prompt with !searchmem.\\n\\nModel Dropdown\\n\\nSelect the model you\'d like the query. The default is gpt-3.5-turbo. Note you need to have access to the GPT-4 Beta to use that model. I kept the model selection fairly limited to avoid confusion. You can change the models in the code if you\'d like to add more but note for older text complete model\'s you\'ll have to adjust the request format.\\n\\nUpdates\\n\\nApril 24th: Initial commit, included the basic functionality of the app.\\n\\nApril 27th: Added vector store, commands and refactored to use PyQt for the UI. Added Hotkey functionality with pyperclip.\\n\\nApril 28th: Added memsearch, addproject, addmem. Removed Hotkey. Few bug corrections.\\n\\nApril 29th: Refactored code base to be more readable, added documentation to code base, updated README, updated requirements, created install scripts and run scripts, QA\'d both scripts, added error correction to stop file from constantly closing. Updated .gitignore.\\n\\nI believe I have gotten this to a good enough state for my purposes, which was to demo out the langchain system. I will be moving on to other projects now. If you have any questions or would like to contribute to the project please feel free to reach out to me\\n\\nAuthor\\n\\nBakobiibizo - richard@bakobi.com\\nBakobi Inc. - https://sites.google.com/bakobi.com/bakobi-creative-design/home\\n\\nLicense\\n\\nGNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007", metadata={\'source\': \'E:/00Bako/HexAmerous/README.md\'})]\n\n        Please answer the user\'s question using the data as relevant context."\n        '}]
 Assistant: Based on the documentation in the vectorstore, the README file contains information about the coding assistant program that Richard has created. It includes a description and features of the program, as well as requirements for running it. Additionally, there are instructions for installation and usage of the program with various commands that can be entered in the command prompt.
 
+User: [{'role': 'system', 'content': 'You are a expert developer. You have indepth knowledge of python and typescript along with supporting frameworks. You have been given the documents of a new programing language called Mojo(also know as modular), its kept in your vectorstore. You are helping out Richard with learning this new super set of python. You are careful to reference your answers against the documents in your vectorstore. You provide verbose detailed and comprehensive answers to questions. You make sure to go through your answers carefully step by step to ensure the information is correct.'}, {'role': 'user', 'content': ''}]
+Assistant: Sure, I'm happy to help! What questions do you have about the Mojo programming language?
+
+User: [{'role': 'system', 'content': 'You are a expert developer. You have indepth knowledge of python and typescript along with supporting frameworks. You have been given the documents of a new programing language called Mojo(also know as modular), its kept in your vectorstore. You are helping out Richard with learning this new super set of python. You are careful to reference your answers against the documents in your vectorstore. You provide verbose detailed and comprehensive answers to questions. You make sure to go through your answers carefully step by step to ensure the information is correct.'}, {'role': 'user', 'content': ''}]
+Assistant: Sure, I am happy to help Richard learn Mojo, the new programming language. Please let me know what questions you have, and I will do my best to provide accurate and detailed answers.
+
+<prompt.Message object at 0x7f36bc16c7f0> + 
+
+, <prompt.Message object at 0x7f36bc16c8e0>+ 
+
+<prompt.Message object at 0x7f36bc16c9a0> + 
+
+, <prompt.Message object at 0x7f36bc16c7f0>+ 
+
+hi + 
+
+, []+ 
+
+hi + 
+
+, []+ 
+
+hi + 
+
+, []+ 
+
+hi + 
+
+, []+ 
+
+hi + 
+
+, []+ 
+
+hi + 
+
+, []+ 
+
+hi + 
+
+, []+ 
+
+hi + 
+
+, []+ 
+

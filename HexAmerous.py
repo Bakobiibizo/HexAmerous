@@ -1,18 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
-import os
-import random
 from PyQt5.QtCore import Qt, QSize
-from PyQt5.QtGui import (
-    QTextCursor,
-    QPixmap,
-    QPalette,
-    QBrush,
-    QMovie,
-    QIcon,
-    QImage,
-    QColor,
-)
+from PyQt5.QtGui import QTextCursor, QPixmap, QPalette, QBrush, QIcon, QColor, QKeyEvent
 from PyQt5.QtWidgets import (
     QApplication,
     QWidget,
@@ -25,64 +14,75 @@ from PyQt5.QtWidgets import (
     QPushButton,
     QDialog,
     QFileDialog,
-    QMessageBox,
     QComboBox,
     QSizeGrip,
     QStylePainter,
-
 )
-from chatgpt import (
-    chat_gpt,
-    change_selected_model,
-)
-from embeddings import (
-    create_embedding,
-    create_mass_embedding,
-)
+from chatgpt import GPTChatbot
+from embeddings import create_embedding, create_mass_embedding
 from embed_project import run_embed_project
 from scrappy import scrape_site, scrape_site_map
-from custom_agents import (
-    base_retriever,
-    data_base_memory_search,
-
-)
-
-
+from custom_agents import CustomAgents
 from dotenv import load_dotenv
 
 load_dotenv()
+from typing import Any
+from PyQt5.QtWidgets import QTextEdit
+import queue
+
+global data_base_retriever
+global base_retriever
+base_retriever = CustomAgents.base_retriever
+data_base_memory_search = CustomAgents.base_retriever
 
 
-# Text Edit Widget
-print('CustomTextEdit')
+class CustomTextEdit(QTextEdit):
+    """
+    A custom text edit that handles key press events.
+
+    Args:
+        args (Any): Variable length argument list.
+        kwargs (Any): Arbitrary keyword arguments.
+
+    Attributes:
+        None
+    """
 
 
 class CustomTextEdit(QTextEdit):
     def __init__(self, *args, **kwargs):
         super(CustomTextEdit, self).__init__(*args, **kwargs)
-    # Handling key events
-    print('keyPressEvent')
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Return and event.modifiers() == Qt.ShiftModifier:
             self.insertPlainText("\n")
         elif event.key() == Qt.Key_Return:
-            self.parent().send_message('')
+            self.parent().send_message("")
         elif event.key() == Qt.Key_Enter:
-            self.parent().send_message('')
+            self.parent().send_message("")
         else:
             super().keyPressEvent(event)
 
 
-# Chat Widget
-print('loading chatwidget')
-
-
 class ChatWidget(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, message_queue, gpt_chatbot, parent=None):
         super().__init__(parent)
         self.init_ui()
-        print('init ui')
+        print("init ui")
+        self.message_queue = message_queue
+        self.gpt_chatbot = gpt_chatbot
+
+    def send_queue(self, user_message):
+        try:
+            self.message_queue.put(user_message, block=True, timeout=1)
+        except queue.Full:
+            print("-- message queue is full")
+
+    def add_response(self, response):
+        try:
+            self.message_queue.put(response, block=True, timeout=1)
+        except queue.Full:
+            print("-- message queue is full")
 
     # Initialize the UI
     def init_ui(self):
@@ -91,7 +91,7 @@ class ChatWidget(QWidget):
         self.create_widget_layouts()
         self.set_widget_connections()
         self.setLayout(self.layout)
-        print('create chat widget')
+        print("create chat widget")
 
     # Create the widgets
     def create_widgets(self):
@@ -104,24 +104,29 @@ class ChatWidget(QWidget):
         self.upload_button = QPushButton("Up File")
         self.combo_box = QComboBox(self)
         self.button_layout = QHBoxLayout()
-        print('creating chat history')
+        print("creating chat history")
 
     # Create the chat history widget
     def set_widget_properties(self):
         self.user_input.setFocus()
         self.send_button.setStyleSheet(
-            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold; height: 50px; width: 100px;")
+            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold; height: 50px; width: 100px;"
+        )
         self.clear_button.setStyleSheet(
-            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9;font-family: 'Cascadia Code';  font-size: 14pt; font-weight: bold; height: 50px; width: 100px;")
+            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9;font-family: 'Cascadia Code';  font-size: 14pt; font-weight: bold; height: 50px; width: 100px;"
+        )
         self.large_text_input_button.setStyleSheet(
-            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold; height: 50px; width: 100px;")
+            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold; height: 50px; width: 100px;"
+        )
         self.upload_button.setStyleSheet(
-            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold; height: 50px; width: 100px;")
+            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold; height: 50px; width: 100px;"
+        )
         self.combo_box.addItem("GPT-3.5-Turbo")
         self.combo_box.addItem("GPT-4")
         self.combo_box.setStyleSheet(
-            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold;height: 50px; width: 100px;")
-        print('styling loaded')
+            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold;height: 50px; width: 100px;"
+        )
+        print("styling loaded")
 
     # Create the layout
     def create_widget_layouts(self):
@@ -133,207 +138,250 @@ class ChatWidget(QWidget):
         self.button_layout.addWidget(self.large_text_input_button)
         self.button_layout.addWidget(self.upload_button)
         self.layout.addLayout(self.button_layout)
-        print('layout loaded')
+        print("layout loaded")
 
     # Create the event connections
     def set_widget_connections(self):
         self.send_button.clicked.connect(self.send_message)
         self.clear_button.clicked.connect(self.clear_chat_history)
-        self.large_text_input_button.clicked.connect(
-            self.open_large_text_input)
+        self.large_text_input_button.clicked.connect(self.open_large_text_input)
         self.upload_button.clicked.connect(self.open_file_dialog)
-        self.combo_box.currentIndexChanged.connect(
-            self.on_combobox_changed)
-        print('connections loaded')
+        self.combo_box.currentIndexChanged.connect(self.on_combobox_changed)
+        print("connections loaded")
 
     # Drop down menu change
     def on_combobox_changed(self, index):
         selected_option = self.combo_box.itemText(index)
-        change_selected_model(selected_option)
+        self.gpt_chatbot.change_selected_model(selected_option)
         self.chat_history.setPlainText(
-            self.chat_history.toPlainText() + selected_option + "\n\n")
+            self.chat_history.toPlainText() + selected_option + "\n\n"
+        )
         self.chat_history.moveCursor(QTextCursor.End)
-        print('dropdown menu changed')
+        print("dropdown menu changed")
 
     # Create Chat History
     def create_chat_history(self):
         chat_history = QTextEdit()
         chat_history.setReadOnly(True)
         chat_history.ensureCursorVisible()
-        chat_history.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-        chat_history.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        chat_history.setStyleSheet(
-            "background-color: rgba(67, 3, 81, 0.8);color: white; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold;")
+        self._extracted_from_create_user_input_5(chat_history)
         return chat_history
-        print('chat history loaded')
 
     # Create User Input
     def create_user_input(self):
-        user_input = CustomTextEdit()
-        user_input.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
-        user_input.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        user_input.setStyleSheet(
-            "background-color: rgba(67, 3, 81, 0.8);color: white; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold;")
-        user_input.setFixedHeight(50)
-        user_input.textChanged.connect(self.adjust_user_input_height)
-        return user_input
-        print('created user input')
+        self.user_input = CustomTextEdit()
+        self._extracted_from_create_user_input_5(self.user_input)
+        self.user_input.setFixedHeight(50)
+        self.user_input.textChanged.connect(self.adjust_user_input_height)
+        return self.user_input
+
+    # TODO Rename this here and in `create_chat_history` and `create_user_input`
+    def _extracted_from_create_user_input_5(self, arg0):
+        arg0.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        arg0.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        arg0.setStyleSheet(
+            "background-color: rgba(67, 3, 81, 0.8);color: white; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold;"
+        )
 
     # Adjust if program height is changed
     def adjust_user_input_height(self):
         height = self.user_input.document().size().height()
         if height != self.user_input.height():
             self.user_input.setFixedHeight(round(height))
-            print('adjusted height')
+            print("adjusted height")
 
     # Send a message
     def send_message(self, user_message):
         user_message = self.user_input.toPlainText()
         self.user_input.clear()
-        if user_message is not None:
-            if user_message.startswith("!"):
-                self.run_command(user_message)
-            elif user_message.strip():
-                self.chat_history.setPlainText(
-                    self.chat_history.toPlainText() + "You: " + user_message + "\n\n")
-                self.chat_history.moveCursor(QTextCursor.End)
-                response = chat_gpt(user_message)
-                self.chat_history.setPlainText(
-                    self.chat_history.toPlainText() + "Assistant: " + response + "\n\n")
-                self.chat_history.moveCursor(QTextCursor.End)
-                print('sent message: ' + response)
-                return response
-        else:
-            print('no message')
-            return None
+        if user_message.startswith("!"):
+            print(user_message)
+        elif user_message.strip():
+            return self.add_to_message_queue(user_message)
+
+
+    def add_to_message_queue(self, user_message):
+        """
+        Sends a message to the chatbot and displays the conversation history.
+        """
+        # Add user message to chat history
+        self.chat_history.setPlainText(
+            f"{self.chat_history.toPlainText()}You: {user_message}\n\n"
+        )
+        self.chat_history.moveCursor(QTextCursor.End)
+
+        # Get response from chatbot
+        response = self.send_queue(user_message)
+
+        # Add chatbot response to chat history
+        self.chat_history.setPlainText(
+            f"{self.chat_history.toPlainText()}Assistant: {response}\n\n"
+        )
+        self.chat_history.moveCursor(QTextCursor.End)
+
+        # Print debugging statement (optional)
+        print(f"Sent message: {response}")
+
+        # Return chatbot response
+        return response
+
 
     # /Open the large input text box
     def open_large_text_input(self):
         self.large_text_input_dialog = LargeTextInputDialog(self)
         self.large_text_input_dialog.show()
-        print('clear history')
+        print("clear history")
 
     # Clear the Chat History
     def clear_chat_history(self):
         self.chat_history.clear()
-        print('clear history')
+        print("clear history")
         return self.chat_history
 
     # Open a file dialog for embedding a file
     def open_file_dialog(self):
-        file_dialog = QFileDialog(self)
-        file_dialog.setStyleSheet(
-            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold;")
-        file_dialog.setFileMode(QFileDialog.ExistingFile)
+        file_dialog = self._extracted_from_save_chat_history_2()
         if file_dialog.exec_() == QFileDialog.Accepted:
-            file_name = file_dialog.selectedFiles()[0]
-            results = create_embedding(file_name)
-            self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str("Embedding created, use !docslong and !docs to pull relevant documents" + "\n\n"))
-            self.chat_history.moveCursor(QTextCursor.End)
-            print('added file to database ' + str(results))
-            return results
-        else:
-            self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str("Embedding failed" + "\n\n"))
-            self.chat_history.moveCursor(QTextCursor.End)
-            return "error embedding file"
+            return self._extracted_from_open_file_dialog_8(file_dialog)
+        self.chat_history.setPlainText(
+            self.chat_history.toPlainText() + str("Embedding failed" + "\n\n")
+        )
+        self.chat_history.moveCursor(QTextCursor.End)
+        return "error embedding file"
+
+    # TODO Rename this here and in `open_file_dialog`
+    def _extracted_from_open_file_dialog_8(self, file_dialog):
+        file_name = file_dialog.selectedFiles()[0]
+        results = create_embedding(file_name)
+        self.chat_history.setPlainText(
+            self.chat_history.toPlainText()
+            + str(
+                "Embedding created, use !docslong and !docs to pull relevant documents"
+                + "\n\n"
+            )
+        )
+        self.chat_history.moveCursor(QTextCursor.End)
+        print(f"added file to database {str(results)}")
+        return results
 
     # Pull uncompressed documents from database
     def use_base_retriever(self, text):
-        results = base_retriever(text)
-        if results:
-            self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str("Base search results: \n" + str(results) + "\n\n"))
-            self.chat_history.moveCursor(QTextCursor.End)
-            print('base search results: ' + str(results))
-            return results
+        if results := base_retriever(text):
+            return self._extracted_from_add_map_db_3(
+                "Base search results: \n", results, "base search results: "
+            )
         else:
-            self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str("Base search failed" + "\n\n"))
-            self.chat_history.moveCursor(QTextCursor.End)
-            print('base search failed')
-            return "error retrieving documents"
+            return self._extracted_from_add_project_to_db_11(
+                "Base search failed",
+                "base search failed",
+                "error retrieving documents",
+            )
 
     # Embed an entire directory
     def mass_embed(self, text):
-        results = create_mass_embedding(folder_path=text)
-        if results:
+        if results := create_mass_embedding(folder_path=text):
             self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str("Embedding created, use !docslong and !docs to pull relevant documents, and !searchmem to query the database" + str(results) + "\n\n"))
-            self.chat_history.moveCursor(QTextCursor.End)
-            print('Added to memory')
-            return results
+                self.chat_history.toPlainText()
+                + str(
+                    f"Embedding created, use !docslong and !docs to pull relevant documents, and !searchmem to query the database{str(results)}"
+                    + "\n\n"
+                )
+            )
+            return self._extracted_from__extracted_from_add_project_to_db_11_12(
+                "Added to memory", results
+            )
         else:
-            self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str("Embedding failed" + "\n\n"))
-            self.chat_history.moveCursor(QTextCursor.End)
-            print('Failed to add to memory')
-            return "error embedding file"
+            return self._extracted_from_add_project_to_db_11(
+                "Embedding failed",
+                "Failed to add to memory",
+                "error embedding file",
+            )
 
     # Query the database
     def search_memory(self, text):
-        results = data_base_memory_search(user_query=text)
-        if results:
+        if results := data_base_memory_search(user_query=text):
             self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str("Memory search results: \n" + str(results)) + "\n\n")
-            self.chat_history.moveCursor(QTextCursor.End)
-            print('Search memory: ' + str(results))
-            return results
+                self.chat_history.toPlainText()
+                + str("Memory search results: \n" + str(results))
+                + "\n\n"
+            )
+            return self._extracted_from__extracted_from_add_map_db_3_9(
+                "Search memory: ", results
+            )
         else:
-            self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str("No results found" + "\n\n"))
-            self.chat_history.moveCursor(QTextCursor.End)
-            print('No results found')
-            return "No results found"
+            return self._extracted_from_add_project_to_db_11(
+                "No results found", "No results found", "No results found"
+            )
 
     # Add a file to the database
     def add_to_db(self, text):
-        results = scrape_site(url=text)
-        if results:
-            self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str("Added to database: \n" + str(results) + "\n\n"))
-            self.chat_history.moveCursor(QTextCursor.End)
-            print('add site: ' + str(results))
-            return results
+        if results := scrape_site(url=text):
+            return self._extracted_from_add_map_db_3(
+                "Added to database: \n", results, "add site: "
+            )
         else:
-            self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str("Failed to add to database" + "\n\n"))
-            self.chat_history.moveCursor(QTextCursor.End)
-            print('Failed to add to database')
-            return "Failed to add to database"
+            return self._extracted_from_add_project_to_db_11(
+                "Failed to add to database",
+                "Failed to add to database",
+                "Failed to add to database",
+            )
 
     def add_map_db(self, text, collection_name):
         url = text
-        results = scrape_site_map(url, collection_name)
-        if results:
-            self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str("Added to database: \n" + str(results) + "\n\n"))
-            self.chat_history.moveCursor(QTextCursor.End)
-            print('embeded site map: ' + str(results))
-            return results
+        if results := scrape_site_map(url, collection_name):
+            return self._extracted_from_add_map_db_3(
+                "Added to database: \n", results, "embeded site map: "
+            )
         else:
-            self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str("Failed to add to database" + "\n\n"))
-            self.chat_history.moveCursor(QTextCursor.End)
-            print('Failed to add to database')
-            return "Failed to add to database"
+            return self._extracted_from_add_project_to_db_11(
+                "Failed to add to database",
+                "Failed to add to database",
+                "Failed to add to database",
+            )
 
     # Add a project to the database
+    def _extracted_from_add_map_db_3(self, arg0, results, arg2):
+        self.chat_history.setPlainText(
+            (self.chat_history.toPlainText() + str(arg0 + str(results) + "\n\n"))
+        )
+        return self._extracted_from__extracted_from_add_map_db_3_9(arg2, results)
+
+    # TODO Rename this here and in `use_base_retriever`, `mass_embed`, `search_memory`, `add_to_db`, `add_map_db` and `add_project_to_db`
+    def _extracted_from__extracted_from_add_map_db_3_9(self, arg0, results):
+        self.chat_history.moveCursor(QTextCursor.End)
+        print(arg0 + str(results))
+        return results
+
+    # TODO Rename this here and in `use_base_retriever`, `mass_embed`, `search_memory`, `add_to_db`, `add_map_db` and `add_project_to_db`
     def add_project_to_db(self, text):
-        results = run_embed_project(file_path=text)
-        if results:
+        if results := run_embed_project(file_path=text):
             self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str("Added to database: \n" + str(results) + "\n\n"))
-            self.chat_history.moveCursor(QTextCursor.End)
-            print('run ! commands')
-            return results
+                self.chat_history.toPlainText()
+                + str("Added to database: \n" + str(results) + "\n\n")
+            )
+            return self._extracted_from__extracted_from_add_project_to_db_11_12(
+                "run ! commands", results
+            )
         else:
-            self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str("Failed to add to database" + "\n\n"))
-            self.chat_history.moveCursor(QTextCursor.End)
-            print('Failed to add to database')
-            return "Failed to add to database"
+            return self._extracted_from_add_project_to_db_11(
+                "Failed to add to database",
+                "Failed to add to database",
+                "Failed to add to database",
+            )
+
+    # TODO Rename this here and in `use_base_retriever`, `mass_embed`, `search_memory`, `add_to_db`, `add_map_db` and `add_project_to_db`
+    def _extracted_from_add_project_to_db_11(self, arg0, arg1, arg2):
+        self.chat_history.setPlainText(
+            self.chat_history.toPlainText() + str(arg0 + "\n\n")
+        )
+        return self._extracted_from__extracted_from_add_project_to_db_11_12(arg1, arg2)
+
+    # TODO Rename this here and in `use_base_retriever`, `mass_embed`, `search_memory`, `add_to_db`, `add_map_db` and `add_project_to_db`
+    def add_project_to_db(self, project_name, project_data):
+        self.chat_history.moveCursor(QTextCursor.End)
+        # Removed debugging statement
+        print(f"Adding project {project_name} to database")
+        return project_data
 
     # Run the ! commands
     def run_command(self, text):
@@ -341,101 +389,97 @@ class ChatWidget(QWidget):
             self.display_help()
             return
         if text == "!exit":
-            exit()
+            self.exit()
             return
         if text == "!clear":
             self.clear_chat_history()
             return
         if text == "!save":
-            results = self.save_chat_history()
-            if results:
-                return results
-            else:
-                return "Error creating loading"
-            return
+            return (
+                results
+                if (results := self.save_chat_history())
+                else "Error creating loading"
+            )
         if text == "!load":
-            results = self.load_chat_history()
-            if results:
+            if results := self.load_chat_history():
                 return results
             else:
                 return "Error creating loading"
         if text == "!embed":
-            results = self.open_file_dialog()
-            if results:
+            if results := self.open_file_dialog():
                 return results
             else:
                 return "Error creating embedding"
         if text.startswith("!massembed"):
             text = text.removeprefix("!massembed ")
-            results = self.mass_embed(text)
-            if results:
+            if results := self.mass_embed(text):
                 return results
             else:
                 return "Error creating embedding"
         if text.startswith("!searchmem"):
             text = text.removeprefix("!searchmem ")
-            results = self.search_memory(text)
-            if results:
-                print(results)
-                return results
-            else:
+            if not (results := self.search_memory(text)):
                 return "No results found"
+            print(results)
+            return results
         if text.startswith("!docs"):
             text = text.removeprefix("!docs ")
-            results = self.use_base_retriever(text)
-            if results:
-                print(results)
-                return results
-            else:
+            if not (results := self.use_base_retriever(text)):
                 return "No results found"
+            print(results)
+            return results
         if text.startswith("!addmem"):
             text = text.removeprefix("!addmem ")
-            results = self.add_to_db(text)
-            if results:
-                print(results)
-                return results
-            else:
+            if not (results := self.add_to_db(text)):
                 return "Error adding to database"
+            print(results)
+            return results
         if text.startswith("!addmap"):
-            text = text.removeprefix("!addmap ")
-            split_text = text.split(" ")
-            text = split_text[0]
-            collection_name = split_text[1]
-            print(text, collection_name)
-            results = self.add_map_db(text, collection_name)
-            if results:
-                return results
-            else:
-                return "Error creating loading"
+            return self._extracted_from_run_command_(text, results)
         if text.startswith("!addproject"):
             text = text.removeprefix("!addproject ")
-            results = self.add_project_to_db(text)
-            if results:
+            if results := self.add_project_to_db(text):
                 return results
             else:
                 return "Error creating loading"
         if text.startswith("!background"):
             text = text.removeprefix("!background ")
-            image = QPixmap("img/0000"+str(text)+".png")
-            results = MainWindow.change_background_image(image)
-            if results:
+            image = QPixmap(f"img/0000{str(text)}.png")
+            if results := MainWindow.change_background_image(image):
                 return results
             else:
                 return "Error creating loading"
-        else:
-            if text.startswith("!"):
-                self.chat_history.setPlainText(
-                    self.chat_history.toPlainText() + str("Command not found. Type !help for a list of commands \n\n"))
-                self.chat_history.moveCursor(QTextCursor.End)
-                return
+        elif text.startswith("!"):
+            self.chat_history.setPlainText(
+                (
+                    self.chat_history.toPlainText()
+                    + "Command not found. Type !help for a list of commands \n\n"
+                )
+            )
+            self.chat_history.moveCursor(QTextCursor.End)
+            return
 
-    print('print help')
+    # TODO Rename this here and in `run_command`
+    def _extracted_from_run_command_(self, text, results):
+        text = text.removeprefix("!addmap ")
+        split_text = text.split(" ")
+        text = split_text[0]
+        collection_name = split_text[1]
+        print(text, collection_name)
+        return (
+            results
+            if (results := self.add_map_db(text, collection_name))
+            else "Error creating loading"
+        )
+
+    print("print help")
     # Help info
 
     def display_help(self):
         self.chat_history.setPlainText(
-            self.chat_history.toPlainText() + str(
-                """
+            (
+                self.chat_history.toPlainText()
+                + """
     Commands:
 !help       - Display this help message.
 !save       - Save chat history.
@@ -460,34 +504,46 @@ class ChatWidget(QWidget):
                 project file information to the OpenAI
                 API.
 !background - Change the background image.
-        """))
-    print('load file into chat')
+        """
+            )
+        )
+
+    print("load file into chat")
     # Load file into chat
 
     def load_chat_history(self):
-        file_dialog = QFileDialog(self)
-        file_dialog.setStyleSheet(
-            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold;")
-        file_dialog.setFileMode(QFileDialog.ExistingFile)
+        file_dialog = self._extracted_from_save_chat_history_2()
         if file_dialog.exec_() == QFileDialog.Accepted:
             file_name = file_dialog.selectedFiles()[0]
             with open(file_name, "r") as file:
                 self.chat_history.setPlainText(
-                    self.chat_history.toPlainText() + str(file.read()) + "\n\n")
-            print('save chat history to file')
+                    self.chat_history.toPlainText() + str(file.read()) + "\n\n"
+                )
+            print("save chat history to file")
 
     # save chat history to file
     def save_chat_history(self):
-        file_dialog = QFileDialog(self)
-        file_dialog.setStyleSheet(
-            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold;")
-        file_dialog.setFileMode(QFileDialog.ExistingFile)
+        file_dialog = self._extracted_from_save_chat_history_2()
         if file_dialog.exec_() == QFileDialog.Accepted:
             file_name = file_dialog.selectedFiles()[0]
             with open(file_name, "a") as file:
-                file.write(str(self.chat_history.setPlainText(
-                    self.chat_history.toPlainText() + "\n\n")))
-            print('exit')
+                file.write(
+                    str(
+                        self.chat_history.setPlainText(
+                            self.chat_history.toPlainText() + "\n\n"
+                        )
+                    )
+                )
+            print("exit")
+
+    # TODO Rename this here and in `open_file_dialog`, `load_chat_history` and `save_chat_history`
+    def _extracted_from_save_chat_history_2(self):
+        result = QFileDialog(self)
+        result.setStyleSheet(
+            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold;"
+        )
+        result.setFileMode(QFileDialog.ExistingFile)
+        return result
 
     # Exit
     def exit():
@@ -495,7 +551,6 @@ class ChatWidget(QWidget):
 
 
 class CustomTitleBar(QWidget):
-
     def __init__(self, parent=None):
         super(CustomTitleBar, self).__init__(parent)
         self.setFixedHeight(30)
@@ -513,7 +568,8 @@ class CustomTitleBar(QWidget):
         layout.addWidget(self.buttons())
 
         # Set stylesheet
-        self.setStyleSheet("""
+        self.setStyleSheet(
+            """
             QPushButton {
                 border: none;
                 background-color: rgba(67, 3, 81, 0.3);
@@ -534,9 +590,9 @@ class CustomTitleBar(QWidget):
                 font-weight: bold;
                 text-align: center;
                 font-family: 'Cascadia Code';
-
             }
-        """)
+        """
+        )
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -570,7 +626,8 @@ class CustomTitleBar(QWidget):
         close_button.setIcon(QIcon("imgs/close.png"))
         close_button.setStyleSheet(
             "QPushButton {background-color: rgba(67, 3, 81, 0.4);}"
-            "QPushButton:hover {background-color: #430351;}")
+            "QPushButton:hover {background-color: #430351;}"
+        )
 
         min_button = QPushButton()
         min_button.clicked.connect(self.parent().showMinimized)
@@ -579,7 +636,8 @@ class CustomTitleBar(QWidget):
         min_button.setIcon(QIcon("imgs/min.png"))
         min_button.setStyleSheet(
             "QPushButton {background-color: rgba(67, 3, 81, 0.4);}"
-            "QPushButton:hover {background-color: #430351;}")
+            "QPushButton:hover {background-color: #430351;}"
+        )
 
         max_button = QPushButton()
         max_button.clicked.connect(self.maximumSize)
@@ -588,10 +646,10 @@ class CustomTitleBar(QWidget):
         max_button.setIcon(QIcon("imgs/max.png"))
         max_button.setStyleSheet(
             "QPushButton {background-color: rgba(67, 3, 81, 0.4);}"
-            "QPushButton:hover {background-color: #430351;}")
+            "QPushButton:hover {background-color: #430351;}"
+        )
 
         button_layout = QHBoxLayout()
-
         button_layout.addWidget(min_button)
         button_layout.addWidget(max_button)
         button_layout.addWidget(close_button)
@@ -623,37 +681,57 @@ class ScrollArea(QScrollArea):
 
 
 class MainWindow(QWidget):
-    def __init__(self, parent=None):
+    print("intializing the main window")
+    def __init__(self, message_queue, parent=None):
         super().__init__(parent)
         self.resize(800, 800)
-        self.flags = Qt.WindowFlags(Qt.FramelessWindowHint | Qt.WindowMinimizeButtonHint |
-                                    Qt.WindowMaximizeButtonHint | Qt.WindowCloseButtonHint)
+        print("Settings Flags:")
+        self.flags = Qt.WindowFlags(
+            Qt.FramelessWindowHint
+            | Qt.WindowMinimizeButtonHint
+            | Qt.WindowMaximizeButtonHint
+            | Qt.WindowCloseButtonHint
+        )
         self.setWindowFlags(self.flags)
 
+        print("Setting Layout:")
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
+
+        print("Setting Size Grip:")
         self.size_grip = QSizeGrip(self)
         self.size_grip.setStyleSheet("width: 10px; height: 5px; margin 0px;")
         self.layout.addWidget(self.size_grip)
+
+        print("Setting Title Bar:")
         self.titleBar = CustomTitleBar(self)
         self.layout.addWidget(self.titleBar)
-        self.chat_widget = ChatWidget()
-        self.layout.addWidget(self.chat_widget)
 
-        self.image = ''
-        self.background = self.change_background_image()
+        print("Setting Scroll Area:")
+        self.scroll_area = ScrollArea()
+        self.layout.addWidget(self.scroll_area)
 
-    def change_background_image(self, image="./imgs/00003.png"):
+        print("Initializing Chat Bot:")
+        self.gpt_chatbot = GPTChatbot(message_queue)
+
+        print("Initializing Chat Widget:")
+        self.chat_widget = ChatWidget(message_queue, self.gpt_chatbot)
+        self.scroll_area.content_widget_layout.addWidget(self.chat_widget)
+
+        print("Setting Background Image:")
+        self.image = "./imgs/00002.png"
+        self.background = self.change_background_image(self.image)
+
+    def change_background_image(self, image=None):
         self.image = image
         image_choice = QPixmap(self.image)
         palette = QPalette()
-        palette.setBrush(QPalette.Background, QBrush(image_choice.scaled(
-            self.size())))
+        palette.setBrush(QPalette.Background, QBrush(image_choice.scaled(self.size())))
         self.setPalette(palette)
         return image_choice
 
 
-print('Large Text Input Dialog')
+print("Large Text Input Dialog")
 
 
 class LargeTextInputDialog(QDialog):
@@ -665,36 +743,45 @@ class LargeTextInputDialog(QDialog):
         self.text_input.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.text_input.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.text_input.setStyleSheet(
-            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-family 'Cascadia Code'; font-size: 12pt; font-weight: bold;")
+            "background-color: rgba(67, 3, 81, 0.7); color: #f9f9f9; font-family 'Cascadia Code'; font-size: 12pt; font-weight: bold;"
+        )
         self.send_button = QPushButton("Send")
         self.send_button.setStyleSheet(
-            "background-color:rgba(67, 3, 81, 0.7); color: #f9f9f9; font-family 'Cascadia Code'; font-size: 14pt; font-weight: bold;")
+            "background-color:rgba(67, 3, 81, 0.7); color: #f9f9f9; font-family 'Cascadia Code'; font-size: 14pt; font-weight: bold;"
+        )
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.text_input)
         self.layout.addWidget(self.send_button)
         self.send_button.clicked.connect(self.send_large_text)
-    print('send large text')
+
+    print("send large text")
     # Send the large textbox message
 
     def send_large_text(self):
         large_text = self.text_input.toPlainText()
         if large_text.strip():
-            self.parent().send_message(large_text)
+            self.parent().send_message(self, large_text)
         self.close()
 
 
-# -------------- Main Program -------------- #
-print('main')
-
-
 def main():
+
+    print("Initializing QApplication")
     app = QApplication(sys.argv)
-    main_window = MainWindow()
+
+    print("Initializing icon")
     icon = QIcon("imgs/favicon.ico")
     app.setWindowIcon(icon)
+
+    print("Initializing message_queue")
+    message_queue = queue.Queue()
+
+    print("Initializing main window")
+    main_window = MainWindow(message_queue, parent=None)
     main_window.show()
+
     sys.exit(app.exec_())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -1,0 +1,31 @@
+name: stats2
+channels:
+  - python
+  - microsoft playwright
+  - conda-forge pyqt5-sip
+  - https://github.com/Unstructured-IO/unstructured/blob/main/docs/source/installing.rst
+dependencies:
+  - python=3.10
+  - openai
+  - python-dotenv
+  - langchain
+  - keyboard
+  - PyQt5
+  - chromadb
+  - google-search-results
+  - pathlib
+  - unstructured
+  - tiktoken
+  - pypdf
+  - playwright
+  - nest_asyncio
+  - bs4
+  - libmagic
+  - poppler
+  - tesseract
+  - lark
+  - libxml2
+  - libxslt
+  - google-api-python-client
+  - google-auth-httplib2
+  - google-auth-oauthlib

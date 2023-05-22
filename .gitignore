@@ -1,11 +1,15 @@
 .env
 .venv
-log/development log**
+log/**/*
 __pycache__
 docs/*.txt
 docs/*.clip
-docs/index/**
+docs/**/*
 project/*.md
 .vscode
+creds
+build
+dist
+
 
 venv
