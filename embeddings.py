@@ -73,14 +73,9 @@ print('create_embedding function')
 def create_embedding(file_path, optional_arg="metadata"):
     print('creating embedding')
     data = check_file(file_path)
-    metadata = optional_arg
-    if metadata:
-        meta = metadata
-    else:
-        meta = 'file_path'
-
-    vectordb = Chroma.from_documents(
-        documents=data, metadata=meta, embedding=embeddings, persist_directory=vectorstore_location)
+    metatdata = optional_arg or 'file_path'
+    vectordb = Chroma.add_documents(
+        documents=data, embedding=embeddings, metadata=metatdata, persist_directory=vectorstore_location)
     vectordb.persist()
     print(data)
     return "Embedding created"

@@ -22,18 +22,15 @@ from chatgpt import GPTChatbot
 from embeddings import create_embedding, create_mass_embedding
 from embed_project import run_embed_project
 from scrappy import scrape_site, scrape_site_map
-from custom_agents import CustomAgents
+from custom_agents import base_retriever, data_base_memory_search
 from dotenv import load_dotenv
 
 load_dotenv()
-from typing import Any
 from PyQt5.QtWidgets import QTextEdit
-import queue
 
-global data_base_retriever
-global base_retriever
-base_retriever = CustomAgents.base_retriever
-data_base_memory_search = CustomAgents.base_retriever
+
+
+
 
 
 class CustomTextEdit(QTextEdit):
@@ -65,24 +62,11 @@ class CustomTextEdit(QTextEdit):
 
 
 class ChatWidget(QWidget):
-    def __init__(self, message_queue, gpt_chatbot, parent=None):
+    def __init__(self, gpt_chatbot, parent=None):
         super().__init__(parent)
         self.init_ui()
         print("init ui")
-        self.message_queue = message_queue
         self.gpt_chatbot = gpt_chatbot
-
-    def send_queue(self, user_message):
-        try:
-            self.message_queue.put(user_message, block=True, timeout=1)
-        except queue.Full:
-            print("-- message queue is full")
-
-    def add_response(self, response):
-        try:
-            self.message_queue.put(response, block=True, timeout=1)
-        except queue.Full:
-            print("-- message queue is full")
 
     # Initialize the UI
     def init_ui(self):
@@ -192,13 +176,13 @@ class ChatWidget(QWidget):
 
     # Send a message
     def send_message(self, user_message):
+        print(f"sending message: {self.user_input.toPlainText()}")
         user_message = self.user_input.toPlainText()
         self.user_input.clear()
         if user_message.startswith("!"):
-            print(user_message)
+            self.run_command(user_message)
         elif user_message.strip():
             return self.add_to_message_queue(user_message)
-
 
     def add_to_message_queue(self, user_message):
         """
@@ -211,7 +195,7 @@ class ChatWidget(QWidget):
         self.chat_history.moveCursor(QTextCursor.End)
 
         # Get response from chatbot
-        response = self.send_queue(user_message)
+        response = self.gpt_chatbot.get_response(user_message)
 
         # Add chatbot response to chat history
         self.chat_history.setPlainText(
@@ -224,7 +208,6 @@ class ChatWidget(QWidget):
 
         # Return chatbot response
         return response
-
 
     # /Open the large input text box
     def open_large_text_input(self):
@@ -266,7 +249,7 @@ class ChatWidget(QWidget):
 
     # Pull uncompressed documents from database
     def use_base_retriever(self, text):
-        if results := base_retriever(text):
+        if results := base_retriever(self, user_query=text):
             return self._extracted_from_add_map_db_3(
                 "Base search results: \n", results, "base search results: "
             )
@@ -430,12 +413,13 @@ class ChatWidget(QWidget):
             return results
         if text.startswith("!addmem"):
             text = text.removeprefix("!addmem ")
+
             if not (results := self.add_to_db(text)):
                 return "Error adding to database"
             print(results)
             return results
         if text.startswith("!addmap"):
-            return self._extracted_from_run_command_(text, results)
+            return self._extracted_from_run_command_(text)
         if text.startswith("!addproject"):
             text = text.removeprefix("!addproject ")
             if results := self.add_project_to_db(text):
@@ -460,22 +444,21 @@ class ChatWidget(QWidget):
             return
 
     # TODO Rename this here and in `run_command`
-    def _extracted_from_run_command_(self, text, results):
+    def _extracted_from_run_command_(self, text):
         text = text.removeprefix("!addmap ")
         split_text = text.split(" ")
         text = split_text[0]
-        collection_name = split_text[1]
+        collection_name = split_text[1] if len(split_text) > 1 else split_text
         print(text, collection_name)
         return (
             results
             if (results := self.add_map_db(text, collection_name))
-            else "Error creating loading"
+            else "Error creating embedding"
         )
 
-    print("print help")
     # Help info
-
     def display_help(self):
+        print("Displaying help")
         self.chat_history.setPlainText(
             (
                 self.chat_history.toPlainText()
@@ -682,7 +665,8 @@ class ScrollArea(QScrollArea):
 
 class MainWindow(QWidget):
     print("intializing the main window")
-    def __init__(self, message_queue, parent=None):
+
+    def __init__(self, parent=None):
         super().__init__(parent)
         self.resize(800, 800)
         print("Settings Flags:")
@@ -712,14 +696,14 @@ class MainWindow(QWidget):
         self.layout.addWidget(self.scroll_area)
 
         print("Initializing Chat Bot:")
-        self.gpt_chatbot = GPTChatbot(message_queue)
+        self.gpt_chatbot = GPTChatbot()
 
         print("Initializing Chat Widget:")
-        self.chat_widget = ChatWidget(message_queue, self.gpt_chatbot)
+        self.chat_widget = ChatWidget(self.gpt_chatbot)
         self.scroll_area.content_widget_layout.addWidget(self.chat_widget)
 
         print("Setting Background Image:")
-        self.image = "./imgs/00002.png"
+        self.image = "./imgs/00001.png"
         self.background = self.change_background_image(self.image)
 
     def change_background_image(self, image=None):
@@ -765,7 +749,6 @@ class LargeTextInputDialog(QDialog):
 
 
 def main():
-
     print("Initializing QApplication")
     app = QApplication(sys.argv)
 
@@ -773,11 +756,8 @@ def main():
     icon = QIcon("imgs/favicon.ico")
     app.setWindowIcon(icon)
 
-    print("Initializing message_queue")
-    message_queue = queue.Queue()
-
     print("Initializing main window")
-    main_window = MainWindow(message_queue, parent=None)
+    main_window = MainWindow(parent=None)
     main_window.show()
 
     sys.exit(app.exec_())

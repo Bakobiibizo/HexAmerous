@@ -1,6 +1,6 @@
 .env
 .venv
-log/**/*
+log/**/*.txt
 __pycache__
 docs/*.txt
 docs/*.clip
@@ -10,6 +10,9 @@ project/*.md
 creds
 build
 dist
+node_modules
+.history
+**/*.spec
 
 
 venv

@@ -27,18 +27,13 @@ def scrape_site(url):
     data = raw_data[0].page_content
 
     # Text splitter
-    texts = text_splitter.split_text(data)
+    texts = text_splitter.split_text(data, chunk_size=300, chunk_overlap=25)
     print(texts)
 
-    # Store in database
-    chromadb = Chroma.from_texts(
-        texts, embeddings, persist_directory='./docs/')
-    chromadb.persist()
-
-    return chromadb
+    create_embedding(texts)
 
 
-def scrape_site_map(site_path, collection_name):
+def scrape_site_map(site_path, collection_name=None):
 
     nest_asyncio.apply()
 
@@ -48,12 +43,5 @@ def scrape_site_map(site_path, collection_name):
 
     # Store in database
     metadata = collection_name
-    if metadata:
-        meta = metadata
-    else:
-        meta = 'file_path'
-    vectordb = Chroma.from_documents(
-        documents=docs, metadata=meta, embedding=embeddings, persist_directory='./docs/')
-    vectordb.persist()
-
-    return vectordb
+    meta = metadata or 'file_path'
+    create_embedding(docs)

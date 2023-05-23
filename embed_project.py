@@ -31,7 +31,7 @@ def run_embed_project(file_path):
             # Set output file path
             output_file = os.path.join(
                 output_folder, os.path.relpath(python_file, project_folder))
-            output_file = os.path.splitext(output_file)[0] + '.md'
+            output_file = f'{os.path.splitext(output_file)[0]}.md'
 
             # Ensure the directory for the output file exists
             os.makedirs(os.path.dirname(output_file), exist_ok=True)
@@ -47,6 +47,7 @@ def run_embed_project(file_path):
             # Create the embedding
             print("Creating embedding...")
             create_embedding(output_file)
+
     result = convert_files(project_files)
     print("Done!")
     return result
