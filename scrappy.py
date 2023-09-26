@@ -27,10 +27,13 @@ def scrape_site(url):
     data = raw_data[0].page_content
 
     # Text splitter
-    texts = text_splitter.split_text(data, chunk_size=300, chunk_overlap=25)
-    print(texts)
+    texts = text_splitter.split_text(text=data)
 
-    create_embedding(texts)
+    text = tuple(texts)
+
+    print(text)
+
+    create_embedding(text)
 
 
 def scrape_site_map(site_path, collection_name=None):

@@ -44,9 +44,6 @@ class CustomTextEdit(QTextEdit):
     Attributes:
         None
     """
-
-
-class CustomTextEdit(QTextEdit):
     def __init__(self, *args, **kwargs):
         super(CustomTextEdit, self).__init__(*args, **kwargs)
 
@@ -703,7 +700,7 @@ class MainWindow(QWidget):
         self.scroll_area.content_widget_layout.addWidget(self.chat_widget)
 
         print("Setting Background Image:")
-        self.image = "./imgs/00001.png"
+        self.image = "./imgs/00002.png"
         self.background = self.change_background_image(self.image)
 
     def change_background_image(self, image=None):
