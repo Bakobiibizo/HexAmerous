@@ -1,9 +1,22 @@
 import os
 import openai
 import loguru
+import json
+from pathlib import Path
 from pydantic import BaseModel
-from typing import Dict List
+from typing import Dict, List, Optional
 from dotenv import load_dotenv
+from models import (
+    Agent,
+    AgentABC,
+    Message, 
+    MessageABC,
+    SystemMessage,
+    SystemMessageABC,
+    Context, 
+    ContextABC, 
+    StoragePaths
+)
 
 load_dotenv()
 
@@ -11,13 +24,77 @@ logger = loguru.logger
 
 logger.info("Welcome to HexAmerous, your coding assistant!")
 
-class GPTChatbot:
+path = Path()
+
+system_file_path = path.resolve(StoragePaths.SYSTEM_MESSAGES_PATH)
+
+with system_file_path.open.read("r", encoder="utf-8") as file:
+    system_message_dict = json.loads(file.read())
+
+
+class Chat_Message(Message, MessageABC):
+    def __init__(self, role, content):
+        super().__init__()
+        self.hisotry_path = system_file_path
+        self.role = role
+        self.content = content
+        
+    def create_message(self, role=Optional[str], content=Optional[str]):
+        if not role:
+            role == self.role
+        if not content:
+            content = self.content
+        self.role = role
+        self.content = content
+        return {role: self.role, self.content: content}
+    
+
+class SystemMessageHandler(SystemMessage, SystemMessageABC):
+    def __init__(self, messages):
+        super().__init__(messages)
+        self.name = name
+        self.messages: List[Message]= []
+        self.name_map: Dict[str, str]= {}
+        self.path = StoragePaths.HISTORY_MESSAGES_PATH
+        
+    def create_message(self, role=Optional[str], content=Optional[str]):
+        if not role:
+            role == self.role
+        if not content:
+            content = self.content
+        self.role = role
+        self.content = content
+        return {role: self.role, self.content: content}
+    
+    def create_system_message(
+        self, 
+        path: Optional[str], 
+        messaage: Optional[str], 
+        role: Optional[str]="sytem", 
+        content: Optional[str]=None
+        ):
+        if not path:
+            path = self.path
+        if not messaage:
+            message = Chat_Message(role=role, content=content)
+        if not content or role:
+            message = Chat_Message(**message)
+            
+        
+system_file_path = path.resolve(StoragePaths.SYSTEM_MESSAGES_PATH)
+
+system_message_dict_item
+
+system_message = SystemMessage(**system_dict_item)
+
+
+class GPTChatbot():
     def __init__(self, model="gpt-4", log_count=0):
         logger.info("Init gpt_chatbot")
         super().__init__()
         self.model = model
         system_role = "system"
-        self.system_message = 
+        self.system_message = SystemMessage(**data)
         logger.info("-- set log count")
         self.log_count = log_count
         logger.info("-- set messages")
