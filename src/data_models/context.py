@@ -6,8 +6,8 @@ from typing import List
 from abc import ABC, abstractmethod
 from pydantic import BaseModel
 
-from models.messages import Message, SystemMessage
-from managers.storage_manager import StoragePathDBManager
+from src.models.messages import Message, SystemMessage
+from src.managers.storage_manager import StoragePathDBManager
 class Context(BaseModel):
     """
     Model for handling context

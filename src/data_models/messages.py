@@ -11,7 +11,7 @@ from abc import ABC, abstractmethod
 from enum import Enum
 from pydantic import BaseModel
 
-from managers.storage_manager import StoragePathDBManager
+from src.managers.storage_manager import StoragePathDBManager
 
 class Message(BaseModel):
     """

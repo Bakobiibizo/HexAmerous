@@ -4,7 +4,7 @@ import sqlite3
 from pathlib import Path
 from typing import List, Dict
 
-path = Path()
+pathlb = Path()
 
 class StoragePathDBManager:
     """ 
@@ -28,12 +28,12 @@ class StoragePathDBManager:
         self.conn.execute(query)
         self.conn.commit()
     
-    def insert_path(self, name: str, new_path: str)-> None:
+    def insert_path(self, name: str, path: str)-> None:
         """
         Insert a new path
         """
-        query = 'INSERT INTO storage_paths (name, new_path) VALUES (?, ?)'
-        self.conn.execute(query, (name, new_path))
+        query = 'INSERT INTO storage_paths (name, path) VALUES (?, ?)'
+        self.conn.execute(query, (name, path))
         self.conn.commit()
     
     def get_all_paths(self)-> List[Dict[str, str]]:
@@ -44,12 +44,12 @@ class StoragePathDBManager:
         cursor = self.conn.execute(query)
         return cursor.fetchall()
     
-    def update_path(self, name: str, new_path: str)-> None:
+    def update_path(self, name: str, path: str)-> None:
         """
         Update the database entry for a path
         """
         query = 'UPDATE storage_paths SET path = ? WHERE name = ?'
-        self.conn.execute(query, (new_path, name))
+        self.conn.execute(query, (path, name))
         self.conn.commit()
     
     def delete_path(self, name: str)-> None:
@@ -70,10 +70,10 @@ class StoragePathDBManager:
 db_manager = StoragePathDBManager()
 
 # Insert some sample paths
-db_manager.insert_path('SYSTEM_MESSAGES_PATH', path.cwd() / "docs" / "system_message" / ".json")
-db_manager.insert_path('AGENTS_PATH', path.cwd() / "docs" / "agents" / ".json")
-db_manager.insert_path('TOOLS_PATH', path.cwd() / "docs" / "tools" / ".json")
-db_manager.insert_path('HISTORY_MESSAGES_PATH', path.cwd() / "docs" / "history" / ".json")
+db_manager.insert_path('SYSTEM_MESSAGES_PATH', str(pathlb.cwd() / "docs" / "system_message" / ".json"))
+db_manager.insert_path('AGENTS_PATH', str(pathlb.cwd() / "docs" / "agents" / ".json"))
+db_manager.insert_path('TOOLS_PATH', str(pathlb.cwd() / "docs" / "tools" / ".json"))
+db_manager.insert_path('HISTORY_MESSAGES_PATH', str(pathlb.cwd() / "docs" / "history" / ".json"))
 
 # Fetch and display all paths
 all_paths = db_manager.get_all_paths()

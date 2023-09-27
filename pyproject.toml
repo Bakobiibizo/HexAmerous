@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "hexamerous"
+version = "0.2.0"
+description = "Refactoring the original hexamerous to add agent archetecture"
+authors = ["Richard <bakobiibizo@gmail.com>"]
+license = "GNU3"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+openai = "^0.28.1"
+python-dotenv = "^1.0.0"
+langchain = "^0.0.302"
+keyboard = "^0.13.5"
+PyQt5 = "^5.15.9"
+chromadb-client = "^0.4.14.dev0"
+google-search-results = "^2.4.2"
+google-api-python-client = "^2.101.0"
+google-auth-httplib2 = "^0.1.1"
+google-auth-oauthlib = "^1.1.0"
+pathlib = "^1.0.1"
+unstructured = "^0.10.16"
+tiktoken = "^0.5.1"
+PyPDF2 = "^3.0.1"
+playwright = "^1.38.0"
+bs4 = "^0.0.1"
+libmagic = "^1.0"
+tesseract = "^0.1.3"
+wikipedia = "^1.4.0"
+fastapi = "^0.103.1"
+uvicorn = "^0.23.2"
+lark = "^1.1.7"
+loguru = "^0.7.2"
+
+[tool.poetry.group.dev.dependencies]
+pytest-cov = "^4.1.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

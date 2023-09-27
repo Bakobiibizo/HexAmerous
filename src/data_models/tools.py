@@ -8,7 +8,7 @@ from typing import List, Dict, Any
 from abc import ABC, abstractmethod
 from pathlib import Path
 from pydantic import BaseModel
-from managers.storage_manager import StoragePathDBManager
+from src.managers.storage_manager import StoragePathDBManager
 
 class Tool(BaseModel):
     """

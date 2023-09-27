@@ -19,3 +19,7 @@ google-api-python-client
 google-auth-httplib2
 google-auth-oauthlib
 tiktoken
+wikipedia
+fastapi
+uvicorn
+

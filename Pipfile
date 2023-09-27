@@ -1,0 +1,32 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = false
+name = "pip_conf_index_global"
+
+[packages]
+openai = "*"
+python-dotenv = "*"
+langchain = "*"
+keyboard = "*"
+pyqt5 = "*"
+chromadb = "*"
+google-search-results = "*"
+pathlib = "*"
+unstructured = "*"
+tiktoken = "*"
+pypdf = "*"
+playwright = "*"
+nest-asyncio = "*"
+bs4 = "*"
+libmagic = "*"
+tesseract = "*"
+lark = "*"
+google-api-python-client = "*"
+google-auth-httplib2 = "*"
+google-auth-oauthlib = "*"
+
+[dev-packages]
+pytest = "*"
+
+[requires]
+python_version = "3.10"
