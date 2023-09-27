@@ -5,16 +5,23 @@ Also context window size is a consideration for the future.
 from typing import List
 from abc import ABC, abstractmethod
 from pydantic import BaseModel
+from src.data_models.messages import Message, SystemMessage
 
-from src.models.messages import Message, SystemMessage
-from src.managers.storage_manager import StoragePathDBManager
 class Context(BaseModel):
     """
     Model for handling context
     """
     context: List[Message]
     system_message: SystemMessage
-    path: StoragePathDBManager
+    
+def context_sql_table():
+    return """
+    CREATE TABLE IF NOT EXISTS agent_actions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    context LIST message_id INTEGER NOT NULL,
+    FOREIGN KEY (message_id) REFERENCES message (id)
+);"""
     
 
 class ContextABC(ABC):

@@ -4,30 +4,35 @@ This class is for agent tool creation and management. The agent should be able t
 I still have to do a bit more exploring for the format and best use of tools.
 """
 
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from abc import ABC, abstractmethod
 from pathlib import Path
 from pydantic import BaseModel
-from src.managers.storage_manager import StoragePathDBManager
 
 class Tool(BaseModel):
     """
     Model for managing tools
     """
     name: str
-    path_manager: StoragePathDBManager
-    path: Path
     description: str
     command: str
     api: str
-
+    
+def tool_sql_table():
+    return """
+    CREATE TABLE IF NOT EXISTS agent_actions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    command TEXT NOT NULL,
+    api TEXT NOT NULL,
+);"""
 
 class ToolABC(ABC):
     """
     Abstract base class for tool management
     """
     @abstractmethod
-    def new_tool(self, name:str, path_manager: StoragePathDBManager, path: Path, description:str, command:str, api:str)-> Tool:
+    def new_tool(self, name:str, description:str, command:str, api:str)-> Tool:
         """
         Create a tool
         """
@@ -54,11 +59,25 @@ class Tools(BaseModel):
     """
     Model for managing tools
     """
+    name: str
     tools: List[Tool]
-    name_map: Dict[str, str]
-    path_manager: StoragePathDBManager
-    path: Path
+    notes: Optional[str]
+    
+    
 
+
+def tools_sql_table():
+    """
+    CREATE TABLE IF NOT EXISTS agent_actions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    tools: LIST tool_id INTEGER NOT NULL,
+    notes TEXT,  # Optional, can be NULL
+    FOREIGN KEY (tool_id) REFERENCES tools (id)
+    )
+          
+    """
+    
 class ToolsABC(ABC):
     """
     An abstract base class for tool management
@@ -88,3 +107,4 @@ class ToolsABC(ABC):
         """
         Delete a tool from the tools
         """
+     

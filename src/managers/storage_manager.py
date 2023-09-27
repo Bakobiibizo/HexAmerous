@@ -1,93 +1,103 @@
-# A Python class that encapsulates the database operations related to storage paths.
-# This class will use SQLite for demonstration purposes
+"""
+A Python class that encapsulates the database operations related to storage paths.
+This class will use SQLite for demonstration purposes
+"""
 import sqlite3
-from pathlib import Path
 from typing import List, Dict
+from pathlib import Path
+from src.helpers.log_helper import get_logger
+from src.data_models.storage import StoragePathABC, StoragePathModel, StoragePathEnum, get_queries
 
-pathlb = Path()
+logger = get_logger()
 
-class StoragePathDBManager:
+pathlib_path = Path
+
+class StoragePathDBManager(StoragePathABC):
     """ 
-    Database manager for sql style data base. 
+    Database manager for SQL-style databases. 
     """
-    def __init__(self, db_path=':memory:')-> None:
-        self.conn = sqlite3.connect(db_path)
-        self.create_table()
+    def __init__(self, db_connection: sqlite3.Connection):
+        super().__init__(db_connection=db_connection)
+        logger.info("Initializing StoragePathDBManager")
+        self.connection = db_connection
+        self.create_tables()
+  
+    def create_tables(self)-> None:
+        """
+        Create tables in the database
+        """
+        logger.info("Creating tables")
+        for enum_member in StoragePathEnum:
+            query = get_queries(enum_member)
+            try:
+                self.connection.execute(query)
+                self.connection.commit()
+            except sqlite3.Error as error:
+                logger.error(f"Failed to create table: {error}")
     
-    def create_table(self)-> None:
+    def insert_model(self, storage_path_model: StoragePathModel) -> None:
         """
-        Create a table in the database
+        Insert a model into the database
         """
-        query = '''
-        CREATE TABLE IF NOT EXISTS storage_paths (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            path TEXT NOT NULL
-        );
-        '''
-        self.conn.execute(query)
-        self.conn.commit()
-    
-    def insert_path(self, name: str, path: str)-> None:
+        logger.info("Inserting model")
+        name = storage_path_model.name
+        model = storage_path_model.model_dump()
+        self.insert_into_db(name, model)
+
+    def insert_into_db(self, name: str, model: str):
         """
-        Insert a new path
+        extracted common method
         """
-        query = 'INSERT INTO storage_paths (name, path) VALUES (?, ?)'
-        self.conn.execute(query, (name, path))
-        self.conn.commit()
+        query = 'INSERT INTO storage_paths (name, model) VALUES (?, ?)'
+        try:
+            self.connection.execute(query, (name, model))
+            self.connection.commit()
+        except sqlite3.Error as error:
+            logger.error(f"Failed to insert model: {error}")
     
     def get_all_paths(self)-> List[Dict[str, str]]:
         """
-        Fetch all paths
+        Fetch all paths from the database
         """
         query = 'SELECT * FROM storage_paths'
-        cursor = self.conn.execute(query)
-        return cursor.fetchall()
+        try:
+            cursor = self.connection.execute(query)
+            return cursor.fetchall()
+        except sqlite3.Error as error:
+            logger.error(f"Failed to fetch paths: {error}")
+            return []
     
-    def update_path(self, name: str, path: str)-> None:
+    def update_path(self, name: str, storage_path_model: StoragePathModel) -> None:
         """
-        Update the database entry for a path
+        Update a model in the database
         """
-        query = 'UPDATE storage_paths SET path = ? WHERE name = ?'
-        self.conn.execute(query, (path, name))
-        self.conn.commit()
+        model = storage_path_model.model_dump()
+        query = 'UPDATE storage_paths SET model = ? WHERE name = ?'
+        try:
+            self.connection.execute(query, (model, name))
+            self.connection.commit()
+        except sqlite3.Error as error:
+            logger.error(f"Failed to update model: {error}")
     
-    def delete_path(self, name: str)-> None:
+    def delete_path(self, name: str) -> None:
         """
-        Delete a path from the database
+        Delete a model from the database
         """
         query = 'DELETE FROM storage_paths WHERE name = ?'
-        self.conn.execute(query, (name,))
-        self.conn.commit()
+        try:
+            self.connection.execute(query, (name,))
+            self.connection.commit()
+        except sqlite3.Error as error:
+            logger.error(f"Failed to delete model: {error}")
     
-    def close(self)-> None:
+    def close(self) -> None:
         """
-        Close the connection
+        Close the database connection
         """
-        self.conn.close()
+        self.connection.close()
 
 # Initialize the database manager
-db_manager = StoragePathDBManager()
-
-# Insert some sample paths
-db_manager.insert_path('SYSTEM_MESSAGES_PATH', str(pathlb.cwd() / "docs" / "system_message" / ".json"))
-db_manager.insert_path('AGENTS_PATH', str(pathlb.cwd() / "docs" / "agents" / ".json"))
-db_manager.insert_path('TOOLS_PATH', str(pathlb.cwd() / "docs" / "tools" / ".json"))
-db_manager.insert_path('HISTORY_MESSAGES_PATH', str(pathlb.cwd() / "docs" / "history" / ".json"))
-
-# Fetch and display all paths
-all_paths = db_manager.get_all_paths()
-for row in all_paths:
-    print(f"ID: {row[0]}, Name: {row[1]}, Path: {row[2]}")
-
-# Update a path
-db_manager.update_path('SYSTEM_MESSAGES_PATH', '/new_docs/system_message/.json')
-
-# Fetch and display all paths after the update
-print("\nAfter Update:")
-all_paths = db_manager.get_all_paths()
-for row in all_paths:
-    print(f"ID: {row[0]}, Name: {row[1]}, Path: {row[2]}")
+db_manager = StoragePathDBManager(sqlite3.connect(':memory:'))
 
 # Close the database connection
 db_manager.close()

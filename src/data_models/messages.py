@@ -11,8 +11,6 @@ from abc import ABC, abstractmethod
 from enum import Enum
 from pydantic import BaseModel
 
-from src.managers.storage_manager import StoragePathDBManager
-
 class Message(BaseModel):
     """
     Pydantic model for data sent and recieved by the agent
@@ -26,8 +24,16 @@ class SystemMessage(BaseModel):
     """
     messages: List[Message]
     name_map: Dict[str, str]
-    path: StoragePathDBManager
 
+def message_sql_table():
+    return """
+    CREATE TABLE IF NOT EXISTS agent_actions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    role TEXT NOT NULL,
+    content TEXT NOT NULL,
+    FOREIGN KEY (message_id) REFERENCES message (id)
+);"""
 
 class MessageABC(ABC):
     """
