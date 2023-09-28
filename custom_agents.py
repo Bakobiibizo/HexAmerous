@@ -67,6 +67,6 @@ def data_base_memory_search(user_query):
 
     result = chat_gpt(prompt)
 
-    print("Memory search result: " + result)
+    print(f"Memory search result: {result}")
 
     return result

@@ -165,7 +165,6 @@ class ChatWidget(QWidget):
         chat_history.setStyleSheet(
             "background-color: rgba(67, 3, 81, 0.8);color: white; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold;")
         return chat_history
-        print('chat history loaded')
 
     # Create User Input
     def create_user_input(self):
@@ -177,7 +176,6 @@ class ChatWidget(QWidget):
         user_input.setFixedHeight(50)
         user_input.textChanged.connect(self.adjust_user_input_height)
         return user_input
-        print('created user input')
 
     # Adjust if program height is changed
     def adjust_user_input_height(self):
@@ -195,13 +193,17 @@ class ChatWidget(QWidget):
                 self.run_command(user_message)
             elif user_message.strip():
                 self.chat_history.setPlainText(
-                    self.chat_history.toPlainText() + "You: " + user_message + "\n\n")
+                    f"{self.chat_history.toPlainText()}You: {user_message}"
+                    + "\n\n"
+                )
                 self.chat_history.moveCursor(QTextCursor.End)
                 response = chat_gpt(user_message)
                 self.chat_history.setPlainText(
-                    self.chat_history.toPlainText() + "Assistant: " + response + "\n\n")
+                    f"{self.chat_history.toPlainText()}Assistant: {response}"
+                    + "\n\n"
+                )
                 self.chat_history.moveCursor(QTextCursor.End)
-                print('sent message: ' + response)
+                print(f'sent message: {response}')
                 return response
         else:
             print('no message')
@@ -231,7 +233,7 @@ class ChatWidget(QWidget):
             self.chat_history.setPlainText(
                 self.chat_history.toPlainText() + str("Embedding created, use !docslong and !docs to pull relevant documents" + "\n\n"))
             self.chat_history.moveCursor(QTextCursor.End)
-            print('added file to database ' + str(results))
+            print(f'added file to database {str(results)}')
             return results
         else:
             self.chat_history.setPlainText(
@@ -241,12 +243,11 @@ class ChatWidget(QWidget):
 
     # Pull uncompressed documents from database
     def use_base_retriever(self, text):
-        results = base_retriever(text)
-        if results:
+        if results := base_retriever(text):
             self.chat_history.setPlainText(
                 self.chat_history.toPlainText() + str("Base search results: \n" + str(results) + "\n\n"))
             self.chat_history.moveCursor(QTextCursor.End)
-            print('base search results: ' + str(results))
+            print(f'base search results: {str(results)}')
             return results
         else:
             self.chat_history.setPlainText(
@@ -257,10 +258,14 @@ class ChatWidget(QWidget):
 
     # Embed an entire directory
     def mass_embed(self, text):
-        results = create_mass_embedding(folder_path=text)
-        if results:
+        if results := create_mass_embedding(folder_path=text):
             self.chat_history.setPlainText(
-                self.chat_history.toPlainText() + str("Embedding created, use !docslong and !docs to pull relevant documents, and !searchmem to query the database" + str(results) + "\n\n"))
+                self.chat_history.toPlainText()
+                + str(
+                    f"Embedding created, use !docslong and !docs to pull relevant documents, and !searchmem to query the database{str(results)}"
+                    + "\n\n"
+                )
+            )
             self.chat_history.moveCursor(QTextCursor.End)
             print('Added to memory')
             return results
@@ -273,12 +278,11 @@ class ChatWidget(QWidget):
 
     # Query the database
     def search_memory(self, text):
-        results = data_base_memory_search(user_query=text)
-        if results:
+        if results := data_base_memory_search(user_query=text):
             self.chat_history.setPlainText(
                 self.chat_history.toPlainText() + str("Memory search results: \n" + str(results)) + "\n\n")
             self.chat_history.moveCursor(QTextCursor.End)
-            print('Search memory: ' + str(results))
+            print(f'Search memory: {str(results)}')
             return results
         else:
             self.chat_history.setPlainText(
@@ -289,12 +293,11 @@ class ChatWidget(QWidget):
 
     # Add a file to the database
     def add_to_db(self, text):
-        results = scrape_site(url=text)
-        if results:
+        if results := scrape_site(url=text):
             self.chat_history.setPlainText(
                 self.chat_history.toPlainText() + str("Added to database: \n" + str(results) + "\n\n"))
             self.chat_history.moveCursor(QTextCursor.End)
-            print('add site: ' + str(results))
+            print(f'add site: {str(results)}')
             return results
         else:
             self.chat_history.setPlainText(
@@ -305,12 +308,11 @@ class ChatWidget(QWidget):
 
     def add_map_db(self, text, collection_name):
         url = text
-        results = scrape_site_map(url, collection_name)
-        if results:
+        if results := scrape_site_map(url, collection_name):
             self.chat_history.setPlainText(
                 self.chat_history.toPlainText() + str("Added to database: \n" + str(results) + "\n\n"))
             self.chat_history.moveCursor(QTextCursor.End)
-            print('embeded site map: ' + str(results))
+            print(f'embeded site map: {str(results)}')
             return results
         else:
             self.chat_history.setPlainText(
@@ -321,8 +323,7 @@ class ChatWidget(QWidget):
 
     # Add a project to the database
     def add_project_to_db(self, text):
-        results = run_embed_project(file_path=text)
-        if results:
+        if results := run_embed_project(file_path=text):
             self.chat_history.setPlainText(
                 self.chat_history.toPlainText() + str("Added to database: \n" + str(results) + "\n\n"))
             self.chat_history.moveCursor(QTextCursor.End)
@@ -347,85 +348,74 @@ class ChatWidget(QWidget):
             self.clear_chat_history()
             return
         if text == "!save":
-            results = self.save_chat_history()
-            if results:
-                return results
-            else:
-                return "Error creating loading"
-            return
+            return (
+                results
+                if (results := self.save_chat_history())
+                else "Error creating loading"
+            )
         if text == "!load":
-            results = self.load_chat_history()
-            if results:
+            if results := self.load_chat_history():
                 return results
             else:
                 return "Error creating loading"
         if text == "!embed":
-            results = self.open_file_dialog()
-            if results:
+            if results := self.open_file_dialog():
                 return results
             else:
                 return "Error creating embedding"
         if text.startswith("!massembed"):
             text = text.removeprefix("!massembed ")
-            results = self.mass_embed(text)
-            if results:
+            if results := self.mass_embed(text):
                 return results
             else:
                 return "Error creating embedding"
         if text.startswith("!searchmem"):
             text = text.removeprefix("!searchmem ")
-            results = self.search_memory(text)
-            if results:
-                print(results)
-                return results
-            else:
+            if not (results := self.search_memory(text)):
                 return "No results found"
+            print(results)
+            return results
         if text.startswith("!docs"):
             text = text.removeprefix("!docs ")
-            results = self.use_base_retriever(text)
-            if results:
-                print(results)
-                return results
-            else:
+            if not (results := self.use_base_retriever(text)):
                 return "No results found"
+            print(results)
+            return results
         if text.startswith("!addmem"):
             text = text.removeprefix("!addmem ")
-            results = self.add_to_db(text)
-            if results:
-                print(results)
-                return results
-            else:
+            if not (results := self.add_to_db(text)):
                 return "Error adding to database"
+            print(results)
+            return results
         if text.startswith("!addmap"):
             text = text.removeprefix("!addmap ")
             split_text = text.split(" ")
             text = split_text[0]
             collection_name = split_text[1]
             print(text, collection_name)
-            results = self.add_map_db(text, collection_name)
-            if results:
+            if results := self.add_map_db(text, collection_name):
                 return results
             else:
                 return "Error creating loading"
         if text.startswith("!addproject"):
             text = text.removeprefix("!addproject ")
-            results = self.add_project_to_db(text)
-            if results:
+            if results := self.add_project_to_db(text):
                 return results
             else:
                 return "Error creating loading"
         if text.startswith("!background"):
             text = text.removeprefix("!background ")
-            image = QPixmap("img/0000"+str(text)+".png")
-            results = MainWindow.change_background_image(image)
-            if results:
+            image = QPixmap(f"img/0000{str(text)}.png")
+            if results := MainWindow.change_background_image(image):
                 return results
             else:
                 return "Error creating loading"
         else:
             if text.startswith("!"):
                 self.chat_history.setPlainText(
-                    self.chat_history.toPlainText() + str("Command not found. Type !help for a list of commands \n\n"))
+                    self.chat_history.toPlainText()
+                    + "Command not found. Type !help for a list of commands \n\n"
+                )
                 self.chat_history.moveCursor(QTextCursor.End)
                 return
 
@@ -434,8 +424,9 @@ class ChatWidget(QWidget):
 
     def display_help(self):
         self.chat_history.setPlainText(
-            self.chat_history.toPlainText() + str(
-                """
+            (
+                self.chat_history.toPlainText()
+                + """
     Commands:
 !help       - Display this help message.
 !save       - Save chat history.
@@ -460,7 +451,9 @@ class ChatWidget(QWidget):
                 project file information to the OpenAI
                 API.
 !background - Change the background image.
-        """))
+        """
+            )
+        )
     print('load file into chat')
     # Load file into chat
 

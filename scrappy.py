@@ -48,10 +48,7 @@ def scrape_site_map(site_path, collection_name):
 
     # Store in database
     metadata = collection_name
-    if metadata:
-        meta = metadata
-    else:
-        meta = 'file_path'
+    meta = metadata if metadata else 'file_path'
     vectordb = Chroma.from_documents(
         documents=docs, metadata=meta, embedding=embeddings, persist_directory='./docs/')
     vectordb.persist()
