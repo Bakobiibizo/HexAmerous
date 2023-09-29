@@ -1,8 +1,8 @@
-from src import data_models, helpers, managers
-from tests import test_helpers
+from src.vectordb.xml_loader import sitemap_loader
 
-__all__ = [
-    "data_models",
-    "helpers",
-    "managers"
-]
+
+def main():
+    sitemap_loader()
+
+if __name__=="__main__":
+    main()
