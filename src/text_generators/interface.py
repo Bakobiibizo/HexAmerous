@@ -1,54 +1,41 @@
 from pydantic import BaseModel
 from typing import List, Dict, Iterator
-from abc import ABC, abstractmethod
 from src.templates.interface import BaseTemplate
+from abc import ABC, abstractmethod
 
 
 class Generator(BaseModel, ABC):
-    """
-    Interface for Generators.
-
-    @ property template: BaseTemplate
-    @ property url: str
-    @ property api: str
-    @ property context: List
-    @ property context_window: int
-
-    @ method set_apikey
-    @ method set_url
-    @ method set_context
-    @ method set_context_window
-    @ method set_template
-    @ method generate
-    @ method generate_stream
-    @ method prepare_messages
-    """
     template: BaseTemplate
     url: str
-    api: str
+    api_key: str
     context: List
     context_window: int
 
-    @abstractmethod
-    def set_apikey(self) -> bool:
-        pass
+    def set_apikey(self, apikey) -> bool:
+        self.api_key = apikey
+        return True
 
-    @abstractmethod
-    def set_url(self) -> bool:
-        pass
-
-    @abstractmethod
-    def set_context(self) -> bool:
-        pass
+    def set_url(self, url) -> bool:
+        self.url = url
+        return True
     
-    @abstractmethod
     def set_context_window(self) -> bool:
-        pass
-
-    @abstractmethod
-    def set_template(self) -> bool:
-        pass
-
+        self.context_window = 16000
+        return True
+        
+    def set_context(self, context) -> List[Dict[str, str]]:
+        if not self.context:
+            self.context = []
+        self.context.append(context)
+        return self.context
+    
+    def set_template(self, template: BaseTemplate) -> List[Dict[str, str]]:
+        self.template = template
+        if self.context[0]["role"] == "system":
+            self.context.pop(0)
+        self.context.insert(0, self.template.create_system_prompt())
+        return self.context        
+        
     @abstractmethod
     async def generate(
         self,
@@ -57,7 +44,7 @@ class Generator(BaseModel, ABC):
         pass
     
     @abstractmethod
-    async def generate_stream(
+    async def async_generate(
         self,
         messages: List[Dict[str, str]]
     ) -> Iterator[Dict[str, str]]:

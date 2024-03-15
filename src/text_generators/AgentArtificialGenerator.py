@@ -1,43 +1,29 @@
 import json
 import os
 from src.text_generators.interface import Generator, GeneratorConfig
-from src.templates.CodingTemplate import
+from src.templates.CodingTemplate import CodingTemplate
 
 config = GeneratorConfig(
-    template=CodingTemplate(),
+    template=CodingTemplate,
     url=os.getenviron.get("AGENT_ARTIFICIAL_URL"),
     apikey=os.getenviron.get("AGENT_ARTIFICIAL_API_KEY"),
     context_window=16000
 )
 
 class AgentArtificialGenerator(Generator):
-    def __init__(
-        self,
-        template=None,
-        url="",
-        apikey="",
-        context=None,
-        context_window=16000
-    ) -> None:
+    def __init__(self, input_config: GeneratorConfig) -> None:
         super().__init__()
-        self.url = url
-        self.apikey = apikey
-        self.context = context
-        self.context_window = context_window
-        self.agentartificial_generator = template
+        self.set_apikey()
+        self.set_url()
+        self.set_context()
+        self.set_context_window()
 
-    def set_configuration(self, config: GeneratorConfig):
-        self.apikey = os.environ.get("AGENT_ARTIFICIAL_API_KEY")
-        self.url = os.environ.get("AGENT_ARTIFICIAL_URL")
-        self.context_window = 16000
-        self.template =
+    def set_template(self) -> bool:
+        self.template
 
-    def install_depenedencies(self):
-        import http.client
       
 
-    def generate_text(self, messages, url="the-roost- agentartificial.ngrok.dev", model="codellama"):
-        return self.agentartificial_generator(messages, url, model)        
+    def generate_text(self, messages: List[Dict[str, str]]) -> str:     
 
 
     def prepare_messages(self, queries: Optional[List[str]]=None, template: Optional[List[Dict[str,str]]]=None, context: Optional[Dict[str, str]]=None) -> List[Dict[str,str]]:

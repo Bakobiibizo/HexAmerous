@@ -6,11 +6,12 @@ import os
 
 
 class GeneratorManager:
-    def __init__(self):
+    def __init__(self, name="AgentArtificial"):
         self.generators: Dict[str, Generator] = {
             "AgentArtificial": AgentArtificialGenerator
         }
-        self.generator = None
+        self.generator = self.generators[name]
+        self.set_generator
         
 
     def set_generator(self, generator: str) -> bool:
