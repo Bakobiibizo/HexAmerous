@@ -14,7 +14,6 @@ nltk.download('punkt')
 
 print('Loading global variables')
 # Load Langchain variables
-openai.api_key = os.getenv("OPENAI_API_KEY")
 
 embeddings = OpenAIEmbeddings()
 

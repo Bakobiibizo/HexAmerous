@@ -1,85 +1,81 @@
 # -*- coding: utf-8 -*-
 import os
-import openai
+from openai import OpenAI
 from dotenv import load_dotenv
-from langchain.llms import OpenAI
+from typing import Union, List, Dict
+from loguru import logger
 
+from enum import Enum
 # Load environment variables
 load_dotenv()
 
-llm=OpenAI()
+openai = OpenAI()
+openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.base_url = "https://the-roost-agentartificial.ngrok.app"
 
-print("loading HexAmerous")
-
+logger.info("loading HexAmerous")
 
 
 
 # Initialize OpenAI
-openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Initialize variables
 
 
-print("Welcome to HexAmerous your coding assistant")
-
-selected_model = "gpt-3.5-turbo"
+logger.info("Welcome to HexAmerous your coding assistant")
 
 
-print('change_selected_model')
 
 
-def change_selected_model(model):
-    selected_model = model
-    print(f"Selected model changed to {selected_model}")
+logger.info('change_selected_model')
+
+
+class MODEL_LIST(Enum):
+    mixtral="mixtral"
+    mistral="mistral"
+    llava="llava"
+    bakllava="bakllava"
+    codellama="codellama"
+
+    def __str__(self):
+        return self.value
+
+    def __repr__(self):
+        return self.value
+
+    def __eq__(self, other):
+        return self.value == other
+    
+selected_model = MODEL_LIST.mixtral
+
+def change_selected_model(model: Union[MODEL_LIST, str]):
+    selected_model = MODEL_LIST
+    logger.info(f"Selected model changed to {selected_model}")
     return selected_model
+    
+
 # call openai chat api
-
-
-print('loading chat_gpt')
+logger.info('loading chat_gpt')
 context = []
 
 
 def chat_gpt(user_message):
 
-    if context!=[]:
+
+    if len(context) > 0:
 
         # Create prompt
-        prompt =[
-            {
-                "role": "system",
-                "content": f"This is the context of the conversation you are having with the user: {context}"
-            },
-            {
-                "role": "user",
-                "content":  user_message
-            },
-            {
-                "role": "assistant",
-                "content": ""
-            }
-        ]
-    else:
-
-        prompt = [
-            {
-               "role": "system",
-               "content": "You are a expert developer. You have indepth knowledge of python and typescript along with supporting frameworks. You have been given the documents of a new programing language called Mojo(also know as modular), its kept in your vectorstore. You are helping out Richard with learning this new super set of python. You are careful to reference your answers against the documents in your vectorstore. You provide verbose detailed and comprehensive answers to questions. You make sure to go through your answers carefully step by step to ensure the information is correct."
-            },
-        user_message
-
-        ]
-    print(prompt)
+ 
+    logger.info(prompt)
     # Call OpenAI's Chat API
-    result = openai.ChatCompletion.create(
-        model=selected_model,
-        messages=prompt
-    )
-    print(result)
+    result = openai.chat.completions.create(model=selected_model.value,
+    messages=prompt)
+    logger.info(result)
     # Read the current value of the counter from a file
     with open("./log/log_count.txt", "r", encoding='utf-8') as f:
         log_count = str(f.read().strip())
         # get response from OpenAI
-    response = result['choices'][0]['message']['content']
+    response = result.choices[0].message.content
 
     # append log
     with open(f"./log/{log_count}.txt", "a", encoding='utf-8') as f:
@@ -88,5 +84,5 @@ def chat_gpt(user_message):
     # add context
     context.append(f"User: {prompt}\nAssistant: {response}\n\n")
     # Return the AI's response
-    print(response)
+    logger.info(response)
     return response

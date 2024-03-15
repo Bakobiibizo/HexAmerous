@@ -2,7 +2,7 @@
 
 # Create a new virtual environment in the .venv folder
 echo "Creating a new Python virtual environment in the .venv folder."
-python3 -m venv .venv
+python -m venv .venv
 echo "Done."
 
 # Activate the virtual environment
@@ -12,13 +12,13 @@ echo "Done."
 
 # Upgrade pip
 echo "Upgrading pip"
-python3 -m pip install pip --upgrade
+python -m pip install pip --upgrade
 echo "Done."
 
 # Install the required packages from requirements.txt
 echo "Installing required packages from requirements.txt"
 while read requirement; do
-    pip3 install -r requirements.txt
+    pip install -r requirements.txt
 done
 echo "Done."
 
@@ -29,4 +29,4 @@ echo "Done."
 
 # Run your Python script HexAmerous.py
 echo "Running your Python script HexAmerous.py"
-python3 HexAmerous.py
+python HexAmerous.py

@@ -7,5 +7,7 @@ docs/*.clip
 docs/index/**
 project/*.md
 .vscode
-
 venv
+creds/*
+src/vectordb.rar
+docs/ingestion/data.txt

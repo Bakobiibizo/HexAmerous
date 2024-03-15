@@ -1,29 +1,21 @@
-from embeddings import load_vector_store_docs, OpenAIEmbeddings
+from embeddings import OpenAIEmbeddings
 from dotenv import load_dotenv
-from chatgpt import chat_gpt
-from langchain import OpenAI, Wikipedia
-from langchain.agents import Tool
-from langchain.llms import OpenAI
-from langchain.retrievers.self_query.base import SelfQueryRetriever
-from langchain.chains.query_constructor.base import AttributeInfo
-from langchain.agents.react.base import DocstoreExplorer
-from langchain.vectorstores import Chroma
-docstore = DocstoreExplorer(Wikipedia())
+from pydantic import BaseModel
+from typing import Any, Callable, List
 
-llm = OpenAI(temperature=0)
+load_dotenv()
+
+from chatgpt import openai
+
 embeddings = OpenAIEmbeddings()
 
-tools = [
-    Tool(
-        name="Search",
-        func=docstore.search,
-        description="useful for when you need to ask with search"
-    ),
-    Tool(name="Lookup",
-         func=docstore.lookup,
-         description="useful for when you need to ask with lookup"
-         )
-]
+
+
+search_tool = Tool(
+    name='search',
+    function=base_retriever,
+    description='useful for when you need to answer questions about current events'
+)
 
 load_dotenv()
 
