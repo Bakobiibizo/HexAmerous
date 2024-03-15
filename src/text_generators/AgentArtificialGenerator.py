@@ -12,11 +12,8 @@ config = GeneratorConfig(
 
 class AgentArtificialGenerator(Generator):
     def __init__(self, input_config: GeneratorConfig) -> None:
-        super().__init__()
-        self.set_apikey()
-        self.set_url()
-        self.set_context()
-        self.set_context_window()
+        super().__init__(**input_config.model_dump())
+
 
     def set_template(self) -> bool:
         self.template
