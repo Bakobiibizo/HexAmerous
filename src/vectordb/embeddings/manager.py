@@ -1,11 +1,11 @@
-
+from src.vectordb.embeddings.TikTokenizer import TikTokenizer
+from src.vectordb.WeaviateManager import Embedder
+from 
 
 class EmbeddingManager:
     def __init__(self):
         self.embedders: dict[str, Embedder] = {
-            "MiniLMEmbedder": MiniLMEmbedder(),
-            "ADAEmbedder": ADAEmbedder(),
-            "CohereEmbedder": CohereEmbedder(),
+            "MiniLMEmbedder": TikTokenizer(),
         }
         self.selected_embedder: Embedder = self.embedders["ADAEmbedder"]
 

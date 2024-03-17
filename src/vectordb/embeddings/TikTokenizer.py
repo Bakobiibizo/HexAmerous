@@ -1,17 +1,19 @@
 from pydantic import BaseModel
 from loguru import logger
 from typing import List, Optional
-from src.text_generators.interface import Tokenizer
+from src.text_generators.interface import TokenizerConfig
 
 
-input_config = Tokenizer(
+
+input_config = TokenizerConfig(
     
+
 )
 
 
 class TikTokenizer(Tokenizer):
     
-    def __init__(self, input_config: Optional[Tokenizer]):
+    def __init__(self, input_config: Optional[Tokenizer]=input_config):
         super().__init__(input_config or self.config)
         
     def install_dependencies(self):

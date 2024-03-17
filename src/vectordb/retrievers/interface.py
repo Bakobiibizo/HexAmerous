@@ -1,5 +1,5 @@
 
-class Retriever(VerbaComponent):
+class Retriever(Component):
     """
     Interface for Verba Retrievers.
     """
