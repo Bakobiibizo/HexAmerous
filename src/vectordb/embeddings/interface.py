@@ -1,5 +1,13 @@
 
 
+class Tokenizer(Tokenizer):
+    name: str
+    description: str 
+    model: str
+    tokenizer: str
+    device: any
+    model_path: str
+
 class Embedder(VerbaComponent):
     """
     Interface for Verba Embedding.

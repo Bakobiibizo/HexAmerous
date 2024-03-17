@@ -37,7 +37,6 @@ class MiniLMEmbedder(Embedder):
 
         except Exception as e:
             msg.warn(str(e))
-            pass
 
     def embed(
         self,
@@ -106,10 +105,7 @@ class MiniLMEmbedder(Embedder):
 
             averaged_embedding = all_embeddings.mean(dim=0)
 
-            averaged_embedding_list = averaged_embedding.tolist()
-
-            return averaged_embedding_list
-
+            return averaged_embedding.tolist()
         except Exception:
             raise
 
