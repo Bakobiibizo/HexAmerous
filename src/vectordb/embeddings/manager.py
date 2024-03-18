@@ -1,6 +1,6 @@
-from src.vectordb.embeddings.TikTokenizer import TikTokenizer
-from src.vectordb.WeaviateManager import Embedder
-from 
+from src.vectordb.embeddings.tik_tokenizer import TikTokenizer
+from src.vectordb.weaviate_manager import Embedder
+from src.
 
 class EmbeddingManager:
     def __init__(self):

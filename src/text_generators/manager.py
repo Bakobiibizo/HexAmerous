@@ -1,5 +1,5 @@
-from src.text_generators.interface import Generator
-from src.text_generators.AgentArtificialGenerator import AgentArtificialGenerator
+from src.data_models.generators import Generator
+from src.text_generators.agent_artificial_generator import AgentArtificialGenerator
 from typing import Dict, List, Iterator, Callable
 from loguru import logger
 import os

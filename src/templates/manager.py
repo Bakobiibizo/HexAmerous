@@ -2,8 +2,8 @@
 Template Manager
 """
 from typing import List, Union
-from src.templates.interface import BaseTemplate, AvailableTemplates, Templates
-from src.templates.CodingTemplate import CodingTemplate
+from src.data_models.templates import BaseTemplate, AvailableTemplates, Templates
+from src.templates.coding_template import CodingTemplate
 
 
 class TemplateManager(Templates):
@@ -27,6 +27,7 @@ class TemplateManager(Templates):
         self.selected_template = self.select_template(selected_template)
         # Set the system prompt
         self.template = self.get_prompt_template()
+        
     
     def update_templates(
         self,
