@@ -1,16 +1,17 @@
-from src.text_generators.interface import Generator
-from src.text_generators.AgentArtificialGenerator import AgentArtificialGenerator
+from src.data_models.generators import Generator
+from src.text_generators.agent_artificial_generator import AgentArtificialGenerator
 from typing import Dict, List, Iterator, Callable
 from loguru import logger
 import os
 
 
 class GeneratorManager:
-    def __init__(self):
+    def __init__(self, name="AgentArtificial"):
         self.generators: Dict[str, Generator] = {
             "AgentArtificial": AgentArtificialGenerator
         }
-        self.generator = None
+        self.generator = self.generators[name]
+        self.set_generator
         
 
     def set_generator(self, generator: str) -> bool:

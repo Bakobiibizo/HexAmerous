@@ -1,7 +1,8 @@
-from src.templates.interface import BaseTemplate
+"""
+from src.data_models.templates import BaseTemplate
 
 
-class ResearchTemplate(BaseTemplate):
+class EmailTemplate(BaseTemplate):
     def __init__(self):
         super().__init__()
         self.description = ""
@@ -11,8 +12,9 @@ class ResearchTemplate(BaseTemplate):
 
 
 def main():
-    return ResearchTemplate()
+    return EmailTemplate()
 
 
 if __name__ == "__main__":
     main()
+"""

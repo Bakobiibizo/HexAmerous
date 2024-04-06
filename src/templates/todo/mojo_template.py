@@ -1,4 +1,4 @@
-from src.templates.interface import BaseTemplate
+from src.data_models.templates import BaseTemplate
 
 
 class MojoTemplate(BaseTemplate):

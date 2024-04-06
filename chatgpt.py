@@ -60,13 +60,13 @@ context = []
 
 
 def chat_gpt(user_message):
-
+    logger.info(prompt)
 
     if len(context) > 0:
 
         # Create prompt
  
-    logger.info(prompt)
+
     # Call OpenAI's Chat API
     result = openai.chat.completions.create(model=selected_model.value,
     messages=prompt)

@@ -1,7 +1,7 @@
-from src.templates.interface import BaseTemplate
+from src.data_models.templates import BaseTemplate
 
 
-class SocialMediaTemplate(BaseTemplate):
+class ResearchTemplate(BaseTemplate):
     def __init__(self):
         super().__init__()
         self.description = ""
@@ -11,7 +11,7 @@ class SocialMediaTemplate(BaseTemplate):
 
 
 def main():
-    return SocialMediaTemplate()
+    return ResearchTemplate()
 
 
 if __name__ == "__main__":

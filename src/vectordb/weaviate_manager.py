@@ -1,8 +1,13 @@
+from pydantic import BaseModel
+from typing import Any
+from src.data_models.component import Component
 
 
-class Embedder(VerbaComponent):
+
+
+class Embedder(Component):
     """
-    Interface for Verba Embedding.
+    Interface for Embedding.
     """
 
     def __init__(self):
