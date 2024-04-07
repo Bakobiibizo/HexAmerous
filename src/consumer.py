@@ -1,6 +1,9 @@
+import threading
+from concurrent.futures import ThreadPoolExecutor
 import pika
 import os
 from dotenv import load_dotenv
+from run_executor.main import ExecuteRun
 
 load_dotenv()
 
@@ -11,7 +14,9 @@ RABBITMQ_PORT = os.getenv("RABBITMQ_PORT")
 
 
 class RabbitMQConsumer:
-    def __init__(self):
+    def __init__(
+        self, max_workers=5
+    ):  # max_workers can be adjusted based on demand # noqa
         credentials = pika.PlainCredentials(RABBITMQ_USER, RABBITMQ_PASS)
         self.connection = pika.BlockingConnection(
             pika.ConnectionParameters(
@@ -22,11 +27,17 @@ class RabbitMQConsumer:
             )
         )
         self.channel = self.connection.channel()
+        self.executor = ThreadPoolExecutor(max_workers=max_workers)
+
+    def process_message(self, body):
+        run_id = body.decode("utf-8")
+        print(f"Processing {run_id}")
+        run = ExecuteRun(run_id)
+        run.execute()
+        # Insert your Run Executor pipeline logic here
 
     def callback(self, ch, method, properties, body):
-        print(f"Received {body}")
-        # Process the message here
-        # Acknowledge the message
+        self.executor.submit(self.process_message, body)
         ch.basic_ack(delivery_tag=method.delivery_tag)
 
     def start_consuming(self, queue_name):
