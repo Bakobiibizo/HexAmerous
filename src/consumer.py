@@ -4,6 +4,7 @@ import pika
 import os
 from dotenv import load_dotenv
 from run_executor.main import ExecuteRun
+import json
 
 load_dotenv()
 
@@ -30,15 +31,28 @@ class RabbitMQConsumer:
         self.executor = ThreadPoolExecutor(max_workers=max_workers)
 
     def process_message(self, body):
-        run_id = body.decode("utf-8")
-        print(f"Processing {run_id}")
-        run = ExecuteRun(run_id)
+        message = body.decode("utf-8")
+        data = json.loads(message)
+
+        print(f"Processing {data}")
+        run = ExecuteRun(data["thread_id"], data["run_id"])
         run.execute()
         # Insert your Run Executor pipeline logic here
 
     def callback(self, ch, method, properties, body):
-        self.executor.submit(self.process_message, body)
-        ch.basic_ack(delivery_tag=method.delivery_tag)
+        try:
+            self.executor.submit(self.process_message_and_ack, body, ch, method)
+        except Exception as e:
+            print(f"Failed to submit the task to the executor: {e}")
+
+    def process_message_and_ack(self, body, ch, method):
+        try:
+            self.process_message(body)
+            ch.basic_ack(delivery_tag=method.delivery_tag)
+        except Exception as e:
+            print(f"Failed to process message {body}: {e}")
+            # Here you can decide whether to reject, requeue or just log the exception
+            ch.basic_nack(delivery_tag=method.delivery_tag, requeue=False)
 
     def start_consuming(self, queue_name):
         self.channel.queue_declare(queue=queue_name, durable=True)
