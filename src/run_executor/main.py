@@ -1,4 +1,4 @@
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 from tools.ops_api_handler import update_run
 from data_models import run
 
@@ -9,14 +9,21 @@ class ExecuteRun:
         self.thread_id = thread_id
         self.run_config = run_config
 
+        self.run: Optional[run.Run] = None
+        self.thread = None
+
     def execute(self):
         # Create an instance of the RunUpdate schema with the new status
         run_update = run.RunUpdate(status=run.RunStatus.IN_PROGRESS.value)
 
         # Call the API handler to update the run status
-        if not update_run(self.thread_id, self.run_id, run_update):
+        updated_run = update_run(self.thread_id, self.run_id, run_update)
+
+        if not updated_run:
             print(f"Error updating run status for {self.run_id}. Aborting execution.")
             return
+
+        self.run = updated_run
 
         print(f"Executing run {self.run_id}")
 

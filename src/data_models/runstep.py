@@ -1,9 +1,12 @@
 from pydantic import BaseModel
 from typing import Literal, Optional, Dict, Any, Union
 from openai.types.beta.threads.runs import (
+    RunStep,
     MessageCreationStepDetails,
     ToolCallsStepDetails,
 )
+
+RunStep
 
 StepDetails = Union[MessageCreationStepDetails, ToolCallsStepDetails]
 

@@ -1,7 +1,9 @@
 from pydantic import BaseModel
 from typing import Optional, List, Any
 from enum import Enum
+from openai.types.beta.threads.run import Run
 
+Run
 
 class RunUpdate(BaseModel):
     assistant_id: Optional[str] = None
