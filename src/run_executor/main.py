@@ -1,7 +1,20 @@
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from tools.ops_api_handler import update_run
 from data_models import run
+from openai.types.beta.threads import Message
+from tools.openai_clients import assistants_client
+from openai.types.beta.thread import Thread
+from agents.router import RouterAgent
 
+# TODO: add assistant and base tools off of assistant
+tools_config = {
+    "text_generation": {
+        "description": "general text response",
+    },
+    "key_retrieval": {
+        "description": "retrieve the key from the database",
+    },
+}
 
 class ExecuteRun:
     def __init__(self, thread_id: str, run_id: str, run_config: Dict[str, Any] = {}):
@@ -10,7 +23,9 @@ class ExecuteRun:
         self.run_config = run_config
 
         self.run: Optional[run.Run] = None
-        self.thread = None
+        self.messages: Optional[List(Message)] = None
+        self.thread: Optional[Thread] = None
+        # TODO: add assistant and base tools off of assistant
 
     def execute(self):
         # Create an instance of the RunUpdate schema with the new status
@@ -18,12 +33,34 @@ class ExecuteRun:
 
         # Call the API handler to update the run status
         updated_run = update_run(self.thread_id, self.run_id, run_update)
+        print("Updated run: ", updated_run)
 
         if not updated_run:
             print(f"Error updating run status for {self.run_id}. Aborting execution.")
             return
 
         self.run = updated_run
+
+        # Get the thread messages
+        thread = assistants_client.beta.threads.retrieve(
+            thread_id=self.thread_id,
+        )
+        self.thread = thread
+
+        messages = assistants_client.beta.threads.messages.list(
+            thread_id=self.thread_id,
+        )
+        self.messages = messages
+
+        router_agent = RouterAgent()
+        response = router_agent.generate(tools_config, self.messages)
+        if response != "<TRANSITION>":
+            # execute completion here
+            print("Generating response")
+        print("Transitioning")
+
+
+
 
         print(f"Executing run {self.run_id}")
 
