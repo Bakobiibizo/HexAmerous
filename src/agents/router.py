@@ -4,30 +4,24 @@ from openai.pagination import SyncCursorPage
 from tools.openai_clients import litellm_client
 
 
-
-
 class RouterAgent:
     def __init__(
         self,
     ):
-        self.role = f"""Your role is to determine whether to use tools or directly generate a response.
+        self.role_instructions = f"""Your role is to determine whether to use tools or directly generate a response.
 In the case that you need to use tools, simply respond with '<TRANSITION>'. Otherwise, generate an appropriate response.
 
 The tools available to you are:"""
 
     def compose_system_prompt(self, tools: dict) -> str:
-        tools_list = ""
-        for idx, (tool_name, tool_config) in enumerate(tools.items()):
-            tools_list += f"{idx + 1}. {tool_name}: {tool_config['description']}\n"
-        return f"""{self.role}
+        tools_list = "\n".join([f"- {name}: {config['description']}" for name, config in tools.items()])
+        return f"""{self.role_instructions}
 
 The tools available to you are:
 {tools_list}"""
 
     # TODO: add assistant and base tools off of assistant
-    def generate(
-        self, tools: dict, paginated_messages: SyncCursorPage[Message]
-    ) -> str:
+    def generate(self, tools: dict, paginated_messages: SyncCursorPage[Message]) -> str:
         """
         Generates a response based on the chat history and role instructions.
 
@@ -64,5 +58,3 @@ The tools available to you are:
             return "<TRANSITION>"
         else:
             return response.choices[0].message.content
-
-

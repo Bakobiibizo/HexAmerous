@@ -4,7 +4,7 @@ from data_models import run
 from openai.types.beta.threads import Message
 from tools.openai_clients import assistants_client
 from openai.types.beta.thread import Thread
-from agents.router import RouterAgent
+from agents import router, summarizer
 
 # TODO: add assistant and base tools off of assistant
 tools_config = {
@@ -12,7 +12,7 @@ tools_config = {
         "description": "general text response",
     },
     "key_retrieval": {
-        "description": "retrieve the key from the database",
+        "description": "a database that contains my private keys",
     },
 }
 
@@ -33,7 +33,6 @@ class ExecuteRun:
 
         # Call the API handler to update the run status
         updated_run = update_run(self.thread_id, self.run_id, run_update)
-        print("Updated run: ", updated_run)
 
         if not updated_run:
             print(f"Error updating run status for {self.run_id}. Aborting execution.")
@@ -52,17 +51,23 @@ class ExecuteRun:
         )
         self.messages = messages
 
-        router_agent = RouterAgent()
-        response = router_agent.generate(tools_config, self.messages)
-        if response != "<TRANSITION>":
+        router_agent = router.RouterAgent()
+        router_response = router_agent.generate(tools_config, self.messages)
+        print("Response: ", router_response, "\n\n")
+        if router_response != "<TRANSITION>":
             # execute completion here
             print("Generating response")
         print("Transitioning")
 
+        summarizer_agent = summarizer.SummarizerAgent()
+        summary = summarizer_agent.generate(tools_config, self.messages)
+        print("Summary: ", summary, "\n\n")
 
 
 
-        print(f"Executing run {self.run_id}")
+
+
+        print(f"Finished executing run {self.run_id}")
 
     def get_run_id(self) -> str:
         return self.run_id
