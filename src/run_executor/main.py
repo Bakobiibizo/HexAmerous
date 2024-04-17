@@ -1,32 +1,29 @@
 from typing import Dict, Any, Optional, List
 from constants import PromptKeys
+from utils.tools import ToolItem, tools_to_map
 from utils.ops_api_handler import create_message_runstep, update_run
 from data_models import run
 from openai.types.beta.threads import Message
 from utils.openai_clients import assistants_client
 from openai.types.beta.thread import Thread
+from openai.types.beta import Assistant
 from agents import router, summarizer
 
 # TODO: add assistant and base tools off of assistant
-tools_config = {
-    "text_generation": {
-        "description": "general text response",
-    },
-    "key_retrieval": {
-        "description": "a database that contains my private keys",
-    },
-}
 
 
 class ExecuteRun:
     def __init__(self, thread_id: str, run_id: str, run_config: Dict[str, Any] = {}):
         self.run_id = run_id
         self.thread_id = thread_id
+        self.assistant_id: Optional[str] = None
         self.run_config = run_config
 
         self.run: Optional[run.Run] = None
         self.messages: Optional[List(Message)] = None
         self.thread: Optional[Thread] = None
+        self.assistant: Optional[Assistant] = None
+        self.tools_map: Optional[dict[str, ToolItem]] = None
         # TODO: add assistant and base tools off of assistant
 
     def execute(self):
@@ -41,12 +38,21 @@ class ExecuteRun:
             return
 
         self.run = updated_run
+        print("Run: ", self.run, "\n\n")
 
         # Get the thread messages
+        # TODO: should only populate these entities once
         thread = assistants_client.beta.threads.retrieve(
             thread_id=self.thread_id,
         )
         self.thread = thread
+
+        assistant = assistants_client.beta.assistants.retrieve(
+            assistant_id=self.run.assistant_id,
+        )
+        self.assistant_id = assistant.id
+        self.assistant = assistant
+        self.tools_map = tools_to_map(self.assistant.tools)
 
         messages = assistants_client.beta.threads.messages.list(
             thread_id=self.thread_id,
@@ -54,7 +60,7 @@ class ExecuteRun:
         self.messages = messages
 
         router_agent = router.RouterAgent()
-        router_response = router_agent.generate(tools_config, self.messages)
+        router_response = router_agent.generate(self.tools_map, self.messages)
         print("Response: ", router_response, "\n\n")
         if router_response != PromptKeys.TRANSITION.value:
             create_message_runstep(
@@ -71,7 +77,7 @@ class ExecuteRun:
         print("Transitioning")
 
         summarizer_agent = summarizer.SummarizerAgent()
-        summary = summarizer_agent.generate(tools_config, self.messages)
+        summary = summarizer_agent.generate(self.tools_map, self.messages)
         print("Summary: ", summary, "\n\n")
 
         print(f"Finished executing run {self.run_id}")

@@ -1,7 +1,7 @@
-import random
 from openai.types.beta.threads import Message
 from openai.pagination import SyncCursorPage
 from constants import PromptKeys
+from utils.tools import ToolItem
 from utils.openai_clients import litellm_client
 
 
@@ -10,17 +10,21 @@ class RouterAgent:
         self,
     ):
         self.role_instructions = f"""Your role is to determine whether to use tools or directly generate a response.
-In the case that you need to use tools, simply respond with '{PromptKeys.TRANSITION.value}'. Otherwise, generate an appropriate response.""" # noqa
+In the case that you need to use tools, simply respond with '{PromptKeys.TRANSITION.value}'. Otherwise, generate an appropriate response."""  # noqa
 
-    def compose_system_prompt(self, tools: dict) -> str:
-        tools_list = "\n".join([f"- {name}: {config['description']}" for name, config in tools.items()])
+    def compose_system_prompt(self, tools: dict[str, ToolItem]) -> str:
+        tools_list = "\n".join(
+            [f"- {tool.type}: {tool.description}" for _, tool in tools.items()]
+        )
         return f"""{self.role_instructions}
 
 The tools available to you are:
 {tools_list}"""
 
     # TODO: add assistant and base tools off of assistant
-    def generate(self, tools: dict, paginated_messages: SyncCursorPage[Message]) -> str:
+    def generate(
+        self, tools: dict[str, ToolItem], paginated_messages: SyncCursorPage[Message]
+    ) -> str:
         """
         Generates a response based on the chat history and role instructions.
 
