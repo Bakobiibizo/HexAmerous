@@ -1,8 +1,12 @@
 # api_handler.py
+from typing import Literal
+from openai import OpenAI
 import requests
 import os
 from dotenv import load_dotenv
 from data_models import run
+from openai.types.beta.threads import Message
+from utils.openai_clients import assistants_client
 
 # TODO: create run script that imports env vars
 load_dotenv()
@@ -30,6 +34,46 @@ def update_run(thread_id: str, run_id: str, run_update: run.RunUpdate) -> run.Ru
         return run.Run(**response.json())
     else:
         return None
+
+
+def create_message_and_thread(
+    thread_id: str, content: str, role: Literal["user", "assistant"]
+) -> Message:
+    # Create a thread with a message
+    message = assistants_client.beta.threads.messages.create(
+        thread_id=thread_id, content=content, role=role
+    )
+    assert message.thread_id == thread_id
+
+    return message
+
+
+def create_message_runstep(
+    thread_id: str, run_id: str, assistant_id: str, content: str
+) -> run.RunStep:
+    message = create_message_and_thread(
+        thread_id, content, role="assistant"
+    )
+    # Prepare run step details
+    run_step_details = {
+        "assistant_id": assistant_id,
+        "step_details": {
+            "type": "message_creation",
+            "message_creation": {"message_id": message.id},
+        },
+        "type": "message_creation",
+        "status": "completed",
+    }
+    run_step_details = run.RunStepCreate(**run_step_details).model_dump(exclude_none=True)
+
+    # Post request to create a run step
+    response = requests.post(
+        f"{BASE_URL}/ops/threads/{thread_id}/runs/{run_id}/steps", json=run_step_details
+    )
+    if response.status_code != 200:
+        raise Exception(f"Failed to create run step: {response.text}")
+
+    return response.json()
 
 
 # You can add more API functions as

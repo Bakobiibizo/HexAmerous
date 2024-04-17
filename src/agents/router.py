@@ -1,6 +1,7 @@
 import random
 from openai.types.beta.threads import Message
 from openai.pagination import SyncCursorPage
+from constants import PromptKeys
 from utils.openai_clients import litellm_client
 
 
@@ -9,9 +10,7 @@ class RouterAgent:
         self,
     ):
         self.role_instructions = f"""Your role is to determine whether to use tools or directly generate a response.
-In the case that you need to use tools, simply respond with '<TRANSITION>'. Otherwise, generate an appropriate response.
-
-The tools available to you are:"""
+In the case that you need to use tools, simply respond with '{PromptKeys.TRANSITION.value}'. Otherwise, generate an appropriate response.""" # noqa
 
     def compose_system_prompt(self, tools: dict) -> str:
         tools_list = "\n".join([f"- {name}: {config['description']}" for name, config in tools.items()])
@@ -30,7 +29,7 @@ The tools available to you are:
             paginated_messages (SyncCursorPage[Message]): The chat history.
 
         Returns:
-            str: It either returns `<TRANSITION>` or a generated response.
+            str: It either returns `{PromptKeys.TRANSITION.value}` or a generated response.
         """
 
         messages = [
@@ -39,6 +38,7 @@ The tools available to you are:
                 "content": self.compose_system_prompt(tools),
             }
         ]
+        print("\n\nSYSTEM PROMPT: ", messages[0]["content"])
         for message in paginated_messages.data:
             messages.append(
                 {
@@ -54,7 +54,7 @@ The tools available to you are:
         )
 
         print("GENERATION: ", response.choices[0].message.content)
-        if "<TRANSITION>" in response.choices[0].message.content:
-            return "<TRANSITION>"
+        if PromptKeys.TRANSITION.value in response.choices[0].message.content:
+            return PromptKeys.TRANSITION.value
         else:
             return response.choices[0].message.content

@@ -1,5 +1,6 @@
 from typing import Dict, Any, Optional, List
-from utils.ops_api_handler import update_run
+from constants import PromptKeys
+from utils.ops_api_handler import create_message_runstep, update_run
 from data_models import run
 from openai.types.beta.threads import Message
 from utils.openai_clients import assistants_client
@@ -15,6 +16,7 @@ tools_config = {
         "description": "a database that contains my private keys",
     },
 }
+
 
 class ExecuteRun:
     def __init__(self, thread_id: str, run_id: str, run_config: Dict[str, Any] = {}):
@@ -54,18 +56,23 @@ class ExecuteRun:
         router_agent = router.RouterAgent()
         router_response = router_agent.generate(tools_config, self.messages)
         print("Response: ", router_response, "\n\n")
-        if router_response != "<TRANSITION>":
-            # execute completion here
+        if router_response != PromptKeys.TRANSITION.value:
+            create_message_runstep(
+                self.thread_id, self.run_id, self.run.assistant_id, router_response
+            )
+            update_run(
+                self.thread_id,
+                self.run_id,
+                run.RunUpdate(status=run.RunStatus.COMPLETED.value),
+            )
             print("Generating response")
+            print(f"Finished executing run {self.run_id}")
+            return
         print("Transitioning")
 
         summarizer_agent = summarizer.SummarizerAgent()
         summary = summarizer_agent.generate(tools_config, self.messages)
         print("Summary: ", summary, "\n\n")
-
-
-
-
 
         print(f"Finished executing run {self.run_id}")
 
