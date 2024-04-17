@@ -1,6 +1,6 @@
 from openai.types.beta.threads import Message
 from openai.pagination import SyncCursorPage
-from tools.openai_clients import litellm_client
+from utils.openai_clients import litellm_client
 
 
 class SummarizerAgent:

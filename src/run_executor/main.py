@@ -1,8 +1,8 @@
 from typing import Dict, Any, Optional, List
-from tools.ops_api_handler import update_run
+from utils.ops_api_handler import update_run
 from data_models import run
 from openai.types.beta.threads import Message
-from tools.openai_clients import assistants_client
+from utils.openai_clients import assistants_client
 from openai.types.beta.thread import Thread
 from agents import router, summarizer
 
