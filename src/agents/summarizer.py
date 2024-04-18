@@ -1,6 +1,6 @@
 from openai.types.beta.threads import Message
 from openai.pagination import SyncCursorPage
-from utils.tools import ToolItem
+from utils.tools import ActionItem
 from utils.openai_clients import litellm_client
 
 
@@ -11,7 +11,7 @@ This summarization should contain sufficient information to fulfill the current 
 Also take the tools available to you into consideration as they will be used to fulfill the request."""
 
     def generate(
-        self, tools: dict[str, ToolItem], paginated_messages: SyncCursorPage[Message]
+        self, tools: dict[str, ActionItem], paginated_messages: SyncCursorPage[Message]
     ) -> str:
         """
         Create a summary of the chat history with an emphasis on the current user request and tool use.
@@ -51,7 +51,7 @@ Also take the tools available to you into consideration as they will be used to 
         summary = response.choices[0].message.content
         return summary
 
-    def compose_system_prompt(self, tools: dict[str, ToolItem]) -> str:
+    def compose_system_prompt(self, tools: dict[str, ActionItem]) -> str:
         tools_list = "\n".join(
             [f"- {tool.type}: {tool.description}" for _, tool in tools.items()]
         )

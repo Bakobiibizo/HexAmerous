@@ -1,13 +1,14 @@
 from typing import Dict, Any, Optional, List
 from constants import PromptKeys
-from utils.tools import ToolItem, tools_to_map
+from utils.tools import ActionItem, tools_to_map
 from utils.ops_api_handler import create_message_runstep, update_run
 from data_models import run
 from openai.types.beta.threads import Message
 from utils.openai_clients import assistants_client
 from openai.types.beta.thread import Thread
 from openai.types.beta import Assistant
-from agents import router, summarizer
+from openai.pagination import SyncCursorPage
+from agents import router, summarizer, orchestrator
 
 # TODO: add assistant and base tools off of assistant
 
@@ -20,10 +21,10 @@ class ExecuteRun:
         self.run_config = run_config
 
         self.run: Optional[run.Run] = None
-        self.messages: Optional[List(Message)] = None
+        self.messages: Optional[SyncCursorPage(Message)] = None
         self.thread: Optional[Thread] = None
         self.assistant: Optional[Assistant] = None
-        self.tools_map: Optional[dict[str, ToolItem]] = None
+        self.tools_map: Optional[dict[str, ActionItem]] = None
         # TODO: add assistant and base tools off of assistant
 
     def execute(self):
@@ -55,9 +56,10 @@ class ExecuteRun:
         self.tools_map = tools_to_map(self.assistant.tools)
 
         messages = assistants_client.beta.threads.messages.list(
-            thread_id=self.thread_id,
+            thread_id=self.thread_id, order="asc"
         )
         self.messages = messages
+        print("\n\nMain Messages: ", self.messages, "\n\n")
 
         router_agent = router.RouterAgent()
         router_response = router_agent.generate(self.tools_map, self.messages)
@@ -78,7 +80,13 @@ class ExecuteRun:
 
         summarizer_agent = summarizer.SummarizerAgent()
         summary = summarizer_agent.generate(self.tools_map, self.messages)
-        print("Summary: ", summary, "\n\n")
+        print("\n\nSummary: ", summary, "\n\n")
+
+        orchestrator_agent = orchestrator.OrchestratorAgent(
+            self.run_id, self.thread_id, self.tools_map, summary
+        )
+        orchestrator_response = orchestrator_agent.generate()
+        print("\n\nOrchestrator Response: ", orchestrator_response, "\n\n")
 
         print(f"Finished executing run {self.run_id}")
 
