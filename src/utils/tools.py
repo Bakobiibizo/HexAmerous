@@ -21,21 +21,22 @@ class ActionItem(BaseModel):
     description: str
 
 
-def actions_to_map(action: List[str]) -> dict[str, ActionItem]:
+def actions_to_map(actions: List[str]) -> dict[str, ActionItem]:
     """
     Converts a list of AssistantTool objects to a dictionary.
     """
     actions_map = {}
-    if action == Actions.TEXT_GENERATION:
-        actions_map[action] = ActionItem(
-            type=Actions.TEXT_GENERATION.value,
-            description="Communicate to the user either to summarize or express the next tasks to be executed.",
-        )
-    elif action == Actions.COMPLETION:
-        actions_map[action] = ActionItem(
-            type=Actions.COMPLETION.value,
-            description="Indicate that the current goal is achieved or that this loop should be terminated.",
-        )
+    for action in actions:
+        if action == Actions.TEXT_GENERATION.value:
+            actions_map[action] = ActionItem(
+                type=Actions.TEXT_GENERATION.value,
+                description="Communicate to the user either to summarize or express the next tasks to be executed.",
+            )
+        elif action == Actions.COMPLETION.value:
+            actions_map[action] = ActionItem(
+                type=Actions.COMPLETION.value,
+                description="Indicate that the current goal is achieved or that this loop should be terminated.",
+            )
     return actions_map
 
 

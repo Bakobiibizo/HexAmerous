@@ -19,8 +19,8 @@ class OrchestratorAgent:
         self.role_instructions = f"""Your role is to determine which tool to use next according to the episodic memory (current conversation) and working memory.
 In addition to the tools, you can also be able to use actions.
 You must reply with the corresponding key of the tool or action you think should be used next to fulfill the user request.
-Only reply with that key.
-You will always finish with <{Actions.COMPLETION.value.upper()}> but try and use <{Actions.TEXT_GENERATION.value.upper()}> before completing."""
+The next tool or action must be formated as `<TOOL_OR_ACTION>`, only reply with the tool or action to use.
+You will always finish with `<{Actions.COMPLETION.value.upper()}>` but try and use `<{Actions.TEXT_GENERATION.value.upper()}>` before completing."""
 
     def generate(self) -> str:
         """
@@ -77,7 +77,8 @@ You will always finish with <{Actions.COMPLETION.value.upper()}> but try and use
             ]
         )
 
-        action_items = actions_to_map([Actions.TEXT_GENERATION, Actions.COMPLETION])
+        action_items = actions_to_map([Actions.TEXT_GENERATION.value, Actions.COMPLETION.value])
+        print("Action Items: ", action_items)
         actions_list = "\n".join(
             [
                 f"- <{action.type.upper()}>: {action.description}"
