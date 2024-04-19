@@ -14,6 +14,10 @@ class Actions(Enum):
     CODE_INTERPRETER = "code_interpreter"
     TEXT_GENERATION = "text_generation"
     COMPLETION = "completion"
+    FAILURE = "failure"
+
+
+Actions["FAILURE"]
 
 
 class ActionItem(BaseModel):

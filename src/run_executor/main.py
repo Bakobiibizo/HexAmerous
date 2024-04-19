@@ -1,6 +1,6 @@
 from typing import Dict, Any, Optional, List
 from constants import PromptKeys
-from utils.tools import ActionItem, tools_to_map
+from utils.tools import ActionItem, Actions, tools_to_map
 from utils.ops_api_handler import create_message_runstep, update_run
 from data_models import run
 from openai.types.beta.threads import Message
@@ -9,6 +9,7 @@ from openai.types.beta.thread import Thread
 from openai.types.beta import Assistant
 from openai.pagination import SyncCursorPage
 from agents import router, summarizer, orchestrator
+from actions import retrieval, text_generation
 
 # TODO: add assistant and base tools off of assistant
 
@@ -85,8 +86,27 @@ class ExecuteRun:
         orchestrator_agent = orchestrator.OrchestratorAgent(
             self.run_id, self.thread_id, self.tools_map, summary
         )
-        orchestrator_response = orchestrator_agent.generate()
-        print("\n\nOrchestrator Response: ", orchestrator_response, "\n\n")
+        orchestrator_response = None
+        # handle action or tool
+        while orchestrator_response not in [
+            Actions.COMPLETION.value,
+            Actions.FAILURE.value,
+        ]:
+            messages = assistants_client.beta.threads.messages.list(
+                thread_id=self.thread_id, order="asc"
+            )
+            orchestrator_response = orchestrator_agent.generate(messages=messages)
+            print("\n\nOrchestrator Response: ", orchestrator_response, "\n\n")
+            if orchestrator_response == Actions.TEXT_GENERATION:
+                action = text_generation.TextGeneration(
+                    self.run_id, self.thread_id, self.assistant_id, summary
+                )
+                action.generate()
+            elif orchestrator_response == Actions.RETRIEVAL:
+                action = retrieval.Retrieval(
+                    self.run_id, self.thread_id, self.assistant_id, summary
+                )
+                action.generate()
 
         print(f"Finished executing run {self.run_id}")
 
