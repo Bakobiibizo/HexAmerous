@@ -26,6 +26,7 @@ class ExecuteRun:
         self.thread: Optional[Thread] = None
         self.assistant: Optional[Assistant] = None
         self.tools_map: Optional[dict[str, ActionItem]] = None
+        self.runsteps: Optional[SyncCursorPage[run.RunStep]] = None
         # TODO: add assistant and base tools off of assistant
 
     def execute(self):
@@ -92,21 +93,38 @@ class ExecuteRun:
             Actions.COMPLETION.value,
             Actions.FAILURE.value,
         ]:
+            # Get updated run state
             messages = assistants_client.beta.threads.messages.list(
                 thread_id=self.thread_id, order="asc"
             )
-            orchestrator_response = orchestrator_agent.generate(messages=messages)
-            print("\n\nOrchestrator Response: ", orchestrator_response, "\n\n")
-            if orchestrator_response == Actions.TEXT_GENERATION:
+            self.messages = messages
+            runsteps = assistants_client.beta.threads.runs.steps.list(
+                thread_id=self.thread_id,
+                run_id=self.run_id,
+            )
+            self.runsteps = runsteps
+
+            # Execute thought
+            if len(runsteps.data) == 0 or runsteps.data[0].type == "tool_calls":
                 action = text_generation.TextGeneration(
-                    self.run_id, self.thread_id, self.assistant_id, summary
+                    self.run_id,
+                    self.thread_id,
+                    self.assistant_id,
+                    self.tools_map,
+                    summary,
                 )
-                action.generate()
-            elif orchestrator_response == Actions.RETRIEVAL:
+                action.generate(messages, runsteps)
+                continue
+
+            # Execute orchestrator
+            orchestrator_response = orchestrator_agent.generate(messages, runsteps)
+            print("\n\nOrchestrator Response: ", orchestrator_response, "\n\n")
+            if orchestrator_response == Actions.RETRIEVAL:
                 action = retrieval.Retrieval(
                     self.run_id, self.thread_id, self.assistant_id, summary
                 )
                 action.generate()
+                continue
 
         print(f"Finished executing run {self.run_id}")
 
