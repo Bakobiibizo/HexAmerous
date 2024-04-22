@@ -1,12 +1,17 @@
-from vectordb.retrievers.interface import Retriever
-from vectordb.retrievers.WindowRetriver import WindowRetriever
-from vectordb.retrievers.SimpleRetriver import SimpleRetriever
-from vectordb.embeddings.interface import Embedder
-from text_generators.interface import Generator
-from vectordb.chunking.chunk import Chunk
-
+"""
+Retriever Manager. Based on Weaviate's Verba.
+https://github.com/weaviate/Verba
+"""
+from typing import List, Tuple, Dict
 from weaviate.client import Client
 from loguru import logger
+from src.vectordb.retrievers.interface import Retriever
+from src.vectordb.embedders.interface import Embedder
+from src.vectordb.chunkers.chunk import Chunk
+from src.text_generators.interface import Generator
+from src.vectordb.retrievers.SimpleRetriever import SimpleRetriever
+from src.vectordb.retrievers.WindowRetriever import WindowRetriever
+
 
 
 class RetrieverManager:

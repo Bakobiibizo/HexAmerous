@@ -7,7 +7,7 @@ from tqdm import tqdm
 from loguru import logger
 
 from vectordb.documents.documents import Document, Chunk
-from vectordb.chunking.interface import Chunker
+from vectordb.chunkers.interface import Chunker
 
 
 class SentenceChunker(Chunker):

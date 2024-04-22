@@ -1,23 +1,51 @@
+"""
+Mini LM Embedder. Based on Weaviate's Verba.
+https://github.com/weaviate/Verba
+"""
+import torch
+from transformers import AutoModel, AutoTokenizer
+from typing import List
+from weaviate.client import Client
+from loguru import logger
+
+from src.vectordb.readers.document import Document
 
 
 class MiniLMEmbedder(Embedder):
     """
     MiniLMEmbedder for Verba.
     """
-
+    model = AutoModel
+    tokenizer = AutoTokenizer
     def __init__(self):
+        """
+        Initializes the MiniLMEmbedder class.
+
+        This function initializes the MiniLMEmbedder class by setting the name, required libraries, description, and vectorizer attributes. It also attempts to get the device on which the model will be run. If a CUDA-enabled GPU is available, it uses that device. If not, it checks if the Multi-Process Service (MPS) is available and uses that device. If neither a CUDA device nor an MPS device is available, it falls back to using the CPU.
+
+        The function then loads the pre-trained model and tokenizer from the "sentence-transformers/all-MiniLM-L6-v2" repository using the AutoModel and AutoTokenizer classes from the transformers library. The model and tokenizer are moved to the device obtained earlier.
+
+        If there is a RuntimeError during the initialization process, a warning message is logged.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+        """
         super().__init__()
         self.name = "MiniLMEmbedder"
         self.requires_library = ["torch", "transformers"]
         self.description = "Embeds and retrieves objects using SentenceTransformer's all-MiniLM-L6-v2 model"
         self.vectorizer = "MiniLM"
-        self.model = None
-        self.tokenizer = None
         try:
-            import torch
-            from transformers import AutoModel, AutoTokenizer
-
             def get_device():
+                """
+                Returns the appropriate device for running the model based on the availability of CUDA-enabled GPUs and Multi-Process Service (MPS).
+        
+                :return: A torch.device object representing the device to be used for running the model.
+                :rtype: torch.device
+                """
                 if torch.cuda.is_available():
                     return torch.device("cuda")
                 elif torch.backends.mps.is_available():
@@ -35,20 +63,23 @@ class MiniLMEmbedder(Embedder):
             )
             self.model = self.model.to(self.device)
 
-        except Exception as e:
-            msg.warn(str(e))
-            pass
+        except RuntimeError as e:
+            logger.warning(str(e))
 
     def embed(
         self,
         documents: List[Document],
         client: Client,
     ) -> bool:
-        """Embed verba documents and its chunks to Weaviate
-        @parameter: documents : List[Document] - List of Verba documents
-        @parameter: client : Client - Weaviate Client
-        @parameter: batch_size : int - Batch Size of Input
-        @returns bool - Bool whether the embedding what successful.
+        """
+        Embeds the given list of documents and their chunks into Weaviate using the SentenceTransformer model.
+
+        Parameters:
+            documents (List[Document]): A list of Document objects representing the documents to be embedded.
+            client (Client): The Weaviate client used to import the embedded data.
+
+        Returns:
+            bool: True if the embedding and import were successful, False otherwise.
         """
         for document in tqdm(
             documents, total=len(documents), desc="Vectorizing document chunks"
@@ -59,9 +90,19 @@ class MiniLMEmbedder(Embedder):
         return self.import_data(documents, client)
 
     def vectorize_chunk(self, chunk) -> List[float]:
-        try:
-            import torch
+        """
+        Vectorize a chunk of text into a list of floats representing the average embedding of the tokens in the chunk.
 
+        Parameters:
+            chunk (str): The text chunk to be vectorized.
+
+        Returns:
+            List[float]: A list of floats representing the average embedding of the tokens in the chunk.
+
+        Raises:
+            RuntimeError: If there is an error creating the embeddings.
+        """
+        try:
             text = chunk
             tokens = self.tokenizer.tokenize(text)
 
@@ -106,12 +147,18 @@ class MiniLMEmbedder(Embedder):
 
             averaged_embedding = all_embeddings.mean(dim=0)
 
-            averaged_embedding_List = averaged_embedding.tolist()
-
-            return averaged_embedding_List
-
-        except Exception:
-            raise
+            return averaged_embedding.tolist()
+        except Exception as e:
+            raise RuntimeError(f"Error creating embeddings: {e}") from e
 
     def vectorize_query(self, query: str) -> List[float]:
+        """
+        Vectorize a query by calling the vectorize_chunk method and return the resulting vector.
+        
+        Parameters:
+            query (str): The query to be vectorized.
+        
+        Returns:
+            List[float]: A list of floats representing the vectorized query.
+        """
         return self.vectorize_chunk(query)

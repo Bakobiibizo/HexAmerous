@@ -1,24 +1,24 @@
 """
-WordChunker for vectorstore. Based on Weaviate's Verba.
+Tiktoken Token Chunker. Based on Weaviate's Verba.
 https://github.com/weaviate/Verba
 """
-import spacy
+import tiktoken
 from tqdm import tqdm
 from loguru import logger
 
+from vectordb.chunkers.interface import Chunker
 from vectordb.documents.documents import Document, Chunk
-from vectordb.chunking.interface import Chunker
 
 
-class WordChunker(Chunker):
+class TokenChunker(Chunker):
     """
-    WordChunker for Verba built with spaCy.
+    TokenChunker built with tiktoken.
     """
     def __init__(self):
         """
-        Initializes the WordChunker object.
+        Initializes the TokenChunker class.
 
-        This method initializes the WordChunker object by calling the __init__ method of the parent class using the super() function. It sets the `name` attribute to "WordChunker", `requires_library` to ["spacy"], `default_units` to 100, `default_overlap` to 50, `description` to "Chunk documents by words. You can specify how many words should overlap between chunks to improve retrieval." It then tries to set the `nlp` attribute to a blank spacy model for English, and if Spacy is not installed, it sets `nlp` to None.
+        This method initializes the TokenChunker class by calling the __init__ method of the parent class using the super() function. It sets the 'name' attribute to "TokenChunker", the 'requires_library' attribute to ["tiktoken"], the 'default_units' attribute to 250, and the 'default_overlap' attribute to 50. It also sets the 'description' attribute to "Chunk documents by tokens powered by tiktoken. You can specify how many tokens should overlap between chunks to improve retrieval." Finally, it sets the 'encoding' attribute to the encoding for the "gpt-3.5-turbo" model using the tiktoken library.
 
         Parameters:
             None
@@ -27,16 +27,12 @@ class WordChunker(Chunker):
             None
         """
         super().__init__()
-        self.name = "WordChunker"
-        self.requires_library = ["spacy"]
-        self.default_units = 100
+        self.name = "TokenChunker"
+        self.requires_library = ["tiktoken"]
+        self.default_units = 250
         self.default_overlap = 50
-        self.description = "Chunk documents by words. You can specify how many words should overlap between chunks to improve retrieval."
-        try:
-            self.nlp = spacy.blank("en")
-        except ValueError as e:
-            logger.warning(f"Spacy is not installed. Setting nlp to none. {e}")
-        self.nlp = None
+        self.description = "Chunk documents by tokens powered by tiktoken. You can specify how many tokens should overlap between chunks to improve retrieval."
+        self.encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
 
     def chunk(
         self, documents: List[Document], units: int, overlap: int
@@ -46,20 +42,23 @@ class WordChunker(Chunker):
 
         Args:
             documents (List[Document]): A List of Document objects representing the documents to be chunked.
-            units (int): The number of words per chunk.
-            overlap (int): The number of words that should overlap between chunks.
+            units (int): The number of tokens per chunk.
+            overlap (int): The number of tokens that should overlap between chunks.
 
         Returns:
             List[Document]: The List of Document objects with their chunks added.
 
+        Raises:
+            None
+
         Description:
             This function takes a List of Document objects and chunks them into smaller chunks based on the specified units and overlap.
             Each Document object is checked to see if it already has chunks. If it does, the function skips it.
-            If the Document does not have chunks, the function uses the `nlp` attribute (a spacy model) to tokenize the text of the document.
-            If the number of tokens in the document is less than or equal to the specified units, a single chunk is created with the entire text of the document.
+            If the Document does not have chunks, the function encodes the text of the document using the tiktoken encoding.
+            If the number of tokens in the encoded text is less than or equal to the specified units, a single chunk is created with the entire text of the document.
             If the overlap is greater than or equal to the units, a warning is logged and the function continues to the next document.
-            The function then iterates over the tokens, creating chunks of the specified units and overlapping them by the specified overlap.
-            Each chunk is created by creating a Chunk object with the corresponding text, document name, document type, and a unique chunk ID.
+            The function then iterates over the encoded tokens, creating chunks of the specified units and overlapping them by the specified overlap.
+            Each chunk is created by decoding the corresponding tokens using the tiktoken encoding and creating a Chunk object with the decoded text, document name, document type, and a unique chunk ID.
             The function then appends the Chunk object to the Document object's List of chunks.
             The function returns the List of Document objects with their chunks added.
         """
@@ -70,12 +69,11 @@ class WordChunker(Chunker):
             if len(document.chunks) > 0:
                 continue
 
-            if self.nlp:
-                doc = self.nlp(document.text)
+            encoded_tokens = self.encoding.encode(document.text, disallowed_special=())
 
-            if units > len(doc) or units < 1:
+            if units > len(encoded_tokens) or units < 1:
                 doc_chunk = Chunk(
-                    text=doc.text,
+                    text=document.text,
                     doc_name=document.name,
                     doc_type=document.type,
                     chunk_id=0,
@@ -89,13 +87,16 @@ class WordChunker(Chunker):
 
             i = 0
             split_id_counter = 0
-            while i < len(doc):
+            while i < len(encoded_tokens):
                 # Overlap
                 start_i = i
-                end_i = i + units
-                end_i = min(end_i, len(doc))
+                end_i = min(i + units, len(encoded_tokens))
+
+                chunk_tokens = encoded_tokens[start_i:end_i]
+                chunk_text = self.encoding.decode(chunk_tokens)
+
                 doc_chunk = Chunk(
-                    text=doc[start_i:end_i].text,
+                    text=chunk_text,
                     doc_name=document.name,
                     doc_type=document.type,
                     chunk_id=split_id_counter,
@@ -104,7 +105,7 @@ class WordChunker(Chunker):
                 split_id_counter += 1
 
                 # Exit loop if this was the last possible chunk
-                if end_i == len(doc):
+                if end_i == len(encoded_tokens):
                     break
 
                 i += units - overlap  # Step forward, considering overlap

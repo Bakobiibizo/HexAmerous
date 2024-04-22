@@ -12,8 +12,8 @@ import requests
 from wasabi import msg
 from typing_extensions import List, Optional
 
-from vectordb.reader.document import Document
-from vectordb.reader.interface import InputForm, Reader
+from src.vectordb.readers.document import Document
+from src.vectordb.readers.interface import InputForm, Reader
 
 
 class UnstructuredPDF(Reader):
@@ -95,14 +95,14 @@ class UnstructuredPDF(Reader):
 
         # If bites exist
         if bites and len(bites) == len(file_names):
-            for byte, fileName in zip(bites, file_names):
-                documents += self.load_bites(byte, fileName, document_type)
+            for byte, file_name in zip(bites, file_names):
+                documents += self.load_bites(byte, file_name, document_type)
 
         # If content exist
         if contents and len(contents) == len(file_names):
-            for content, fileName in zip(contents, file_names):
+            for content, file_name in zip(contents, file_names):
                 document = Document(
-                    name=fileName,
+                    name=file_name,
                     text=content,
                     type=document_type,
                     timestamp=str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
@@ -113,13 +113,13 @@ class UnstructuredPDF(Reader):
         msg.good(f"Loaded {len(documents)} documents")
         return documents
 
-    def load_bites(self, bites_string, fileName, document_type: str) -> List[Document]:
+    def load_bites(self, bites_string, file_name, document_type: str) -> List[Document]:
         """
         Loads the content from the provided `bites_string` by decoding it, making a POST request to the `UNSTRUCTURED_API_URL` with the decoded content, and processing the response to create a Document object. The created Document is returned in a List. 
 
         Parameters:
             bites_string: A string containing the content to be loaded.
-            fileName: The name of the file.
+            file_name: The name of the file.
             document_type: The type of the document.
 
         Returns:
@@ -158,13 +158,13 @@ class UnstructuredPDF(Reader):
         document = Document(
             text=full_content,
             type=document_type,
-            name=str(fileName),
-            link=str(fileName),
+            name=str(file_name),
+            link=str(file_name),
             timestamp=str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
             reader=self.name,
         )
         documents = [document]
-        msg.good(f"Loaded {str(fileName)}")
+        msg.good(f"Loaded {str(file_name)}")
         os.remove("reconstructed.pdf")
         return documents
 

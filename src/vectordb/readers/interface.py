@@ -1,7 +1,12 @@
+"""
+Reader Interface. Based on Weaviate's Verba.
+https://github.com/weaviate/Verba
+"""
 from enum import Enum
+from typing_extensions import List
 
-from goldenverba.components.component import VerbaComponent
-from goldenverba.components.reader.document import Document
+from src.vectordb.component import Component
+from src.vectordb.readers.document import Document
 
 
 class InputForm(Enum):
@@ -11,17 +16,17 @@ class InputForm(Enum):
     TEXT = "TEXT"  # Default Input for Embedder
 
 
-class Reader(VerbaComponent):
+class Reader(Component):
     """
     Interface for Verba Readers.
     """
-
     def __init__(self):
         super().__init__()
         self.file_types = []
         self.input_form = InputForm.UPLOAD.value
 
     def load(
+        self,
         bites: List[str],
         contents: List[str],
         paths: List[str],

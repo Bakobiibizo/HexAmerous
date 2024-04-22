@@ -6,9 +6,9 @@ import tiktoken
 from loguru import logger
 
 from vectordb.documents.documents import Document
-from vectordb.chunking.interface import Chunker
-from src.vectordb.chunking.SentenceChunker import SentenceChunker
-from vectordb.chunking.TiktokenChunker import TokenChunker
+from vectordb.chunkers.interface import Chunker
+from src.vectordb.chunkers.SentenceChunker import SentenceChunker
+from vectordb.chunkers.TiktokenChunker import TokenChunker
 from vectordb.chunking.WordSplitter import WordChunker
 
 

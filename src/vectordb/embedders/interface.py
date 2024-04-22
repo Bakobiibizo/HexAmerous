@@ -1,6 +1,16 @@
+"""
+Embedder Interface. Based on Weaviate's Verba.
+https://github.com/weaviate/Verba
+"""
+from typing import List
+from enum import Enum
+from weaviate import Client
+from src.vectordb.documents.documents import Document, InputForm
+from src.vectordb.component import Component
 
 
-class Embedder(VerbaComponent):
+
+class Embedder(Component):
     """
     Interface for Verba Embedding.
     """
@@ -10,13 +20,7 @@ class Embedder(VerbaComponent):
         self.input_form = InputForm.TEXT.value  # Default for all Embedders
         self.vectorizer = ""
 
-    def embed(documents: List[Document], client: Client, batch_size: int = 100) -> bool:
-        """Embed verba documents and its chunks to Weaviate
-        @parameter: documents : List[Document] - List of Verba documents
-        @parameter: client : Client - Weaviate Client
-        @parameter: batch_size : int - Batch Size of Input
-        @returns bool - Bool whether the embedding what successful.
-        """
+    def embed(self, client: Client, batch_size: int = 100) -> bool:
         raise NotImplementedError("embed method must be implemented by a subclass.")
 
     def import_data(
@@ -24,12 +28,6 @@ class Embedder(VerbaComponent):
         documents: List[Document],
         client: Client,
     ) -> bool:
-        """Import verba documents and its chunks to Weaviate
-        @parameter: documents : List[Document] - List of Verba documents
-        @parameter: client : Client - Weaviate Client
-        @parameter: batch_size : int - Batch Size of Input
-        @returns bool - Bool whether the embedding what successful.
-        """
         try:
             if self.vectorizer not in VECTORIZERS and self.vectorizer not in EMBEDDINGS:
                 msg.fail(f"Vectorizer of {self.name} not found")

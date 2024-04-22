@@ -6,8 +6,8 @@ from weaviate.client import Client
 from weaviate.hybrid import HybridFusion
 from typing import List, Tuple
 
-from src.vectordb.embeddings.interface import Embedder
-from src.vectordb.chunking.chunk import Chunk
+from src.vectordb.embedders.interface import Embedder
+from src.vectordb.chunkers.chunk import Chunk
 from src.vectordb.retrievers.interface import Retriever
 
 

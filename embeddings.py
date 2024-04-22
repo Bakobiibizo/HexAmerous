@@ -46,13 +46,13 @@ print('loading check_file function 43')
         # print(result)
         # return
     # else:
-        # for filename in os.Listdir(folder_path):
-            # file_path = os.path.join(folder_path, filename)
-            # result = create_embedding(file_path, filename)
-            # print(f"Embedding created for {filename}: {result}")
+        # for file_name in os.Listdir(folder_path):
+            # file_path = os.path.join(folder_path, file_name)
+            # result = create_embedding(file_path, file_name)
+            # print(f"Embedding created for {file_name}: {result}")
             # with open('./docs/embed_index.txt', 'a') as f:
                 # f.write(f"{os.path.join(folder_path, file_path)}\n")
-            # print(f"Embedding created for {filename}: {result}")
+            # print(f"Embedding created for {file_name}: {result}")
 # 
         # return result
 # 

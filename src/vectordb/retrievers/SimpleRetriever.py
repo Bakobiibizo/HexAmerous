@@ -1,8 +1,14 @@
-from vectordb.retrievers.interface import Retriever
-from vectordb.embeddings.interface import Embedder
-from vectordb.documents.documents import Chunk
+"""
+Simple Retriever. Based on Weaviate's Verba.
+https://github.com/weaviate/Verba
+"""
+from typing_extensions import List, Tuple
 from weaviate.client import Client
 from weaviate.hybrid import HybridFusion
+
+from src.vectordb.retrievers.interface import Retriever
+from src.vectordb.embedders.interface import Embedder
+from src.vectordb.chunkers.chunk import Chunk
 
 
 class SimpleRetriever(Retriever):

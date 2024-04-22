@@ -1,13 +1,19 @@
-from vectordb.components import Component
-from vectordb.documents.documents import Chunk
-from vectordb.embedders.interface import Embedder
-from vectordb.weaviate.client import Client
 import tiktoken
 from loguru import logger
+from weaviate.client import Client
+from typing_extensions import List, Tuple
+
+from src.vectordb.component import Component
+from src.vectordb.chunkers.chunk import Chunk
+from src.vectordb.embedders.interface import Embedder
+
+
 
 
 class Retriever(Component):
-
+    """
+    Retriever interface for retrieving data from Weaviate.
+    """
     def __init__(self):
         """
         Initializes a new instance of the class.
