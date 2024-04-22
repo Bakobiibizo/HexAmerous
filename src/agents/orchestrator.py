@@ -3,7 +3,7 @@ from data_models import run
 from openai.pagination import SyncCursorPage
 from utils.tools import ActionItem, Actions, actions_to_map
 from utils.openai_clients import litellm_client, assistants_client
-import json
+import os
 from utils.coala import CoALA
 
 
@@ -55,7 +55,7 @@ class OrchestratorAgent:
 
         # Call to the AI model to generate the summary
         response = litellm_client.chat.completions.create(
-            model="mixtral",  # Replace with your model of choice
+            model=os.getenv("LITELLM_MODEL"),  # Replace with your model of choice
             messages=generator_messages,
             max_tokens=100,  # You may adjust the token limit as necessary
         )

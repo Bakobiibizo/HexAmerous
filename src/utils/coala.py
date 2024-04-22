@@ -39,9 +39,6 @@ class CoALA:
                     f"Observation: {step.step_details.tool_calls[0].model_dump()}"
                 )
             if step.type == "message_creation":
-                print(
-                    "COMPOSING TRACE: ", self.messages.model_dump()
-                )
                 message = next(
                     (
                         msg.content[0].text.value
@@ -60,10 +57,12 @@ class CoALA:
         action_prompts = []
         for tool in self.tools_map:
             action_prompts.append(f"- {tool} ({self.tools_map[tool].description})")
-        action_prompts.append(f"- {Actions.COMPLETION.value} (to end the thread)")
+        action_prompts.append(
+            f"- {Actions.COMPLETION.value} (Finish the process, generate the final answer)"
+        )
         return "\n".join(action_prompts)
 
-    def compose_prompt(self, type: Literal["action", "thought"]):
+    def compose_prompt(self, type: Literal["action", "thought", "final_answer"]):
         """
         Compose the prompt for the CoALA task
         """
@@ -74,6 +73,9 @@ You must always begin with "Action: ..." """
         elif type == "thought":
             base_prompt = """Your role is to provide a "Thought" response to the user.
 You must always begin with "Thought: ..."  and finish with "Action: " """
+        elif type == "final_answer":
+            base_prompt = """Your role is to provide the "Final Answer" to the user.
+You must always begin with "Final Answer: ..." """
         trace_prompt = self.compose_trace()
         actions_prompt = self.compose_actions()
         actions_list = list(self.tools_map.keys()) + [Actions.COMPLETION.value]

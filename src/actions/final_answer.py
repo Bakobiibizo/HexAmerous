@@ -10,7 +10,7 @@ from data_models import run
 import os
 
 
-class TextGeneration:
+class FinalAnswer:
     def __init__(
         self,
         run_id: str,
@@ -40,8 +40,8 @@ class TextGeneration:
                 job_summary=self.job_summary,
                 tools_map=self.tool_items,
             )
-            prompt = coala.compose_prompt("thought")
-            print("\n\nTEXTGENERATOR COALA PROMPT:\n", prompt)
+            prompt = coala.compose_prompt("final_answer")
+            print("\n\FINALANSWER COALA PROMPT:\n", prompt)
 
             generator_messages = [
                 {
@@ -55,32 +55,10 @@ class TextGeneration:
                 max_tokens=500,  # You may adjust the token limit as necessary
             )
             content = response.choices[0].message.content
-            content = content.split("Thought: ", 1)[1]
-            content = content.split("Action:", 1)[0]
+            content = content.split("Final Answer: ", 1)[1]
 
         run_step = create_message_runstep(
             self.thread_id, self.run_id, self.assistant_id, content
         )
-        print("TextGeneration content: ", content)
+        print("Final answer content: ", content)
         return run_step
-
-    def compose_working_memory(
-        self,
-    ) -> str:
-        steps = assistants_client.beta.threads.runs.steps.list(
-            thread_id=self.thread_id,
-            run_id=self.run_id,
-        )
-        return "\n".join(
-            [json.dumps(step.step_details.model_dump()) for step in steps.data]
-        )
-
-    def compose_system_prompt(self) -> str:
-        working_memory = self.compose_working_memory()
-
-        composed_instruction = f"""{self.role_instructions}
-
-Current working memory:
-{working_memory}"""
-        print("\n\nTEXTGENERATION SYSTEM PROMP: ", composed_instruction)
-        return composed_instruction

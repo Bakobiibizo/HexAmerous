@@ -6,6 +6,7 @@ from utils.ops_api_handler import create_retrieval_runstep
 from utils.tools import ActionItem, Actions, actions_to_map
 from utils.openai_clients import litellm_client, assistants_client
 from data_models import run
+import os
 
 
 class Retrieval:
@@ -31,7 +32,7 @@ class Retrieval:
             },
         ]
         response = litellm_client.chat.completions.create(
-            model="mixtral",  # Replace with your model of choice
+            model=os.getenv("LITELLM_MODEL"),  # Replace with your model of choice
             messages=messages,
             max_tokens=200,  # You may adjust the token limit as necessary
         )

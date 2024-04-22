@@ -3,6 +3,7 @@ from openai.pagination import SyncCursorPage
 from constants import PromptKeys
 from utils.tools import ActionItem
 from utils.openai_clients import litellm_client
+import os
 
 
 class RouterAgent:
@@ -10,7 +11,7 @@ class RouterAgent:
         self,
     ):
         self.role_instructions = f"""Your role is to determine whether to use tools or directly generate a response.
-In the case that you need to use tools, simply respond with '{PromptKeys.TRANSITION.value}'. Otherwise, generate an appropriate response."""  # noqa
+In the case that you think you may need more tools, simply respond with '{PromptKeys.TRANSITION.value}'. Otherwise, generate an appropriate response."""  # noqa
 
     def compose_system_prompt(self, tools: dict[str, ActionItem]) -> str:
         tools_list = "\n".join(
@@ -52,7 +53,7 @@ The tools available to you are:
             )
         print("MESSAGES: ", messages)
         response = litellm_client.chat.completions.create(
-            model="mixtral",
+            model=os.getenv("LITELLM_MODEL"),
             messages=messages,
             max_tokens=500,
         )

@@ -9,7 +9,7 @@ from openai.types.beta.thread import Thread
 from openai.types.beta import Assistant
 from openai.pagination import SyncCursorPage
 from agents import router, summarizer, orchestrator
-from actions import retrieval, text_generation
+from actions import retrieval, text_generation, final_answer
 
 # TODO: add assistant and base tools off of assistant
 
@@ -89,10 +89,16 @@ class ExecuteRun:
         )
         orchestrator_response = None
         # handle action or tool
-        while orchestrator_response not in [
-            Actions.COMPLETION.value,
-            Actions.FAILURE.value,
-        ]:
+        t_loops = 0
+        while (
+            orchestrator_response
+            not in [
+                Actions.COMPLETION,
+                Actions.FAILURE,
+            ]
+            and t_loops < 5
+        ):
+            t_loops += 1
             # Get updated run state
             messages = assistants_client.beta.threads.messages.list(
                 thread_id=self.thread_id, order="asc"
@@ -125,8 +131,18 @@ class ExecuteRun:
                 )
                 action.generate()
                 continue
+            if orchestrator_response == Actions.COMPLETION:
+                action = final_answer.FinalAnswer(
+                    self.run_id,
+                    self.thread_id,
+                    self.assistant_id,
+                    self.tools_map,
+                    summary,
+                )
+                action.generate(messages, runsteps)
+                continue
 
-        print(f"Finished executing run {self.run_id}")
+        print(f"Finished executing run {self.run_id}. Total loops: {t_loops}")
 
     def get_run_id(self) -> str:
         return self.run_id
