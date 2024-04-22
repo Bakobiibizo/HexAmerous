@@ -10,9 +10,9 @@ class Embedder(VerbaComponent):
         self.input_form = InputForm.TEXT.value  # Default for all Embedders
         self.vectorizer = ""
 
-    def embed(documents: list[Document], client: Client, batch_size: int = 100) -> bool:
+    def embed(documents: List[Document], client: Client, batch_size: int = 100) -> bool:
         """Embed verba documents and its chunks to Weaviate
-        @parameter: documents : list[Document] - List of Verba documents
+        @parameter: documents : List[Document] - List of Verba documents
         @parameter: client : Client - Weaviate Client
         @parameter: batch_size : int - Batch Size of Input
         @returns bool - Bool whether the embedding what successful.
@@ -21,11 +21,11 @@ class Embedder(VerbaComponent):
 
     def import_data(
         self,
-        documents: list[Document],
+        documents: List[Document],
         client: Client,
     ) -> bool:
         """Import verba documents and its chunks to Weaviate
-        @parameter: documents : list[Document] - List of Verba documents
+        @parameter: documents : List[Document] - List of Verba documents
         @parameter: client : Client - Weaviate Client
         @parameter: batch_size : int - Batch Size of Input
         @returns bool - Bool whether the embedding what successful.
@@ -206,10 +206,10 @@ class Embedder(VerbaComponent):
     def get_cache_class(self) -> str:
         return "Cache_" + strip_non_letters(self.vectorizer)
 
-    def search_documents(self, client: Client, query: str, doc_type: str) -> list:
+    def search_documents(self, client: Client, query: str, doc_type: str) -> List:
         """Search for documents from Weaviate
         @parameter query_string : str - Search query
-        @returns list - Document list.
+        @returns List - Document List.
         """
         doc_class_name = "Document_" + strip_non_letters(self.vectorizer)
 
@@ -256,7 +256,7 @@ class Embedder(VerbaComponent):
             "vectorize_query method must be implemented by a subclass."
         )
 
-    def conversation_to_query(self, queries: list[str], conversation: dict) -> str:
+    def conversation_to_query(self, queries: List[str], conversation: Dict) -> str:
         query = ""
 
         if len(conversation) > 1:
@@ -276,7 +276,7 @@ class Embedder(VerbaComponent):
         """Retrieve results from semantic cache based on query and distance threshold
         @parameter query - str - User query
         @parameter dist - float - Distance threshold
-        @returns Optional[dict] - List of results or None.
+        @returns Optional[Dict] - List of results or None.
         """
         needs_vectorization = self.get_need_vectorization()
 
@@ -348,7 +348,7 @@ class Embedder(VerbaComponent):
     def add_to_semantic_cache(self, client: Client, query: str, system: str):
         """Add results to semantic cache
         @parameter query : str - User query
-        @parameter results : list[dict] - Results from Weaviate
+        @parameter results : List[Dict] - Results from Weaviate
         @parameter system : str - System message
         @returns None.
         """

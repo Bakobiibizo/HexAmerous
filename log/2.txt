@@ -180,7 +180,7 @@ for epoch in range(5):
     print(f'Epoch {epoch+1}, Loss: {total_loss / len(data_loader)}')
 
 # Save the trained model
-torch.save(model.state_dict(), 'trained_llama_model.pth')
+torch.save(model.state_Dict(), 'trained_llama_model.pth')
 ```
 This code snippet assumes you have a dataset and weights from Hugging Face, and you want to train a LLaMA model using that dataset and weights. It defines a custom dataset class, creates a data loader, defines the model and optimizer, sets the device to the GPUs, and defines the training loop.
 
@@ -217,8 +217,8 @@ This will compile the model and store it in memory, allowing you to access it wi
 
 You can also use the `torch.save` and `torch.load` functions to save and load the model weights to and from a file, respectively:
 ```python
-torch.save(model.state_dict(),'model_weights.pth')
-model.load_state_dict(torch.load('model_weights.pth'))
+torch.save(model.state_Dict(),'model_weights.pth')
+model.load_state_Dict(torch.load('model_weights.pth'))
 ```
 This will allow you to save the model weights to a file and load them back into memory when needed.
 

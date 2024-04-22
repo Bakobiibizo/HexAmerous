@@ -86,13 +86,13 @@ class GeneratorManager:
         ):
             yield result
 
-    def truncate_convtext_dicts(
-        self, context_dicts: List[Dict[str, any]], max_tokens: int
+    def truncate_convtext_Dicts(
+        self, context_Dicts: List[Dict[str, any]], max_tokens: int
     ) -> List[Dict[str, any]]:
         """
         Truncate a List of conversation Dictionaries to fit within a specified maximum token limit.
 
-        @parameter context_dicts: List[Dict[str, any]] - A List of conversation Dictionaries that may contain various keys, where 'content' key is present and contains text data.
+        @parameter context_Dicts: List[Dict[str, any]] - A List of conversation Dictionaries that may contain various keys, where 'content' key is present and contains text data.
         @parameter max_tokens: int - The maximum number of tokens that the combined content of the truncated conversation Dictionaries should not exceed.
 
         @returns List[Dict[str, any]]: A List of conversation Dictionaries that have been truncated so that their combined content respects the max_tokens limit. The List is returned in the original order of conversation with the most recent conversation being truncated last if necessary.
@@ -101,10 +101,10 @@ class GeneratorManager:
         import tiktoken
         encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
         accumulated_tokens = 0
-        truncated_conversation_dicts = []
+        truncated_conversation_Dicts = []
 
         # Start with the newest conversations
-        for item_Dict in reversed(context_dicts):
+        for item_Dict in reversed(context_Dicts):
             item_tokens = encoding.encode(item_Dict["content"], disallowed_special=())
 
             # If adding the entire new item exceeds the max tokens
@@ -120,14 +120,14 @@ class GeneratorManager:
                     "typewriter": item_Dict["typewriter"],
                 }
 
-                truncated_context_dicts.append(truncated_item_Dict)
+                truncated_context_Dicts.append(truncated_item_Dict)
                 break
 
-            truncated_context_dicts.append(item_Dict)
+            truncated_context_Dicts.append(item_Dict)
             accumulated_tokens += len(item_tokens)
 
         # The List has been built in reverse order so we reverse it again
-        return List(reversed(truncated_context_dicts))
+        return list(reversed(truncated_context_Dicts))
 
     def set_generator(self, generator: str) -> bool:
         if generator in self.generators:

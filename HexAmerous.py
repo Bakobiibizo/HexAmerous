@@ -74,7 +74,6 @@ class CustomTextEdit(QTextEdit):
         else:
             super().keyPressEvent(event)
 
-
 # Chat Widget
 print('loading chatwidget')
 
@@ -394,7 +393,7 @@ class ChatWidget(QWidget):
             return command_functions[command_map[command]]()
         self.chat_history.setPlainText(
             self.chat_history.toPlainText()
-            + "Command not found. Type !help for a list of commands \n\n"
+            + "Command not found. Type !help for a List of commands \n\n"
         )
         self.chat_history.moveCursor(QTextCursor.End)
         return
@@ -419,7 +418,7 @@ class ChatWidget(QWidget):
 #!searchmem  - Search the database for context on a
 #                prompt then ask for a more detailed
 #                response.
-#!addmem     - [http] Add a list of comma delineated
+#!addmem     - [http] Add a List of comma delineated
 #                website to the database.
 #!addmap     - [.xml] - Add all the sites froma sitemap
 #                it to the database.

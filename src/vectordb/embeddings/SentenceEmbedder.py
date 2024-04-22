@@ -41,11 +41,11 @@ class MiniLMEmbedder(Embedder):
 
     def embed(
         self,
-        documents: list[Document],
+        documents: List[Document],
         client: Client,
     ) -> bool:
         """Embed verba documents and its chunks to Weaviate
-        @parameter: documents : list[Document] - List of Verba documents
+        @parameter: documents : List[Document] - List of Verba documents
         @parameter: client : Client - Weaviate Client
         @parameter: batch_size : int - Batch Size of Input
         @returns bool - Bool whether the embedding what successful.
@@ -58,7 +58,7 @@ class MiniLMEmbedder(Embedder):
 
         return self.import_data(documents, client)
 
-    def vectorize_chunk(self, chunk) -> list[float]:
+    def vectorize_chunk(self, chunk) -> List[float]:
         try:
             import torch
 
@@ -106,12 +106,12 @@ class MiniLMEmbedder(Embedder):
 
             averaged_embedding = all_embeddings.mean(dim=0)
 
-            averaged_embedding_list = averaged_embedding.tolist()
+            averaged_embedding_List = averaged_embedding.tolist()
 
-            return averaged_embedding_list
+            return averaged_embedding_List
 
         except Exception:
             raise
 
-    def vectorize_query(self, query: str) -> list[float]:
+    def vectorize_query(self, query: str) -> List[float]:
         return self.vectorize_chunk(query)

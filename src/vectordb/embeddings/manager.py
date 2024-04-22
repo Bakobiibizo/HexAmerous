@@ -2,7 +2,7 @@
 
 class EmbeddingManager:
     def __init__(self):
-        self.embedders: dict[str, Embedder] = {
+        self.embedders: Dict[str, Embedder] = {
             "MiniLMEmbedder": MiniLMEmbedder(),
             "ADAEmbedder": ADAEmbedder(),
             "CohereEmbedder": CohereEmbedder(),
@@ -10,10 +10,10 @@ class EmbeddingManager:
         self.selected_embedder: Embedder = self.embedders["ADAEmbedder"]
 
     def embed(
-        self, documents: list[Document], client: Client, batch_size: int = 100
+        self, documents: List[Document], client: Client, batch_size: int = 100
     ) -> bool:
         """Embed verba documents and its chunks to Weaviate
-        @parameter: documents : list[Document] - List of Verba documents
+        @parameter: documents : List[Document] - List of Verba documents
         @parameter: client : Client - Weaviate Client
         @parameter: batch_size : int - Batch Size of Input
         @returns bool - Bool whether the embedding what successful.
@@ -28,5 +28,5 @@ class EmbeddingManager:
             msg.warn(f"Embedder {embedder} not found")
             return False
 
-    def get_embedders(self) -> dict[str, Embedder]:
+    def get_embedders(self) -> Dict[str, Embedder]:
         return self.embedders

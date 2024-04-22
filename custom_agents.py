@@ -23,7 +23,7 @@ metadata_field_info=[
     AttributeInfo(
         name='README.md',
         description='readme file for the hexamerous project',
-        type='string or list[string]'
+        type='string or List[string]'
     )
 ]
 

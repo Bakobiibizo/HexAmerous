@@ -15,11 +15,11 @@ class CohereEmbedder(Embedder):
 
     def embed(
         self,
-        documents: list[Document],
+        documents: List[Document],
         client: Client,
     ) -> bool:
         """Embed verba documents and its chunks to Weaviate
-        @parameter: documents : list[Document] - List of Verba documents
+        @parameter: documents : List[Document] - List of Verba documents
         @parameter: client : Client - Weaviate Client
         @parameter: batch_size : int - Batch Size of Input
         @returns bool - Bool whether the embedding what successful.

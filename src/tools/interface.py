@@ -25,7 +25,7 @@ class Tools(BaseModel):
     def clear(self):
         self.tools = []
 
-    def update(self, new_tools: list[Tool]):
+    def update(self, new_tools: List[Tool]):
         self.tools = new_tools
 
     def get(self, name: str):

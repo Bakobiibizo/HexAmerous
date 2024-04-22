@@ -86,9 +86,9 @@ class PromptConverter:
         self.ai_prompt: Literal["Assistant:\n\n"] = AI_PROMPT
         self.role_options: RoleOptions = RoleOptions
 
-    def convert_to_anthropic(self, message_dict: Dict[str, str]) -> str:
+    def convert_to_anthropic(self, message_Dict: Dict[str, str]) -> str:
         prompt: str = ""
-        for role, content in message_dict.items():
+        for role, content in message_Dict.items():
             if role == self.role_options.USER:
                 prompt += self.human_prompt + content
             if role == self.role_options.ASSISTANT:

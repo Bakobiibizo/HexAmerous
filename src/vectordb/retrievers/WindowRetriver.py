@@ -1,26 +1,55 @@
+"""
+Window Retriever. Based one Weaviate's Verba.
+https://github.com/weaviate/Verba
+"""
+from weaviate.client import Client
+from weaviate.hybrid import HybridFusion
+from typing import List, Tuple
+
+from src.vectordb.embeddings.interface import Embedder
+from src.vectordb.chunking.chunk import Chunk
+from src.vectordb.retrievers.interface import Retriever
+
 
 class WindowRetriever(Retriever):
     """
-    WindowRetriever that retrieves chunks and their surrounding context depending on the window size.
+    Window Retriever. uses hybrid search to retrieve relevant chunks and adds their surrounding context
     """
-
     def __init__(self):
+        """
+        Initialize a new instance of the WindowRetriever class.
+
+        This method initializes the attributes of the WindowRetriever class, including the description and name.
+        It calls the __init__ method of the parent class to ensure proper initialization.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+        """
         super().__init__()
         self.description = "WindowRetriever uses Hybrid Search to retrieve relevant chunks and adds their surrounding context"
         self.name = "WindowRetriever"
 
     def retrieve(
         self,
-        queries: list[str],
+        queries: List[str],
         client: Client,
         embedder: Embedder,
-    ) -> list[Chunk]:
-        """Ingest data into Weaviate
-        @parameter: queries : list[str] - List of queries
-        @parameter: client : Client - Weaviate client
-        @parameter: embedder : Embedder - Current selected Embedder
-        @returns list[Chunk] - List of retrieved chunks.
+    ) -> Tuple[List[Chunk], str]:
         """
+        Retrieve chunks from Weaviate based on the given queries and return them sorted and with their surrounding context.
+
+        Parameters:
+            queries (List[str]): A List of queries to search for chunks.
+            client (Client): The Weaviate client used to query the database.
+            embedder (Embedder): The embedder used to vectorize the queries.
+
+        Returns:
+            Tuple(List[Chunk], str): A Tuple containing a List of sorted chunks and the combined context string.
+        """
+
         chunk_class = embedder.get_chunk_class()
         needs_vectorization = embedder.get_need_vectorization()
         chunks = []
@@ -80,10 +109,28 @@ class WindowRetriever(Retriever):
 
     def combine_context(
         self,
-        chunks: list[Chunk],
+        chunks: List[Chunk],
         client: Client,
         embedder: Embedder,
     ) -> str:
+        """
+        Combines the context of the given chunks by retrieving and adding surrounding chunks to the map.
+
+        Args:
+            chunks (List[Chunk]): A List of chunks to combine context for.
+            client (Client): The Weaviate client used to query the database.
+            embedder (Embedder): The embedder used to vectorize the queries.
+
+        Returns:
+            str: The combined context string of the chunks.
+
+        Description:
+            This function takes a List of chunks and combines their context by retrieving and adding surrounding chunks to a map.
+            The function iterates over each chunk in the List and checks if its document name is already in the map. If not, it adds an empty Dictionary for that document name.
+            Then, for each chunk, it retrieves the chunk ID and creates a range of chunk IDs around it. It iterates over this range and checks if the chunk ID is not already in the map and not in the added chunks Dictionary.
+            If the conditions are met, it queries the Weaviate client for the chunk with the given chunk ID and document name. If the query returns a result, it creates a Chunk object from the result and adds it to the added chunks Dictionary.
+            Finally, it combines the context of the added chunks and returns it as a string.
+        """
         doc_name_map = {}
 
         context = ""
@@ -94,9 +141,8 @@ class WindowRetriever(Retriever):
 
             doc_name_map[chunk.doc_name][chunk.chunk_id] = chunk
 
-        for doc in doc_name_map:
-            chunk_map = doc_name_map[doc]
-            window = 2
+        window = 2
+        for doc, chunk_map in doc_name_map.items():
             added_chunks = {}
             for chunk in chunk_map:
                 chunk_id = int(chunk)
@@ -139,40 +185,39 @@ class WindowRetriever(Retriever):
                             .do()
                         )
 
-                        if "data" in chunk_retrieval_results:
-                            if chunk_retrieval_results["data"]["Get"][
-                                embedder.get_chunk_class()
-                            ]:
-                                chunk_obj = Chunk(
-                                    chunk_retrieval_results["data"]["Get"][
-                                        embedder.get_chunk_class()
-                                    ][0]["text"],
-                                    chunk_retrieval_results["data"]["Get"][
-                                        embedder.get_chunk_class()
-                                    ][0]["doc_name"],
-                                    chunk_retrieval_results["data"]["Get"][
-                                        embedder.get_chunk_class()
-                                    ][0]["doc_type"],
-                                    chunk_retrieval_results["data"]["Get"][
-                                        embedder.get_chunk_class()
-                                    ][0]["doc_uuid"],
-                                    chunk_retrieval_results["data"]["Get"][
-                                        embedder.get_chunk_class()
-                                    ][0]["chunk_id"],
-                                )
-                                added_chunks[str(_range)] = chunk_obj
+                        if "data" in chunk_retrieval_results and chunk_retrieval_results["data"]["Get"][
+                                                        embedder.get_chunk_class()
+                                                    ]:
+                            chunk_obj = Chunk(
+                                chunk_retrieval_results["data"]["Get"][
+                                    embedder.get_chunk_class()
+                                ][0]["text"],
+                                chunk_retrieval_results["data"]["Get"][
+                                    embedder.get_chunk_class()
+                                ][0]["doc_name"],
+                                chunk_retrieval_results["data"]["Get"][
+                                    embedder.get_chunk_class()
+                                ][0]["doc_type"],
+                                chunk_retrieval_results["data"]["Get"][
+                                    embedder.get_chunk_class()
+                                ][0]["doc_uuid"],
+                                chunk_retrieval_results["data"]["Get"][
+                                    embedder.get_chunk_class()
+                                ][0]["chunk_id"],
+                            )
+                            added_chunks[str(_range)] = chunk_obj
 
-            for chunk in added_chunks:
+            for chunk in added_chunks:                    
                 if chunk not in doc_name_map[doc]:
                     doc_name_map[doc][chunk] = added_chunks[chunk]
 
         for doc in doc_name_map:
-            sorted_dict = {
+            sorted_Dict = {
                 k: doc_name_map[doc][k]
                 for k in sorted(doc_name_map[doc], key=lambda x: int(x))
             }
 
-            for chunk in sorted_dict:
-                context += sorted_dict[chunk].text
+            for value in sorted_Dict.values():
+                context += value.text
 
         return context

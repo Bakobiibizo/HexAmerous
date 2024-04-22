@@ -19,7 +19,7 @@ class TemplateManager(Templates):
     def __init__(self, selected_template: Union[str, AvailableTemplates]):
         super().__init__()
         # TODO: Add more templates
-        # This object holds a dictionary of available template names as enum values and their corresponding template classes.
+        # This object holds a Dictionary of available template names as enum values and their corresponding template classes.
         self.templates = {
             AvailableTemplates.CODING: CodingTemplate
         }
@@ -34,7 +34,7 @@ class TemplateManager(Templates):
         new_template: "BaseTemplate"
     ) -> BaseTemplate:
         """
-        Update the templates dictionary with a new template under the given name.
+        Update the templates Dictionary with a new template under the given name.
         
         Args:
             name (str): The name under which the new template should be stored.
@@ -71,8 +71,8 @@ class TemplateManager(Templates):
         """
         return self.selected_template.create_system_prompt()
 
-    def list_templates(self) -> List[str]:
+    def List_templates(self) -> List[str]:
         """
-        Return a list of all available templates.
+        Return a List of all available templates.
         """
         return self.available_templates.values()

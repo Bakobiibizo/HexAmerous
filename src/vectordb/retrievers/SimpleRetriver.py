@@ -1,3 +1,9 @@
+from vectordb.retrievers.interface import Retriever
+from vectordb.embeddings.interface import Embedder
+from vectordb.documents.documents import Chunk
+from weaviate.client import Client
+from weaviate.hybrid import HybridFusion
+
 
 class SimpleRetriever(Retriever):
     """
@@ -11,15 +17,15 @@ class SimpleRetriever(Retriever):
 
     def retrieve(
         self,
-        queries: list[str],
+        queries: List[str],
         client: Client,
         embedder: Embedder,
-    ) -> list[Chunk]:
+    ) -> Tuple[List[Chunk], str]:
         """Ingest data into Weaviate
-        @parameter: queries : list[str] - List of queries
+        @parameter: queries : List[str] - List of queries
         @parameter: client : Client - Weaviate client
         @parameter: embedder : Embedder - Current selected Embedder
-        @returns list[Chunk] - List of retrieved chunks.
+        @returns List[Chunk] - List of retrieved chunks.
         """
         chunk_class = embedder.get_chunk_class()
         needs_vectorization = embedder.get_need_vectorization()
@@ -74,8 +80,5 @@ class SimpleRetriever(Retriever):
 
         sorted_chunks = self.sort_chunks(chunks)
 
-        context = ""
-        for chunk in sorted_chunks:
-            context += chunk.text + " "
-
+        context = "".join(f"{chunk.text} " for chunk in sorted_chunks)
         return sorted_chunks, context
