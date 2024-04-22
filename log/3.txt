@@ -53,3 +53,7 @@ User: yeah was just debugging your code
 
 Assistant: Debugging code, huh? I'm just an AI, I don't have any code to debug, but I'm happy to help you with any coding-related questions or issues you're facing! What language are you working with, and what's the problem you're trying to solve?
 
+User: testing again 
+
+Assistant: It looks like you're testing something! Don't worry, I'm here to help with any questions or tasks you have. What's on your mind?
+

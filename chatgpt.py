@@ -5,6 +5,8 @@ import requests
 from pydantic import BaseModel
 from typing_extensions import List, Dict, Union
 from datetime import datetime
+from loguru import logger
+from enum import Enum
 # Load environment variables
 load_dotenv()
 
@@ -15,11 +17,23 @@ logger.info("Welcome to HexAmerous your coding assistant")
 selected_model = "Llama3-8b"
 
 
+class MODEL_LIST(Enum):
+    LLAMA3_7B = "Llama3-7b"
+    LLAMA3_70B = "Llama3-70b"
+    MIXTRAL_7B = "Mixtral-7b"
+    MIXTRAL_70B = "Mixtral-70b"
+
+    def __str__(self):
+        return self.value
+
+    def __repr__(self):
+        return self.value
+    
+
 def change_selected_model(model: Union[MODEL_LIST, str]):
-    selected_model = MODEL_LIST
+    selected_model = MODEL_LIST.MIXTRAL_7B
     logger.info(f"Selected model changed to {selected_model}")
     return selected_model
-    
 
 # call openai chat api
 
@@ -40,21 +54,20 @@ class ContextManager(Manager):
         self.context.append(message)
     
     def rough_context_counter(self, context: str):
-        text = ""
-        text += context
-        words = text.split(" ") 
+        text = f"{context}"
+        words = text.split(" ")
         rough_count = len(words) * 0.6
         self.context_counts.append(rough_count)
         self.check_context()
         return rough_count
-    
+
     def get_count(self):
         if not self.context:
             return 0
         if len(self.context_counts) == 1:
             return self.context_counts[0]
         return sum(self.context_counts)
-    
+
     def check_context(self):
         full_count = self.get_count()
         messages_count = len(self.context_counts)
