@@ -15,3 +15,6 @@ bs4
 libmagic
 tesseract
 lark
+wikipedia
+langchain-community
+Chroma
