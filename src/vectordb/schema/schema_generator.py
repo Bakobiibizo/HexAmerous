@@ -16,6 +16,15 @@ EMBEDDINGS = {"MiniLM"}  # Custom Vectors
 
 
 def strip_non_letters(s: str):
+    """
+    Replaces all non-alphanumeric characters in a string with underscores.
+
+    Parameters:
+        s (str): The input string.
+
+    Returns:
+        str: The modified string with non-alphanumeric characters replaced by underscores.
+    """
     return re.sub(r"[^a-zA-Z0-9]", "_", s)
 
 def verify_vectorizer(
@@ -23,6 +32,29 @@ def verify_vectorizer(
     vectorizer: str,
     skip_properties: Optional[List[str]] = None
 ) -> Dict:
+    """
+    Verify the vectorizer and update the schema accordingly.
+
+    Args:
+        schema (Dict): The schema to be modified.
+        vectorizer (str): The name of the vectorizer.
+        skip_properties (Optional[List[str]], optional): The list of properties to skip. Defaults to None.
+
+    Returns:
+        Dict: The modified schema.
+
+    Raises:
+        ValueError: If the `AZURE_OPENAI_RESOURCE_NAME` and `AZURE_OPENAI_EMBEDDING_MODEL` environment variables are not set when using the Azure OpenAI vectorizer.
+
+    Description:
+        This function verifies the vectorizer and updates the schema accordingly. It checks if the vectorizer is in the list of supported vectorizers (`VECTORIZERS`) and updates the schema accordingly. If the vectorizer is not in the list, it checks if it is in the list of supported embeddings (`EMBEDDINGS`). If the vectorizer is not None, it logs a warning message.
+
+        If the vectorizer is the Azure OpenAI vectorizer and the `OPENAI_API_TYPE` environment variable is set to "azure", it checks if the `AZURE_OPENAI_RESOURCE_NAME` and `AZURE_OPENAI_EMBEDDING_MODEL` environment variables are set. If they are not set, it raises a `ValueError` with a specific error message.
+
+        If the vectorizer is the Azure OpenAI vectorizer and the environment variables are set, it creates a `vectorizer_config` dictionary with the deployment ID and resource name. It then updates the schema by setting the vectorizer and module config.
+
+        If any properties in the schema need to be skipped, it updates the module config for the vectorizer to skip the properties and set `vectorizePropertyName` to False.
+    """
     if skip_properties is None:
         skip_properties = []
     modified_schema = schema.copy()
@@ -68,6 +100,16 @@ def add_suffix(
     schema: Dict, 
     vectorizer: str
     ) -> Tuple[Dict, str]:
+    """
+    A function that adds a suffix to the class property of the schema based on the vectorizer provided.
+
+    Args:
+        schema (Dict): The schema to be modified.
+        vectorizer (str): The name of the vectorizer.
+
+    Returns:
+        Tuple[Dict, str]: A tuple containing the modified schema and the updated class property.
+    """
     modified_schema = schema.copy()
     # Verify Vectorizer and add suffix
     modified_schema["classes"][0]["class"] = (
@@ -80,6 +122,16 @@ def reset_schemas(
     client: Optional[Client] = None,
     vectorizer: Optional[str] = None,
 ):
+    """
+    Reset the schemas for a given client and vectorizer.
+
+    Args:
+        client (Optional[Client]): The client object used to interact with the schemas. Defaults to None.
+        vectorizer (Optional[str]): The name of the vectorizer. Defaults to None.
+
+    Returns:
+        None
+    """
     if not client or not vectorizer:
         return
     doc_name = f"Document_{strip_non_letters(vectorizer)}"
@@ -97,6 +149,22 @@ def init_schemas(
     force: bool = False,
     check: bool = False,
 ) -> bool:
+    """
+    Initializes the schemas for a given client and vectorizer.
+
+    Args:
+        client (Optional[Client]): The client object used to interact with the schemas. Defaults to None.
+        vectorizer (Optional[str]): The name of the vectorizer. Defaults to None.
+        force (bool, optional): Whether to force the initialization even if the schemas already exist. Defaults to False.
+        check (bool, optional): Whether to check if the schemas already exist before initializing. Defaults to False.
+
+    Returns:
+        bool: True if the schemas are successfully initialized, False otherwise.
+
+    Raises:
+        ValueError: If the schema initialization fails.
+
+    """
     if not client or vectorizer:
         return False
     try:
@@ -115,6 +183,23 @@ def init_documents(
     force: bool = False, 
     check: bool = False
 ) -> Tuple[Dict, Dict]:
+    """
+    Initializes the schemas for a given client and vectorizer.
+
+    Args:
+        client (Client): The client object used to interact with the schemas.
+        vectorizer (Optional[str], optional): The name of the vectorizer. Defaults to None.
+        force (bool, optional): Whether to force the initialization even if the schemas already exist. Defaults to False.
+        check (bool, optional): Whether to check if the schemas already exist before initializing. Defaults to False.
+
+    Returns:
+        Tuple[Dict, Dict]: A tuple containing the document schema and the chunk schema.
+
+    Raises:
+        ValueError: If the schema initialization fails.
+
+    This function initializes the schemas for a given client and vectorizer. It creates two schema classes: "Document" and "Chunk". The "Document" class has properties such as "text", "doc_name", "doc_type", "doc_link", "timestamp", and "chunk_count". The "Chunk" class has properties such as "text", "doc_name", and "chunk_id". The function verifies the vectorizer and adds a suffix to the schema names. If the schema classes already exist, the function prompts the user to delete them. If the user agrees, the function deletes the schemas and creates new ones. Finally, the function returns the document schema and chunk schema.
+    """
     if not vectorizer:
         return {}, {}
     SCHEMA_CHUNK = {
@@ -241,6 +326,19 @@ def init_cache(
     force: bool = False, 
     check: bool = False
 ) -> Dict:
+    """
+    Initializes the cache schema for a given client and vectorizer.
+
+    Args:
+        client (Client): The client object used to interact with the schemas.
+        vectorizer (Optional[str]): The name of the vectorizer. Defaults to None.
+        force (bool, optional): Whether to force the initialization even if the schemas already exist. Defaults to False.
+        check (bool, optional): Whether to check if the schemas already exist before initializing. Defaults to False.
+
+    Returns:
+        Dict: The cache schema.
+
+    """
     if not vectorizer:
         return {}
     SCHEMA_CACHE = {
@@ -302,6 +400,18 @@ def init_suggestion(
     force: bool = False,
     check: bool = False
 ) -> Dict:
+    """
+    Initializes the schema for suggestions based on the client, force flag, and check flag.
+
+    Args:
+        client (Client): The client object used to interact with the schemas.
+        force (bool, optional): Whether to force the initialization even if the schema exists. Defaults to False.
+        check (bool, optional): Whether to check if the schema already exists before initializing. Defaults to False.
+
+    Returns:
+        Dict: The schema for suggestions.
+
+    """
     SCHEMA_SUGGESTION = {
         "classes": [
             {
