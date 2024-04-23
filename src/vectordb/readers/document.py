@@ -174,8 +174,8 @@ class Document:
             reader=doc_Dict.get("reader", ""),
             meta=doc_Dict.get("meta", {}),
         )
-        # Assuming Chunk has a from_Dict method
+        # Assuming Chunk has a from_dict method
         document.chunks = [
-            Chunk.from_Dict(chunk_data) for chunk_data in doc_Dict.get("chunks", [])
+            Chunk.from_dict(chunk_data) for chunk_data in doc_Dict.get("chunks", [])
         ]
         return document

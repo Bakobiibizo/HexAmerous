@@ -28,7 +28,12 @@ class WindowRetriever(Retriever):
         Returns:
             None
         """
-        super().__init__()
+        super().__init__(
+            name="WindowRetriever",
+            description="WindowRetriever uses Hybrid Search to retrieve relevant chunks and adds their surrounding context",
+            requires_env=[],
+            requires_library=[]            
+        )
         self.description = "WindowRetriever uses Hybrid Search to retrieve relevant chunks and adds their surrounding context"
         self.name = "WindowRetriever"
 

@@ -4,6 +4,7 @@ https://github.com/weaviate/Verba
 """
 from weaviate.client import Client
 from typing import List
+from loguru import logger
 
 from typing_extensions import Dict
 from src.vectordb.embedders.interface import Embedder
@@ -12,6 +13,7 @@ from src.vectordb.embedders.ADAEmbedder import ADAEmbedder
 from src.vectordb.embedders.CohereEmbedder import CohereEmbedder
 from src.vectordb.embedders.SentenceEmbedder import SentenceEmbedder
 from src.vectordb.embedders.MiniLMEmebdder import MiniLMEmbedder
+
 
 class EmbeddingManager:
     """
@@ -30,7 +32,10 @@ class EmbeddingManager:
         self.selected_embedder: Embedder = self.embedders["ADAEmbedder"]
 
     def embed(
-        self, documents: List[Document], client: Client, batch_size: int = 100
+        self,
+        documents: List[Document],
+        client: Client,
+        batch_size: int = 100
     ) -> bool:
         """
         Embeds a list of Verba documents and its chunks to Weaviate.
@@ -43,7 +48,7 @@ class EmbeddingManager:
         Returns:
             bool: True if the embedding was successful, False otherwise.
         """
-        return self.selected_embedder.embed(documents, client)
+        return self.selected_embedder.embed(documents, client, batch_size)
 
     def set_embedder(self, embedder: str) -> bool:
         """
@@ -59,7 +64,7 @@ class EmbeddingManager:
             self.selected_embedder = self.embedders[embedder]
             return True
         else:
-            msg.warn(f"Embedder {embedder} not found")
+            logger.warning(f"Embedder {embedder} not found")
             return False
 
     def get_embedders(self) -> Dict[str, Embedder]:

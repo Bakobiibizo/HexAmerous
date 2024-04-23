@@ -61,7 +61,8 @@ class MiniLMEmbedder(Embedder):
                 "sentence-transformers/all-MiniLM-L6-v2", device_map=self.device
             )
             self.tokenizer = AutoTokenizer.from_pretrained(
-                "sentence-transformers/all-MiniLM-L6-v2", device_map=self.device
+                pretrained_model_name_or_path="sentence-transformers/all-MiniLM-L6-v2", 
+                device_map=self.device
             )
             self.model = self.model.to(self.device)
 
@@ -135,7 +136,10 @@ class MiniLMEmbedder(Embedder):
 
             for batch in batches:
                 inputs = self.tokenizer(
-                    batch, return_tensors="pt", padding=True, truncation=True
+                    text=batch,
+                    return_tensors="pt",
+                    padding=True,
+                    truncation=True
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 with torch.no_grad():

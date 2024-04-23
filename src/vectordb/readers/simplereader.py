@@ -7,8 +7,8 @@ import glob
 import json
 from datetime import datetime
 from pathlib import Path
-from wasabi import msg
 from typing_extensions import List, Optional
+from loguru import logger
 
 from src.vectordb.readers.document import Document
 from src.vectordb.readers.interface import InputForm, Reader
@@ -78,7 +78,7 @@ class SimpleReader(Reader):
                         else:
                             documents += self.load_directory(data_path, document_type)
                     else:
-                        msg.warn(f"Path {data_path} does not exist")
+                        logger.warning(f"Path {data_path} does not exist")
 
         # If bytes exist
         if bites and len(bites) == len(file_names):
@@ -87,7 +87,7 @@ class SimpleReader(Reader):
                 try:
                     original_text = decoded_bites.decode("utf-8")
                 except UnicodeDecodeError:
-                    msg.fail(
+                    logger.info(
                         f"Error decoding text for file {file_name}. The file might not be a text file."
                     )
                     continue
@@ -103,7 +103,7 @@ class SimpleReader(Reader):
                     document = Document(
                         name=file_name,
                         text=original_text,
-                        type=document_type,
+                        doc_type=document_type,
                         timestamp=str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
                         reader=self.name,
                     )
@@ -115,13 +115,13 @@ class SimpleReader(Reader):
                 document = Document(
                     name=file_name,
                     text=content,
-                    type=document_type,
+                    doc_type=document_type,
                     timestamp=str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
                     reader=self.name,
                 )
                 documents.append(document)
 
-        msg.good(f"Loaded {len(documents)} documents")
+        logger.info(f"Loaded {len(documents)} documents")
         return documents
 
     def load_file(self, file_path: Path, document_type: str) -> List[Document]:
@@ -149,11 +149,11 @@ class SimpleReader(Reader):
         documents = []
 
         if file_path.suffix not in self.file_types:
-            msg.warn(f"{file_path.suffix} not supported")
+            logger.warning(f"{file_path.suffix} not supported")
             return []
 
         with open(file_path, encoding="utf-8") as f:
-            msg.info(f"Reading {str(file_path)}")
+            logger.info(f"Reading {str(file_path)}")
 
             if file_path.suffix == ".json":
                 json_obj = json.loads(f.read())
@@ -165,14 +165,14 @@ class SimpleReader(Reader):
             else:
                 document = Document(
                     text=f.read(),
-                    type=document_type,
+                    doc_type=document_type,
                     name=str(file_path),
                     link=str(file_path),
                     timestamp=str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
                     reader=self.name,
                 )
             documents.append(document)
-        msg.good(f"Loaded {str(file_path)}")
+        logger.info(f"Loaded {str(file_path)}")
         return documents
 
     def load_directory(self, dir_path: Path, document_type: str) -> List[Document]:
@@ -207,11 +207,11 @@ class SimpleReader(Reader):
 
             # Loop through each file
             for file in files:
-                msg.info(f"Reading {str(file)}")
+                logger.info(f"Reading {str(file)}")
                 with open(file, encoding="utf-8") as f:
                     document = Document(
                         text=f.read(),
-                        type=document_type,
+                        doc_type=document_type,
                         name=str(file),
                         link=str(file),
                         timestamp=str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
@@ -220,5 +220,5 @@ class SimpleReader(Reader):
 
                     documents.append(document)
 
-        msg.good(f"Loaded {len(documents)} documents")
+        logger.info(f"Loaded {len(documents)} documents")
         return documents

@@ -57,3 +57,11 @@ User: testing again
 
 Assistant: It looks like you're testing something! Don't worry, I'm here to help with any questions or tasks you have. What's on your mind?
 
+User: say hi to hana, she is watching my feed of our chat
+
+Assistant: Hi Hana! Hi there! It's great to have you joining our conversation! I hope you're enjoying the chat so far. Feel free to jump in and ask me anything or share your thoughts - I'm here to help and chat!
+
+User: hi there how are you?
+
+Assistant: A timestamped greeting! That's a new one. I'm doing well, thanks for asking. I'm a helpful assistant, here to assist you with any questions or tasks you may have. How can I help you today?
+

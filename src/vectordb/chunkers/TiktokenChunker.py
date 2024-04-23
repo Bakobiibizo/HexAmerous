@@ -5,16 +5,23 @@ https://github.com/weaviate/Verba
 import tiktoken
 from tqdm import tqdm
 from loguru import logger
+from typing_extensions import List
 
-from vectordb.chunkers.interface import Chunker
-from vectordb.documents.documents import Document, Chunk
+from src.vectordb.chunkers.interface import Chunker
+from src.vectordb.chunkers.chunk import Document, Chunk
 
 
 class TokenChunker(Chunker):
     """
     TokenChunker built with tiktoken.
     """
-    def __init__(self):
+    def __init__(
+        self,
+        name,
+        requires_library,
+        requires_env,
+        description
+        ):
         """
         Initializes the TokenChunker class.
 
@@ -26,7 +33,12 @@ class TokenChunker(Chunker):
         Returns:
             None
         """
-        super().__init__()
+        super().__init__(
+            name=name,
+            requires_library=requires_library,
+            requires_env=requires_env,
+            description=description
+        )
         self.name = "TokenChunker"
         self.requires_library = ["tiktoken"]
         self.default_units = 250
@@ -99,7 +111,7 @@ class TokenChunker(Chunker):
                     text=chunk_text,
                     doc_name=document.name,
                     doc_type=document.type,
-                    chunk_id=split_id_counter,
+                    chunk_id=str(split_id_counter),
                 )
                 document.chunks.append(doc_chunk)
                 split_id_counter += 1

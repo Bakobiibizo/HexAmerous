@@ -2,13 +2,14 @@
 Embedder Interface. Based on Weaviate's Verba.
 https://github.com/weaviate/Verba
 """
-from typing import List, Tuple, Union
+from tqdm import tqdm
+from typing import List, Dict, Tuple, Union, Optional
 from weaviate import Client
 from loguru import logger
-from src.vectordb.documents.documents import Document, InputForm
+from src.vectordb.readers.document import Document
+from src.vectordb.readers.interface import InputForm
 from src.vectordb.component import Component
 from src.vectordb.schema.schema_generator import VECTORIZERS, EMBEDDINGS, strip_non_letters
-
 
 
 class Embedder(Component):
@@ -20,7 +21,7 @@ class Embedder(Component):
         name: str,
         description: str,
         requires_env: List[str],
-        requires_library: List[str],
+        requires_library: Optional[List[str]]=None,
         ):
         """
         Initializes a new instance of the class.
@@ -45,6 +46,7 @@ class Embedder(Component):
 
     def embed(
         self, 
+        documents: List[Document],
         client: Client, 
         batch_size: int = 100
         ) -> bool:
@@ -94,12 +96,14 @@ class Embedder(Component):
                 temp_batch = []
                 token_counter = 0
                 for chunk in document.chunks:
-                    if token_counter + len(chunk.tokens) <= 5000:
-                        token_counter += len(chunk.tokens)
+                    if not chunk or not chunk.tokens:  
+                        break
+                    if token_counter + chunk.tokens <= 5000:
+                        token_counter += chunk.tokens
                         temp_batch.append(chunk)
                     else:
                         batches.append(temp_batch.copy())
-                        token_counter = len(chunk.tokens)
+                        token_counter = chunk.tokens
                         temp_batch = [chunk]
                 if len(temp_batch) > 0:
                     batches.append(temp_batch.copy())
@@ -152,11 +156,12 @@ class Embedder(Component):
                                 client.batch.add_data_object(
                                     properties, class_name, vector=chunk.vector
                                 )
-
+                if not document.name:
+                    document.__setattr__(name="name", value="uuid", obj=document)
                 self.check_document_status(
                     client,
                     uuid,
-                    document.name,
+                    str(document.name),
                     f"Document_{strip_non_letters(self.vectorizer)}",
                     f"Chunk_{strip_non_letters(self.vectorizer)}",
                     len(document.chunks),

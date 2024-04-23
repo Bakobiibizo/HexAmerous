@@ -14,7 +14,6 @@ load_dotenv()
 VECTORIZERS = {"text2vec-openai", "text2vec-cohere"}  # Needs to match with Weaviate modules
 EMBEDDINGS = {"MiniLM"}  # Custom Vectors
 
-
 def strip_non_letters(s: str):
     """
     Replaces all non-alphanumeric characters in a string with underscores.
@@ -95,7 +94,6 @@ def verify_vectorizer(
 
     return modified_schema
 
-
 def add_suffix(
     schema: Dict, 
     vectorizer: str
@@ -116,7 +114,6 @@ def add_suffix(
         modified_schema["classes"][0]["class"] + "_" + strip_non_letters(vectorizer)
     )
     return modified_schema, modified_schema["classes"][0]["class"]
-
 
 def reset_schemas(
     client: Optional[Client] = None,
@@ -141,7 +138,6 @@ def reset_schemas(
     client.schema.delete_class(doc_name)
     client.schema.delete_class(chunk_name)
     client.schema.delete_class(cache_name)
-
 
 def init_schemas(
     client: Optional[Client]=None,
@@ -175,7 +171,6 @@ def init_schemas(
     except ValueError as e:
         logger.warning(f"Schema initialization failed {str(e)}")
         return False
-
 
 def init_documents(
     client: Client, 
@@ -240,7 +235,6 @@ def init_documents(
             }
         ]
     }
-
     SCHEMA_DOCUMENT = {
         "classes": [
             {
@@ -281,7 +275,6 @@ def init_documents(
             }
         ]
     }
-
     # Verify Vectorizer
     chunk_schema = verify_vectorizer(
         SCHEMA_CHUNK,
@@ -319,7 +312,6 @@ def init_documents(
 
     return document_schema, chunk_schema
 
-
 def init_cache(
     client: Client, 
     vectorizer: Optional[str] = None, 
@@ -337,7 +329,6 @@ def init_cache(
 
     Returns:
         Dict: The cache schema.
-
     """
     if not vectorizer:
         return {}
@@ -393,7 +384,6 @@ def init_cache(
         logger.info(f"{cache_name} schema created")
 
     return cache_schema
-
 
 def init_suggestion(
     client: Client,

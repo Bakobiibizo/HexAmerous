@@ -5,9 +5,11 @@ https://github.com/weaviate/Verba
 import spacy
 from tqdm import tqdm
 from loguru import logger
+from typing_extensions import List
 
-from vectordb.documents.documents import Document, Chunk
-from vectordb.chunkers.interface import Chunker
+from src.vectordb.readers.document import Document
+from src.vectordb.chunkers.chunk import Chunk
+from src.vectordb.chunkers.interface import Chunker
 
 
 class SentenceChunker(Chunker):
@@ -15,7 +17,13 @@ class SentenceChunker(Chunker):
     SentenceChunker for Verba built with spaCy.
     """
 
-    def __init__(self):
+    def __init__(
+        self,
+        name="WordChunker",
+        requires_library = ["spacy"],
+        requires_env=None,
+        description = "Chunk documents by sentences. You can specify how many sentences should overlap between chunks to improve retrieval."
+        ):
         """
         Initializes the SentenceChunker object.
 
@@ -27,12 +35,14 @@ class SentenceChunker(Chunker):
         Returns:
             None
         """
-        super().__init__()
-        self.name = "WordChunker"
-        self.requires_library = ["spacy"]
+        super().__init__(
+            name=name,
+            requires_library=requires_library,
+            requires_env=requires_env,
+            description=description
+        )
         self.default_units = 3
         self.default_overlap = 2
-        self.description = "Chunk documents by sentences. You can specify how many sentences should overlap between chunks to improve retrieval."
         try:
             self.nlp = spacy.blank("en")
             self.nlp.add_pipe("sentencizer")
@@ -62,6 +72,8 @@ class SentenceChunker(Chunker):
                 continue
             if not self.nlp:
                 continue
+            if not document.text:
+                continue
             doc = list(self.nlp(document.text).sents)
 
             if units > len(doc) or units < 1:
@@ -86,9 +98,9 @@ class SentenceChunker(Chunker):
                 text = "".join(sent.text for sent in doc[start_i:end_i])
                 doc_chunk = Chunk(
                     text=text,
-                    doc_name=document.name,
-                    doc_type=document.type,
-                    chunk_id=split_id_counter,
+                    doc_name=document.name or "document",
+                    doc_type=document.doc_type or "document",
+                    chunk_id=str(split_id_counter) or str(0)
                 )
                 document.chunks.append(doc_chunk)
                 split_id_counter += 1

@@ -4,12 +4,13 @@ https://github.com/weaviate/Verba
 """
 import tiktoken
 from loguru import logger
+from typing_extensions import List, Dict
 
-from vectordb.documents.documents import Document
-from vectordb.chunkers.interface import Chunker
+from src.vectordb.readers.document import Document
+from src.vectordb.chunkers.interface import Chunker
 from src.vectordb.chunkers.SentenceChunker import SentenceChunker
-from vectordb.chunkers.TiktokenChunker import TokenChunker
-from vectordb.chunking.WordSplitter import WordChunker
+from src.vectordb.chunkers.TiktokenChunker import TokenChunker
+from src.vectordb.chunkers.WordChunker import WordChunker
 
 
 class ChunkerManager:

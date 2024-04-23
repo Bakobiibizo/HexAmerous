@@ -3,13 +3,14 @@ Mini LM Embedder. Based on Weaviate's Verba.
 https://github.com/weaviate/Verba
 """
 import torch
+from tqdm import tqdm
 from transformers import AutoModel, AutoTokenizer
 from typing import List
 from weaviate.client import Client
 from loguru import logger
 
 from src.vectordb.readers.document import Document
-
+from src.vectordb.embedders.interface import Embedder
 
 class MiniLMEmbedder(Embedder):
     """
@@ -105,7 +106,6 @@ class MiniLMEmbedder(Embedder):
         try:
             text = chunk
             tokens = self.tokenizer.tokenize(text)
-
             max_length = (
                 self.tokenizer.model_max_length
             )  # Get the max sequence length for the model
@@ -119,7 +119,6 @@ class MiniLMEmbedder(Embedder):
                 )
                 if token_count + token_length <= max_length:
                     batch.append(token)
-                    token_count += token_length
                 else:
                     batches.append(" ".join(batch))
                     batch = [token]
@@ -133,7 +132,10 @@ class MiniLMEmbedder(Embedder):
 
             for batch in batches:
                 inputs = self.tokenizer(
-                    batch, return_tensors="pt", padding=True, truncation=True
+                    text=batch,
+                    return_tensors="pt",
+                    padding=True,
+                    truncation=True
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 with torch.no_grad():

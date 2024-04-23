@@ -10,6 +10,7 @@ from pathlib import Path
 from PyPDF2 import PdfReader
 from wasabi import msg
 from typing_extensions import List, Optional
+from loguru import logger
 
 from src.vectordb.readers.document import Document
 from src.vectordb.readers.interface import InputForm, Reader
@@ -88,13 +89,13 @@ class PDFReader(Reader):
                 document = Document(
                     name=file_name,
                     text=content,
-                    type=document_type,
+                    doc_type=document_type,
                     timestamp=str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
                     reader=self.name,
                 )
                 documents.append(document)
 
-        msg.good(f"Loaded {len(documents)} documents")
+        logger.info(f"Loaded {len(documents)} documents")
         return documents
 
     def load_file(self, file_path: Path, document_type: str) -> List[Document]:
@@ -119,14 +120,14 @@ class PDFReader(Reader):
         full_text = "".join(page.extract_text() + "\n\n" for page in reader.pages)
         document = Document(
             text=full_text,
-            type=document_type,
+            doc_type=document_type,
             name=str(file_path),
             link=str(file_path),
             timestamp=str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
             reader=self.name,
         )
         documents = [document]
-        msg.good(f"Loaded {str(file_path)}")
+        logger.info(f"Loaded {str(file_path)}")
         return documents
 
     def load_directory(self, dir_path: Path, document_type: str) -> List[Document]:
@@ -161,9 +162,9 @@ class PDFReader(Reader):
 
             # Loop through each file
             for file in files:
-                msg.info(f"Reading {str(file)}")
+                logger.info(f"Reading {str(file)}")
                 with open(file, encoding="utf-8"):
                     documents += self.load_file(Path(file), document_type=document_type)
 
-        msg.good(f"Loaded {len(documents)} documents")
+        logger.info(f"Loaded {len(documents)} documents")
         return documents

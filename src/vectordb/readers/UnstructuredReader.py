@@ -7,7 +7,7 @@ import glob
 import os
 from datetime import datetime
 from pathlib import Path
-
+from loguru import logger
 import requests
 from wasabi import msg
 from typing_extensions import List, Optional
@@ -104,13 +104,13 @@ class UnstructuredPDF(Reader):
                 document = Document(
                     name=file_name,
                     text=content,
-                    type=document_type,
+                    doc_type=document_type,
                     timestamp=str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
                     reader=self.name,
                 )
                 documents.append(document)
 
-        msg.good(f"Loaded {len(documents)} documents")
+        logger.info(f"Loaded {len(documents)} documents")
         return documents
 
     def load_bites(self, bites_string, file_name, document_type: str) -> List[Document]:
@@ -157,14 +157,14 @@ class UnstructuredPDF(Reader):
 
         document = Document(
             text=full_content,
-            type=document_type,
+            doc_type=document_type,
             name=str(file_name),
             link=str(file_name),
             timestamp=str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
             reader=self.name,
         )
         documents = [document]
-        msg.good(f"Loaded {str(file_name)}")
+        logger.info(f"Loaded {str(file_name)}")
         os.remove("reconstructed.pdf")
         return documents
 
@@ -180,7 +180,7 @@ class UnstructuredPDF(Reader):
             List[Document]: A List of Document objects representing the loaded file.
         """
         if file_path.suffix not in self.file_types:
-            msg.warn(f"{file_path.suffix} not supported")
+            logger.warning(f"{file_path.suffix} not supported")
             return []
 
         url = os.environ.get(
@@ -213,22 +213,26 @@ class UnstructuredPDF(Reader):
 
         document = Document(
             text=full_content,
-            type=document_type,
+            doc_type=document_type,
             name=str(file_path),
             link=str(file_path),
             timestamp=str(datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
             reader=self.name,
         )
         documents = [document]
-        msg.good(f"Loaded {str(file_path)}")
+        logger.info(f"Loaded {str(file_path)}")
         return documents
 
     def load_directory(self, dir_path: Path, document_type: str) -> List[Document]:
-        """Loads .pdf files from a directory and its subdirectories.
-
-        @param dir_path : Path - Path to directory
-        @param document_type : str - Document Type
-        @returns List[Document] - List of documents
+        """
+        Initialize an empty Dictionary to store the file contents
+        Parameters:
+            self: The UnstructuredPDF instance
+            dir_path (Path): The path to the directory to load files from
+            document_type (str): The type of the document
+        
+        Returns:
+            List[Document]: A list of Document objects representing the loaded files
         """
         # Initialize an empty Dictionary to store the file contents
         documents = []
@@ -243,9 +247,9 @@ class UnstructuredPDF(Reader):
 
             # Loop through each file
             for file in files:
-                msg.info(f"Reading {str(file)}")
+                logger.info(f"Reading {str(file)}")
                 with open(file, encoding="utf-8"):
                     documents += self.load_file(Path(file), document_type=document_type)
 
-        msg.good(f"Loaded {len(documents)} documents")
+        logger.info(f"Loaded {len(documents)} documents")
         return documents

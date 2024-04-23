@@ -8,17 +8,26 @@ from src.vectordb.chunkers.chunk import Chunk
 from src.vectordb.embedders.interface import Embedder
 
 
-
-
 class Retriever(Component):
     """
     Retriever interface for retrieving data from Weaviate.
     """
-    def __init__(self):
+    def __init__(
+        self,
+        name: str,
+        requires_env: List[str],
+        requires_library: List[str],
+        description: str
+        ) -> None:
         """
         Initializes a new instance of the class.
         """
-        super().__init__()
+        super().__init__(
+            description=description,
+            name=name,
+            requires_env=requires_env,
+            requires_library=requires_library
+        )
 
     def retrieve(
         self,
