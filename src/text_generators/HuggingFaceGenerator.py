@@ -1,3 +1,4 @@
+from src.text_generators.interface import Generator, available_generators
 
 
 class Llama2Generator(Generator):
@@ -159,3 +160,8 @@ class Llama2Generator(Generator):
         llama_prompt += f"Answer this query: '{query}' with this context: {user_context} [/INST] "
 
         return llama_prompt
+
+def get_huggingface_generator(api_key: str):
+    return HuggingFaceGenerator(api_key=api_key)
+
+available_generators.generators["huggingface"] = get_huggingface_generator

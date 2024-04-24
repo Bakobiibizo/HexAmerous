@@ -1,3 +1,4 @@
+from src.text_generators.interface import Generator, available_generators
 
 class GPT4Generator(Generator):
     """
@@ -120,3 +121,8 @@ class GPT4Generator(Generator):
         )
 
         return messages
+
+def get_jippity_generator():
+    return JippityGenerator()
+
+available_generators.generators["jippity"] = get_jippity_generator

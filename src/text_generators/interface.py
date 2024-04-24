@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Dict, Iterator, Union
+from typing_extensions import List, Dict, Iterator, Union, Callable
 from abc import ABC, abstractmethod
 from src.templates.interface import BaseTemplate, AvailableTemplates
 
@@ -106,3 +106,31 @@ class GeneratorConfig(BaseModel):
     api: str
     context: List
     context_window: int
+
+class AvailableGenerators(BaseModel):
+    generators: Dict[str, Callable]
+
+    def __init__(self):
+        self.generators = {}
+        super().__init__()
+
+    def add_generator(self, name: str, generator: Callable):
+        self.generators[name] = generator
+
+    def remove_generator(self, name: str):
+        del self.generators[name]
+
+    def get_generator(self, name: str) -> Callable:
+        return self.generators[name]
+
+    def get_all_generators(self) -> Dict[str, Callable]:
+        return self.generators
+
+    def get_generator_names(self) -> List[str]:
+        return list(self.generators.keys())
+
+    def get_generator_by_name(self, name: str) -> Generator:
+        return self.generators[name]()
+    
+    
+available_generators = AvailableGenerators()
