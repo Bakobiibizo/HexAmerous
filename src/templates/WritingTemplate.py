@@ -1,14 +1,21 @@
-from src.templates.interface import BaseTemplate
+from src.templates.interface import BaseTemplate, templates, AvailableTemplates
 
 
 class WritingTemplate(BaseTemplate):
     def __init__(self):
-        super().__init__()
-        self.description = ""
-        self.persona = ""
-        self.task = ""
-        self.tools = ""
+        super().__init__(
+            description = "",
+            persona = "",
+            task = "",
+            example = "",
+            tools = "",
+            system_prompt=[{}]
+        )        
 
+def get_writing_template():
+    return WritingTemplate()
+
+templates.templates[AvailableTemplates.WRITING] = get_writing_template
 
 def main():
     return WritingTemplate()

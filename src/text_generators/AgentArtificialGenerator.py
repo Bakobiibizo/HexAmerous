@@ -1,69 +1,85 @@
 import json
 import os
+import httpx
+from typing import List, Dict, Optional, Callable
 from src.text_generators.interface import Generator, GeneratorConfig
-from src.templates.CodingTemplate import
+from src.templates.interface import AvailableTemplates, templates, base_template
+from dotenv import load_dotenv
 
-config = GeneratorConfig(
-    template=CodingTemplate(),
-    url=os.getenviron.get("AGENT_ARTIFICIAL_URL"),
-    apikey=os.getenviron.get("AGENT_ARTIFICIAL_API_KEY"),
-    context_window=16000
-)
+load_dotenv()
+
+
+
 
 class AgentArtificialGenerator(Generator):
-    def __init__(
-        self,
-        template=None,
-        url="",
-        apikey="",
-        context=None,
-        context_window=16000
-    ) -> None:
-        super().__init__()
-        self.url = url
-        self.apikey = apikey
-        self.context = context
-        self.context_window = context_window
-        self.agentartificial_generator = template
+    def __init__(self) -> None:
+        config = self.set_configuration(
+            template=templates.templates[AvailableTemplates.CODING],
+            url=str(os.getenv("AGENTARTIFICIAL_URL")), api=str(os.getenv("AGENTARTIFICIAL_API_KEY")),
+            context_window=10000,
+            context=[]
+        )
+        super().__init__(**config)
 
-    def set_configuration(self, config: GeneratorConfig):
-        self.apikey = os.environ.get("AGENT_ARTIFICIAL_API_KEY")
-        self.url = os.environ.get("AGENT_ARTIFICIAL_URL")
-        self.context_window = 16000
-        self.template =
+    def set_configuration(self, template: Callable, url: str, api: str, context_window: int, context: List[Dict[str, str]]):
+        return GeneratorConfig(
+            template=template(),
+            url=url,
+            api=api,
+            context_window=context_window,
+            context=context
+        ).model_dump()
 
     def install_depenedencies(self):
-        import http.client
+        try:
+            import httpx  # type: ignore
+            if not httpx:
+                raise ImportError
+        except ImportError:
+            os.system("pip install httpx")
       
 
-    def generate_text(self, messages, url="the-roost- agentartificial.ngrok.dev", model="codellama"):
-        return self.agentartificial_generator(messages, url, model)        
+    def generate_text(
+        self, 
+        messages, 
+        url="agentartificial.ngrok.dev", 
+        model="llama3-7b"):
+        messages = self.prepare_messages(queries=messages)
+        return self.agentartificial_generator(
+            messages=messages, 
+            url=url, 
+            model=model
+            )
 
-
-    def prepare_messages(self, queries: Optional[List[str]]=None, template: Optional[List[Dict[str,str]]]=None, context: Optional[Dict[str, str]]=None) -> List[Dict[str,str]]:
+    def prepare_messages(
+        self, 
+        queries: Optional[List[str]]=None
+        ) -> List[Dict[str,str]]:
+        
         if not self.context:
-            self.context = []
-        if template:
-            for message in template:
-                self.context.append(message)
-        if context:
-            self.context.append({"role": "system", "content": context})
+            self.context = [self.template.create_system_prompt()]  # type: ignore
+        if not queries:
+            return self.context
+        if not isinstance(queries, list):
+            queries = [queries]
+        for query in queries:
+            self.context.append(base_template.create_message(query))
         if queries:
             for query in queries:
                 self.context.append({"role": "user", "content": query})
         return self.context
 
     def agentartificial_generator(self, messages, url="the-roost- agentartificial.ngrok.dev", model="codellama"):
-        connnection = http.client.HTTPSConnection(url)
-        payload = json.dumps({
+        client = httpx.Client()
+        payload = {
           "messages": messages,
           "model": model,
           "streaming": True
-        })
+        }
         headers = {
-          "Authorization": f"Bearer {self.apikey}",
+          "Authorization": f"Bearer {self.api}",
           "Content-Type": "application/json"
         }
-        conn.request("POST", "/code", payload, headers)
-        res = conn.getresponse()
+        res = client.post(url, data=payload, headers=headers)
         return res.read()
+

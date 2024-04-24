@@ -3,10 +3,16 @@ Template Manager
 """
 from typing import List, Union
 from src.templates.interface import BaseTemplate, AvailableTemplates, Templates
+from src.templates.EmailTemplate import EmailTemplate
+from src.templates.KitScriptTemplate import KitScriptTemplate
+from src.templates.MojoTemplate import MojoTemplate
+from src.templates.ResearchTemplate import ResearchTemplate
+from src.templates.SocialMediaTemplate import SocialMediaTemplate
+from src.templates.WritingTemplate import WritingTemplate
 from src.templates.CodingTemplate import CodingTemplate
 
 
-class TemplateManager(Templates):
+class TemplateManager:
     """
     Initialize the class with a selected template. 
 
@@ -17,14 +23,21 @@ class TemplateManager(Templates):
         None
     """
     def __init__(self, selected_template: Union[str, AvailableTemplates]):
-        super().__init__()
         # TODO: Add more templates
         # This object holds a Dictionary of available template names as enum values and their corresponding template classes.
         self.templates = {
-            AvailableTemplates.CODING: CodingTemplate
+            f"{AvailableTemplates.CODING}": CodingTemplate,
+            f"{AvailableTemplates.CHATBOT}": BaseTemplate,
+            f"{AvailableTemplates.KITSCRIPT}": KitScriptTemplate,
+            f"{AvailableTemplates.MOJO}": MojoTemplate,
+            f"{AvailableTemplates.RESEARCH}": ResearchTemplate,
+            f"{AvailableTemplates.SOCIAL_MEDIA}": SocialMediaTemplate,
+            f"{AvailableTemplates.WRITING}": WritingTemplate,
+            f"{AvailableTemplates.EMAIL}": EmailTemplate
         }
         # Set the selected template class
-        self.selected_template = self.select_template(selected_template)
+        self.selected_template = self.templates[str(selected_template)]
+        self.select_template(self.selected_template)
         # Set the system prompt
         self.template = self.get_prompt_template()
     
@@ -69,10 +82,10 @@ class TemplateManager(Templates):
         Returns:
             BaseTemplate: The system prompt based on the selected template
         """
-        return self.selected_template.create_system_prompt()
+        return self.get_prompt_template()
 
     def List_templates(self) -> List[str]:
         """
         Return a List of all available templates.
         """
-        return self.available_templates.values()
+        return list(self.templates.keys())

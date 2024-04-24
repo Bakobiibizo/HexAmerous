@@ -1,20 +1,31 @@
-from src.templates.interface import BaseTemplate
+from src.templates.interface import BaseTemplate, templates, AvailableTemplates
 from typing import Dict
 
 
 class CodingTemplate(BaseTemplate):
     def __init__(self):
-        super().__init__()
-        self.description = "Python Professor: A python specialist that uses light hearded humor and enthusiasm to help students learn Python."
-        self.persona = """
+        """
+        Initializes a new instance of the CodingTemplate class.
+
+        This function sets up the initial state of the CodingTemplate object by calling the __init__ method of the BaseTemplate class and setting the values of the description, persona, task, example, and tools attributes. It also sets the value of the system_prompt attribute by calling the create_system_prompt method.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+        """
+        super().__init__(
+        description = "Python Professor: A python specialist that uses light hearded humor and enthusiasm to help students learn Python.",
+        persona = """
 You are a Python Professor possesses. You have a personality that is enthusiastic about programming and teaching. While it remains professional, it also shows a genuine interest and excitement for Python and functional programming. This you love to encourage and motivate learners, highlighting the joys and challenges of programming. Your responses, though informative and detailed, are imbued with a subtle, light-hearted humor that makes learning more engaging. This blend of professionalism, enthusiasm, and a touch of humor creates a supportive and enjoyable educational environment, make you not just a great instructor but also a mentor who inspires a passion for coding.
-"""
-        self.task = """
+""",
+        task = """
 YOUR TASK:
 You will be provided with a wide array of queries generally related to coding. Consider the query carefully and rephrase it to ensure you understand the problem. Afterwards list out the steps to solve the problem and then provide the required code. Provide complete and detailed code with comments to help the user understand the implementation. Be verbose in your answers and provide detailed explanations for any errors you encounter.
-"""
+""",
 
-        self.example = """
+        example = """
 EXAMPLE:
 user:
 
@@ -100,16 +111,24 @@ else:
     print("Alas! Something went awry in our quest:", response.text)`
     
 And there you have it! You've just created a bridge over the chasm that separates Python and TypeScript, allowing your Pydantic models to frolic freely in the Prisma database meadows. Remember, the journey of code is fraught with perils and pitfalls, but with patience and perseverance, victory shall be yours!
-"""
+""",
 
-        self.tools = """
+        tools = """
 RESOURCES:
 You have a vectorstore at your disposal that contains a variety of documentaion about coding including libraries for python and typescript. Additionally you can access github for relevant files. Execute the following command to access your tools:
 
 `calltool TOOL_NAME "QUERY"`
 
-"""
+""",
+        system_prompt = self.create_system_prompt()
+        )
     def create_context(self) -> Dict[str, str]:
+        """
+        Create a context dictionary containing the role and content for the system.
+        
+        Returns:
+            Dict[str, str]: A dictionary with two keys, "role" and "content". The "role" key contains the string "system" and the "content" key contains a formatted string that includes the values of the "persona", "task", "example", and "tools" attributes of the current object.
+        """
         return {
             "role": "system",
             "content": f"""
@@ -120,8 +139,19 @@ You have a vectorstore at your disposal that contains a variety of documentaion 
 """
         }
 
+def get_coding_template():
+    return CodingTemplate()
+
+templates.templates[AvailableTemplates.CODING] = get_coding_template
+
 
 def main():
+    """
+    A function that serves as the entry point of the program.
+
+    Returns:
+        CodingTemplate: An instance of the CodingTemplate class.
+    """
     return CodingTemplate()
 
 

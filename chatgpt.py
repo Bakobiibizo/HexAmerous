@@ -123,9 +123,13 @@ def chat_gpt(user_message):
         "model": f"{selected_model}",
         "messages": context_manager.context
     }
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"x-api-key {os.getenv('AGENTARTIFICIAL_API_KEY')}"
+    }
     url = os.getenv("AGENTARTIFICIAL_URL")
     # Call OpenAI's Chat API
-    result = requests.post(url, json=body)
+    result = requests.post(url=str(url), json=body, headers=headers)
     print(result)
     # Read the current value of the counter from a file
     with open("./log/log_count.txt", "r", encoding='utf-8') as f:
