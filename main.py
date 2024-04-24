@@ -1,10 +1,11 @@
-from src.text_generators.manager import manager as generator_manager
-from src.text_generators.manager import generator_map
-from src.templates import manager as template_manager
+from src.text_generators.manager import GeneratorManager
+from src.templates.manager import TemplateManager
 
 
-def init_generator(selected_generator: str):
-    GeneratorManager = generator_manager(
-        selected_generator=generator_map["agent_artificial"]
-)
 
+class HexGenerator:
+    def __init__(self, selected_template: str, selected_generator: str):
+        self.generator = GeneratorManager(
+            selected_generator
+        )
+        self.template = TemplateManager(selected_template)

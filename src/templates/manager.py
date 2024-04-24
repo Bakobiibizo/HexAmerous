@@ -2,14 +2,7 @@
 Template Manager
 """
 from typing import List, Union
-from src.templates.interface import BaseTemplate, AvailableTemplates, Templates
-from src.templates.EmailTemplate import EmailTemplate
-from src.templates.KitScriptTemplate import KitScriptTemplate
-from src.templates.MojoTemplate import MojoTemplate
-from src.templates.ResearchTemplate import ResearchTemplate
-from src.templates.SocialMediaTemplate import SocialMediaTemplate
-from src.templates.WritingTemplate import WritingTemplate
-from src.templates.CodingTemplate import CodingTemplate
+from src.templates.interface import BaseTemplate, available_templates
 
 
 class TemplateManager:
@@ -25,16 +18,7 @@ class TemplateManager:
     def __init__(self, selected_template: Union[str, AvailableTemplates]):
         # TODO: Add more templates
         # This object holds a Dictionary of available template names as enum values and their corresponding template classes.
-        self.templates = {
-            f"{AvailableTemplates.CODING}": CodingTemplate,
-            f"{AvailableTemplates.CHATBOT}": BaseTemplate,
-            f"{AvailableTemplates.KITSCRIPT}": KitScriptTemplate,
-            f"{AvailableTemplates.MOJO}": MojoTemplate,
-            f"{AvailableTemplates.RESEARCH}": ResearchTemplate,
-            f"{AvailableTemplates.SOCIAL_MEDIA}": SocialMediaTemplate,
-            f"{AvailableTemplates.WRITING}": WritingTemplate,
-            f"{AvailableTemplates.EMAIL}": EmailTemplate
-        }
+        self.templates = available_templates.templates
         # Set the selected template class
         self.selected_template = self.templates[str(selected_template)]
         self.select_template(self.selected_template)

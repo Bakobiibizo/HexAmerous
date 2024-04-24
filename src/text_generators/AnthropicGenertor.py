@@ -8,6 +8,7 @@ from src.text_generators.interface import available_generators, Generator
 
 api_key = check_api_keys()
 
+#TODO Refactor this whole thing
 
 class AnthropicGenerator(Generator):
     def __init__(self, api_key=None):

@@ -1,4 +1,4 @@
-from src.templates.interface import BaseTemplate, templates, AvailableTemplates
+from src.templates.interface import BaseTemplate, templates, available_templates
 
 
 class EmailTemplate(BaseTemplate):
@@ -15,7 +15,7 @@ class EmailTemplate(BaseTemplate):
 def get_email_template():
     return EmailTemplate()
 
-templates.templates[AvailableTemplates.EMAIL] = get_email_template
+templates.templates["EmailTemplate"] = get_email_template
 
 def main():
     return EmailTemplate()

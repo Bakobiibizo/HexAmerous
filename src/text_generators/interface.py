@@ -98,7 +98,7 @@ class Generator(BaseModel, ABC):
         """
         A description of the entire function, its parameters, and its return types.
         """
-
+        
 
 class GeneratorConfig(BaseModel):
     template: BaseTemplate
@@ -115,21 +115,70 @@ class AvailableGenerators(BaseModel):
         super().__init__()
 
     def add_generator(self, name: str, generator: Callable):
+        """
+        Add a new generator to the AvailableGenerators instance.
+
+        Args:
+            name (str): The name of the generator to add.
+            generator (Callable): The generator function to add.
+
+        Returns:
+            None
+        """
         self.generators[name] = generator
 
     def remove_generator(self, name: str):
+        """
+        Remove a generator from the AvailableGenerators instance.
+
+        Args:
+            name (str): The name of the generator to remove.
+
+        Returns:
+            None
+        """
         del self.generators[name]
 
     def get_generator(self, name: str) -> Callable:
+        """
+        Retrieves a generator function by name.
+
+        Args:
+            name (str): The name of the generator to retrieve.
+
+        Returns:
+            Callable: The generator function associated with the provided name.
+        """
         return self.generators[name]
 
     def get_all_generators(self) -> Dict[str, Callable]:
+        """
+        Returns a dictionary containing all the generators available.
+
+        :return: A dictionary where the keys are the names of the generators and the values are the callable functions.
+        :rtype: Dict[str, Callable]
+        """
         return self.generators
 
     def get_generator_names(self) -> List[str]:
+        """
+        Returns a list of names of all available generators.
+
+        :return: A list of strings representing the names of the generators.
+        :rtype: List[str]
+        """
         return list(self.generators.keys())
 
     def get_generator_by_name(self, name: str) -> Generator:
+        """
+        Retrieves a generator function by name.
+
+        Args:
+            name (str): The name of the generator to retrieve.
+
+        Returns:
+            Generator: The generator function associated with the provided name.
+        """
         return self.generators[name]()
     
     

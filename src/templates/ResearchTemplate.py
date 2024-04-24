@@ -1,4 +1,4 @@
-from src.templates.interface import BaseTemplate, templates, AvailableTemplates
+from src.templates.interface import BaseTemplate, templates, available_templates
 
 
 class ResearchTemplate(BaseTemplate):
@@ -15,7 +15,7 @@ class ResearchTemplate(BaseTemplate):
 def get_research_template():
     return ResearchTemplate()
 
-templates.templates[AvailableTemplates.RESEARCH] = get_research_template
+templates.templates["ResearchTemplate"] = get_research_template
 
 def main():
     return ResearchTemplate()

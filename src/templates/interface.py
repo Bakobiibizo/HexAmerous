@@ -1,6 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Dict, Callable, Union
-from enum import Enum
+from typing import List, Dict, Callable
 
 
 class BaseTemplate(BaseModel):
@@ -46,22 +45,7 @@ Tools: {self.tools}
         return self.system_prompt
     def create_message(self, message: str):
         return {"role": "user", "content": message}
-
-
-class AvailableTemplates(Enum):
-    CODING = "coding"
-    CHATBOT = "chatbot"
-    KITSCRIPT = "kitscript"
-    MOJO = "mojo"
-    RESEARCH = "research"
-    SOCIAL_MEDIA = "social_media"
-    WRITING = "writing"
-    EMAIL = "email"
-
-
-class Templates(BaseModel):
-    templates: Dict[Union[str, AvailableTemplates], Callable] = {
-    }
+   
 
 templates = Templates()
 
@@ -111,3 +95,15 @@ This script uses the find command to locate all `.py` files within the specified
         tools="",
         system_prompt=[{}]        
     )
+
+def get_base_template():
+    return base_template
+
+
+class AvailableTemplates(BaseModel):
+    templates: List[Dict[str, Callable]]
+
+
+available_templates = AvailableTemplates(
+    templates=[{"chatbot": get_base_template}]
+)

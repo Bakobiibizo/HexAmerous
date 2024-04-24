@@ -1,17 +1,21 @@
 from src.text_generators.interface import Generator, available_generators
+from src.templates.interface import AvailableTemplates
 
 
 class Llama2Generator(Generator):
     """
     Llama2Generator Generator.
     """
-
-    def __init__(self):
-        super().__init__()
+    def __init__(self, selected_model: str):
+        super().__init__(
+            api=os.getenv("HUGGINGFACE_API_KEY"),
+            url=f"https://huggingface.co/{selected_model}",
+            template=available_templates.templates[selected_model],
+            context_window=8000,
+            context=[]
+        )
         self.name = "Llama2Generator"
         self.description = "Generator using Meta's Llama-2-7b-chat-hf model"
-        self.requires_library = ["huggingface_hub", "transformers"]
-        self.requires_env = ["HF_TOKEN"]
         self.streamable = True
         self.model = None
         self.tokenizer = None

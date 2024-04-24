@@ -1,4 +1,4 @@
-from src.templates.interface import BaseTemplate, templates, AvailableTemplates
+from src.templates.interface import BaseTemplate, templates, available_templates
 
 
 class MojoTemplate(BaseTemplate):
@@ -38,7 +38,7 @@ def main():
 def get_mojo_template():
     return MojoTemplate()
 
-templates.templates[AvailableTemplates.MOJO] = get_mojo_template
+templates.templates["MojoTemplate"] = get_mojo_template
 
 if __name__ == "__main__":
     main()

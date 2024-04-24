@@ -1,4 +1,4 @@
-from src.templates.interface import BaseTemplate, templates, AvailableTemplates
+from src.templates.interface import BaseTemplate, templates, available_templates
 from typing import Dict
 
 
@@ -142,7 +142,7 @@ You have a vectorstore at your disposal that contains a variety of documentaion 
 def get_coding_template():
     return CodingTemplate()
 
-templates.templates[AvailableTemplates.CODING] = get_coding_template
+templates.templates["coding"] = get_coding_template
 
 
 def main():

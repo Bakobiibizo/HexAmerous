@@ -1,4 +1,4 @@
-from src.templates.interface import BaseTemplate, templates, AvailableTemplates
+from src.templates.interface import BaseTemplate, templates, available_templates
 
 
 class WritingTemplate(BaseTemplate):
@@ -15,7 +15,7 @@ class WritingTemplate(BaseTemplate):
 def get_writing_template():
     return WritingTemplate()
 
-templates.templates[AvailableTemplates.WRITING] = get_writing_template
+templates.templates["WritingTemplate"] = get_writing_template
 
 def main():
     return WritingTemplate()

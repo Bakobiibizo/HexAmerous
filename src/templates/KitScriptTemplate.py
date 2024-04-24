@@ -1,4 +1,4 @@
-from src.templates.interface import BaseTemplate, templates, AvailableTemplates
+from src.templates.interface import BaseTemplate, available_templates
 
 
 class KitScriptTemplate(BaseTemplate):
@@ -22,13 +22,12 @@ You have the script kit documentation available for reference. Additionally, the
 """,
         system_prompt=self.create_system_prompt()
 
-def get_kit_script_template():
-        return KitScriptTemplate()
-
-templates.templates[AvailableTemplates.KIT_SCRIPT] = get_kit_script_template
-
-def main():
+def get_scriptkit_template():
     return KitScriptTemplate()
+
+available_templates.templates["scriptkit"] = get_scriptkit_template
+
+    
 
 
 if __name__ == "__main__":

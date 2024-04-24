@@ -1,4 +1,4 @@
-from src.templates.interface import BaseTemplate, templates, AvailableTemplates
+from src.templates.interface import BaseTemplate, templates, available_templates
 
 
 class SocialMediaTemplate(BaseTemplate):
@@ -15,7 +15,7 @@ class SocialMediaTemplate(BaseTemplate):
 def get_social_media_template():
     return SocialMediaTemplate()
 
-templates.templates[AvailableTemplates.SOCIAL_MEDIA] = get_social_media_template
+templates.templates["SocialMediaTemplate"] = get_social_media_template
 
 def main():
     return SocialMediaTemplate()
