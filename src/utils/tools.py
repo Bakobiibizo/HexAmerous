@@ -58,7 +58,7 @@ def tools_to_map(tools: List[AssistantTool]) -> dict[str, ActionItem]:
         elif isinstance(tool, RetrievalTool):
             tools_map[tool.type] = ActionItem(
                 type=tool.type,
-                description="Retrieves information from database containing keys.",
+                description="Retrieves information from files provided.",
             )
         elif isinstance(tool, CodeInterpreterTool):
             tools_map[tool.type] = ActionItem(

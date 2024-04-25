@@ -3,8 +3,6 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv(override=True)
-print("Litellm API key: ", os.getenv("LITELLM_API_KEY"))
-print("Litellm API URL: ", os.getenv("LITELLM_API_URL"))
 
 litellm_client = None
 if os.getenv("LITELLM_API_URL"):

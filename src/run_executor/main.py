@@ -127,9 +127,13 @@ class ExecuteRun:
             print("\n\nOrchestrator Response: ", orchestrator_response, "\n\n")
             if orchestrator_response == Actions.RETRIEVAL:
                 action = retrieval.Retrieval(
-                    self.run_id, self.thread_id, self.assistant_id, summary
+                    self.run_id,
+                    self.thread_id,
+                    self.assistant_id,
+                    self.tools_map,
+                    summary,
                 )
-                action.generate()
+                action.generate(messages, runsteps)
                 continue
             if orchestrator_response == Actions.COMPLETION:
                 action = final_answer.FinalAnswer(

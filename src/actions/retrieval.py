@@ -2,33 +2,55 @@ import json
 from typing import Optional
 from openai.types.beta.threads import Message
 from openai.pagination import SyncCursorPage
+from utils.weaviate_utils import retrieve_file_chunks
 from utils.ops_api_handler import create_retrieval_runstep
 from utils.tools import ActionItem, Actions, actions_to_map
 from utils.openai_clients import litellm_client, assistants_client
 from data_models import run
 import os
 
+# import coala
+from utils.coala import CoALA
+
 
 class Retrieval:
     def __init__(
-        self, run_id: str, thread_id: str, assistant_id: str, job_summary: str
+        self,
+        run_id: str,
+        thread_id: str,
+        assistant_id: str,
+        tools_map: dict[str, ActionItem],
+        job_summary: str,
     ):
-        self.query_maker_instructions = f"""Your role generate a query for semantic search to retrieve important information related to the messages and the current working memory."""
+        self.query_maker_instructions = f"""Your role is generate a query for semantic search to retrieve important according to current working memory and the available files.
+Even if there is no relevant information in the working memory, you should still generate a query to retrieve the most relevant information from the available files.
+Only respond with the query iteself NOTHING ELSE."""
         self.run_id = run_id
         self.thread_id = thread_id
         self.assistant_id = assistant_id
+        self.tool_items = tools_map
         self.job_summary = job_summary
+        self.coala = None
+        self.assistant = None
 
-    def generate(self) -> run.RunStep:
+    def generate(
+        self,
+        messages: SyncCursorPage[Message],
+        runsteps: SyncCursorPage[run.RunStep],
+        content: Optional[str] = None,
+    ) -> run.RunStep:
         # get relevant retrieval query
+        self.coala = CoALA(
+            runsteps=runsteps,
+            messages=messages,
+            job_summary=self.job_summary,
+            tools_map=self.tool_items,
+        )
+
         messages = [
             {
-                "role": "system",
-                "content": self.compose_query_system_prompt(),
-            },
-            {
                 "role": "user",
-                "content": self.job_summary,
+                "content": self.compose_query_system_prompt(),
             },
         ]
         response = litellm_client.chat.completions.create(
@@ -39,30 +61,38 @@ class Retrieval:
         query = response.choices[0].message.content
         print("Retrieval query: ", query)
         # TODO: retrieve from db, and delete mock retrieval document
-        documents = ["your key is 9supersecret99"]
+        retrieved_documents = retrieve_file_chunks(
+            self.assistant.file_ids, query
+        )
 
         run_step = create_retrieval_runstep(
-            self.thread_id, self.run_id, self.assistant_id, documents
+            self.thread_id, self.run_id, self.assistant_id, retrieved_documents
         )
         return run_step
 
-    def compose_working_memory(
+    def compose_file_list(
         self,
     ) -> str:
-        steps = assistants_client.beta.threads.runs.steps.list(
-            thread_id=self.thread_id,
-            run_id=self.run_id,
+        assistant = assistants_client.beta.assistants.retrieve(
+            assistant_id=self.assistant_id,
         )
-        return "\n".join(
-            [json.dumps(step.step_details.model_dump()) for step in steps.data]
-        )
+        self.assistant = assistant
+        files_names = []
+        for file_id in assistant.file_ids:
+            file = assistants_client.files.retrieve(file_id)
+            files_names.append(f"- {file.filename}")
+        return "\n".join(files_names)
 
     def compose_query_system_prompt(self) -> str:
-        working_memory = self.compose_working_memory()
+        trace = self.coala.compose_trace()
 
         composed_instruction = f"""{self.query_maker_instructions}
 
+The files currently available to you are:
+{self.compose_file_list()}
+
 Current working memory:
-{working_memory}"""
-        print("\n\nTEXTGENERATION SYSTEM PROMP: ", composed_instruction)
+Question: {self.job_summary}
+{trace}"""
+        print("\n\nRETRIEVAL SYSTEM PROMP: ", composed_instruction)
         return composed_instruction
