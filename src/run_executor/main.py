@@ -3,13 +3,14 @@ from constants import PromptKeys
 from utils.tools import ActionItem, Actions, tools_to_map
 from utils.ops_api_handler import create_message_runstep, update_run
 from data_models import run
-from openai.types.beta.threads import Message
+from openai.types.beta.threads import ThreadMessage
 from utils.openai_clients import assistants_client
 from openai.types.beta.thread import Thread
 from openai.types.beta import Assistant
 from openai.pagination import SyncCursorPage
 from agents import router, summarizer, orchestrator
-from actions import retrieval, text_generation, final_answer
+from actions import retrieval, text_generation, final_answer, web_retrieval
+import datetime
 
 # TODO: add assistant and base tools off of assistant
 
@@ -22,7 +23,7 @@ class ExecuteRun:
         self.run_config = run_config
 
         self.run: Optional[run.Run] = None
-        self.messages: Optional[SyncCursorPage(Message)] = None
+        self.messages: Optional[SyncCursorPage(ThreadMessage)] = None
         self.thread: Optional[Thread] = None
         self.assistant: Optional[Assistant] = None
         self.tools_map: Optional[dict[str, ActionItem]] = None
@@ -107,6 +108,7 @@ class ExecuteRun:
             runsteps = assistants_client.beta.threads.runs.steps.list(
                 thread_id=self.thread_id,
                 run_id=self.run_id,
+                order="asc"
             )
             self.runsteps = runsteps
 
@@ -135,6 +137,16 @@ class ExecuteRun:
                 )
                 action.generate(messages, runsteps)
                 continue
+            if orchestrator_response == Actions.WEB_RETREIVAL: # TODO: Sean, entry point for web retrieval
+                action = web_retrieval.WebRetrieval(
+                    self.run_id,
+                    self.thread_id,
+                    self.assistant_id,
+                    self.tools_map,
+                    summary,
+                )
+                action.generate(messages, runsteps)
+                continue
             if orchestrator_response == Actions.COMPLETION:
                 action = final_answer.FinalAnswer(
                     self.run_id,
@@ -144,7 +156,16 @@ class ExecuteRun:
                     summary,
                 )
                 action.generate(messages, runsteps)
+                run_update = run.RunUpdate(
+                    status=run.RunStatus.COMPLETED.value,
+                    completed_at=runsteps.data[0].created_at,
+                )
+
+                # Call the API handler to update the run status
+                updated_run = update_run(self.thread_id, self.run_id, run_update)
                 continue
+            # retrieve from website
+            # 
 
         print(f"Finished executing run {self.run_id}. Total loops: {t_loops}")
 

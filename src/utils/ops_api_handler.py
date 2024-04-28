@@ -5,7 +5,7 @@ import requests
 import os
 from dotenv import load_dotenv
 from data_models import run
-from openai.types.beta.threads import Message
+from openai.types.beta.threads import ThreadMessage
 from openai.types.beta.threads.runs import RetrievalToolCall
 from utils.openai_clients import assistants_client
 
@@ -39,7 +39,7 @@ def update_run(thread_id: str, run_id: str, run_update: run.RunUpdate) -> run.Ru
 
 def create_message(
     thread_id: str, content: str, role: Literal["user", "assistant"]
-) -> Message:
+) -> ThreadMessage:
     # Create a thread with a message
     message = assistants_client.beta.threads.messages.create(
         thread_id=thread_id, content=content, role=role

@@ -1,6 +1,6 @@
 import json
 from typing import Optional
-from openai.types.beta.threads import Message
+from openai.types.beta.threads import ThreadMessage
 from openai.pagination import SyncCursorPage
 from utils.weaviate_utils import retrieve_file_chunks
 from utils.ops_api_handler import create_retrieval_runstep
@@ -35,7 +35,7 @@ Only respond with the query iteself NOTHING ELSE."""
 
     def generate(
         self,
-        messages: SyncCursorPage[Message],
+        messages: SyncCursorPage[ThreadMessage],
         runsteps: SyncCursorPage[run.RunStep],
         content: Optional[str] = None,
     ) -> run.RunStep:

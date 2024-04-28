@@ -1,6 +1,6 @@
 import json
 from typing import Optional
-from openai.types.beta.threads import Message
+from openai.types.beta.threads import ThreadMessage
 from openai.pagination import SyncCursorPage
 from utils.coala import CoALA
 from utils.ops_api_handler import create_message_runstep
@@ -28,7 +28,7 @@ class FinalAnswer:
 
     def generate(
         self,
-        messages: SyncCursorPage[Message],
+        messages: SyncCursorPage[ThreadMessage],
         runsteps: SyncCursorPage[run.RunStep],
         content: Optional[str] = None,
     ) -> run.RunStep:
@@ -41,7 +41,7 @@ class FinalAnswer:
                 tools_map=self.tool_items,
             )
             prompt = coala.compose_prompt("final_answer")
-            print("\n\FINALANSWER COALA PROMPT:\n", prompt)
+            print("\nFINALANSWER COALA PROMPT:\n", prompt)
 
             generator_messages = [
                 {

@@ -1,9 +1,6 @@
 from enum import Enum
 from typing import List
-from openai.types.beta import AssistantTool
-from openai.types.beta.function_tool import FunctionTool
-from openai.types.beta.retrieval_tool import RetrievalTool
-from openai.types.beta.code_interpreter_tool import CodeInterpreterTool
+from openai.types.beta.assistant import Tool, ToolWebRetrieval, ToolRetrieval, ToolFunction, ToolCodeInterpreter
 from pydantic import BaseModel
 
 
@@ -11,6 +8,7 @@ class Actions(Enum):
     # function, retrieval, code_interpreter, text_generation, completion
     FUNCTION = "function"
     RETRIEVAL = "retrieval"
+    WEB_RETREIVAL = "web_retrieval"
     CODE_INTERPRETER = "code_interpreter"
     TEXT_GENERATION = "text_generation"
     COMPLETION = "completion"
@@ -44,23 +42,28 @@ def actions_to_map(actions: List[str]) -> dict[str, ActionItem]:
     return actions_map
 
 
-def tools_to_map(tools: List[AssistantTool]) -> dict[str, ActionItem]:
+def tools_to_map(tools: List[Tool]) -> dict[str, ActionItem]:
     """
     Converts a list of AssistantTool objects to a dictionary.
     """
     tools_map = {}
     for tool in tools:
-        if isinstance(tool, FunctionTool):
+        if isinstance(tool, ToolFunction):
             tools_map[tool.type] = ActionItem(
                 type=tool.type,
                 description="Generates text based on input data.",
             )
-        elif isinstance(tool, RetrievalTool):
+        elif isinstance(tool, ToolRetrieval):
             tools_map[tool.type] = ActionItem(
                 type=tool.type,
                 description="Retrieves information from files provided.",
             )
-        elif isinstance(tool, CodeInterpreterTool):
+        elif isinstance(tool, ToolWebRetrieval):
+            tools_map[tool.type] = ActionItem(
+                type=tool.type,
+                description="Retrieves information from the web.", # TODO: Sean, please provide a better description.
+            )
+        elif isinstance(tool, ToolCodeInterpreter):
             tools_map[tool.type] = ActionItem(
                 type=tool.type,
                 description="Interprets and executes code.",

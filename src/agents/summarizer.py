@@ -1,4 +1,4 @@
-from openai.types.beta.threads import Message
+from openai.types.beta.threads import ThreadMessage
 from openai.pagination import SyncCursorPage
 from utils.tools import ActionItem
 from utils.openai_clients import litellm_client
@@ -10,7 +10,9 @@ class SummarizerAgent:
         pass
 
     def generate(
-        self, tools: dict[str, ActionItem], paginated_messages: SyncCursorPage[Message]
+        self,
+        tools: dict[str, ActionItem],
+        paginated_messages: SyncCursorPage[ThreadMessage],
     ) -> str:
         """
         Create a summary of the chat history with an emphasis on the current user request and tool use.
@@ -47,7 +49,7 @@ class SummarizerAgent:
         summary = response.choices[0].message.content
         return summary
 
-    def compose_prompt(self, tools: dict[str, ActionItem], latest_message:str) -> str:
+    def compose_prompt(self, tools: dict[str, ActionItem], latest_message: str) -> str:
         tools_list = "\n".join(
             [f"- {tool.type}: {tool.description}" for _, tool in tools.items()]
         )

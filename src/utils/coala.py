@@ -1,7 +1,7 @@
 from typing import Literal
 from openai.pagination import SyncCursorPage
 from data_models import run
-from openai.types.beta.threads import Message
+from openai.types.beta.threads import ThreadMessage
 from openai.types.beta.threads.runs import RetrievalToolCall
 from utils.tools import Actions
 from utils.tools import ActionItem
@@ -11,7 +11,7 @@ class CoALA:
     def __init__(
         self,
         runsteps: SyncCursorPage[run.RunStep],
-        messages: SyncCursorPage[Message],
+        messages: SyncCursorPage[ThreadMessage],
         job_summary: str,
         tools_map: dict[str, ActionItem],
     ):

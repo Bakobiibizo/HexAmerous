@@ -1,4 +1,4 @@
-from openai.types.beta.threads import Message
+from openai.types.beta.threads import ThreadMessage
 from data_models import run
 from openai.pagination import SyncCursorPage
 from utils.tools import ActionItem, Actions, actions_to_map
@@ -24,7 +24,7 @@ class OrchestratorAgent:
         self.job_summary = job_summary
 
     def generate(
-        self, messages: SyncCursorPage[Message], runsteps: SyncCursorPage[run.RunStep]
+        self, messages: SyncCursorPage[ThreadMessage], runsteps: SyncCursorPage[run.RunStep]
     ) -> Actions:
         """
         Generate a summary of the chat history with a focus on the current user request and tool usage.
