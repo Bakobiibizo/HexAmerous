@@ -6,6 +6,7 @@ from utils.weaviate_utils import retrieve_file_chunks
 from utils.ops_api_handler import create_web_retrieval_runstep
 from utils.tools import ActionItem, Actions, actions_to_map
 from utils.openai_clients import litellm_client, assistants_client
+from utils.basic_retriever import retriever1
 from data_models import run
 import os
 
@@ -23,8 +24,8 @@ class WebRetrieval:
         tools_map: dict[str, ActionItem],
         job_summary: str,
     ):
-        self.query_maker_instructions = f"""Your role is generate a query for semantic search to retrieve important according to current working memory and the available files.
-Even if there is no relevant information in the working memory, you should still generate a query to retrieve the most relevant information from the available files.
+        self.query_maker_instructions = f"""Your role is generate a query for semantic search according to current working memory.
+Even if there is no relevant information in the working memory, you should still generate a query to retrieve the most relevant information from the University of Florida (UF).
 Only respond with the query iteself NOTHING ELSE.""" # TODO: Sean, bespoke prompt currently used for creating the retrieval query
         self.run_id = run_id
         self.thread_id = thread_id
@@ -60,16 +61,19 @@ Only respond with the query iteself NOTHING ELSE.""" # TODO: Sean, bespoke promp
             max_tokens=200,  # You may adjust the token limit as necessary
         )
         query = response.choices[0].message.content
-        print("Retrieval query: ", query)
+        print("WebRetrieval query: ", query)
         # TODO: retrieve from db, and delete mock retrieval document
-        retrieved_documents = retrieve_file_chunks(self.assistant.file_ids, query)
+
+        retrieved_documents = retriever1.invoke(query)  # TODO: Sean, this is where the retrieval happens
+        print("WebRetrieval Retrieved documents: ", retrieved_documents)
+        retrieved_documents = [doc.page_content for doc in retrieved_documents]
 
         run_step = create_web_retrieval_runstep(  # TODO: Sean, this is important, this is how state is managed
             self.thread_id,
             self.run_id,
             self.assistant_id,
             retrieved_documents,
-            site="INSERT_SITE_HERE",
+            site="HG",
         )
         return run_step
 
@@ -81,5 +85,5 @@ Only respond with the query iteself NOTHING ELSE.""" # TODO: Sean, bespoke promp
 Current working memory:
 Question: {self.job_summary}
 {trace}""" # TODO: Sean, this prompt should not change too much
-        print("\n\nRETRIEVAL SYSTEM PROMP: ", composed_instruction)
+        print("\n\nWEB_RETRIEVAL SYSTEM PROMP: ", composed_instruction)
         return composed_instruction

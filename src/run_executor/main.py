@@ -8,9 +8,8 @@ from utils.openai_clients import assistants_client
 from openai.types.beta.thread import Thread
 from openai.types.beta import Assistant
 from openai.pagination import SyncCursorPage
-from agents import router, summarizer, orchestrator
-from actions import retrieval, text_generation, final_answer, web_retrieval
-import datetime
+from agents import router, coala
+import json
 
 # TODO: add assistant and base tools off of assistant
 
@@ -81,93 +80,36 @@ class ExecuteRun:
             return
         print("Transitioning")
 
-        summarizer_agent = summarizer.SummarizerAgent()
-        summary = summarizer_agent.generate(self.tools_map, self.messages)
-        print("\n\nSummary: ", summary, "\n\n")
+        coala_class = coala.CoALA(self.run_id, self.thread_id, self.assistant_id)
+        self.assistant = coala_class.retrieve_assistant()
+        self.messages = coala_class.retrieve_messages()
+        self.runsteps = coala_class.retrieve_runsteps()
+        coala_class.set_assistant_tools()
 
-        orchestrator_agent = orchestrator.OrchestratorAgent(
-            self.run_id, self.thread_id, self.tools_map, summary
-        )
-        orchestrator_response = None
-        # handle action or tool
-        t_loops = 0
-        while (
-            orchestrator_response
-            not in [
-                Actions.COMPLETION,
-                Actions.FAILURE,
-            ]
-            and t_loops < 5
-        ):
-            t_loops += 1
-            # Get updated run state
-            messages = assistants_client.beta.threads.messages.list(
-                thread_id=self.thread_id, order="asc"
-            )
-            self.messages = messages
-            runsteps = assistants_client.beta.threads.runs.steps.list(
-                thread_id=self.thread_id,
-                run_id=self.run_id,
-                order="asc"
-            )
-            self.runsteps = runsteps
+        coala_class.generate_question()
 
-            # Execute thought
-            if len(runsteps.data) == 0 or runsteps.data[0].type == "tool_calls":
-                action = text_generation.TextGeneration(
-                    self.run_id,
-                    self.thread_id,
-                    self.assistant_id,
-                    self.tools_map,
-                    summary,
-                )
-                action.generate(messages, runsteps)
-                continue
+        max_steps = 5
+        curr_step = 0
+        while coala_class.react_steps[-1].step_type != coala.ReactStepType.FINAL_ANSWER:
+            self.messages = coala_class.retrieve_messages()
+            self.runsteps = coala_class.retrieve_runsteps()
+            coala_class.generate_thought()
+            coala_class.generate_action()
+            coala_class.execute_action(Actions(coala_class.react_steps[-1].content))
+            print(f"""\n\nStep {curr_step} completed.
+with react steps:
+{json.dumps([step.model_dump() for step in coala_class.react_steps], indent=2)}""")
+            curr_step += 1
+            if curr_step >= max_steps:
+                break
+        # if while completes from the if statement, then print("success") else if it breaks from the while loop, print("failure")
+        if coala_class.react_steps[-1].step_type == coala.ReactStepType.FINAL_ANSWER:
+            run_update = run.RunUpdate(status=run.RunStatus.COMPLETED.value)
+        else:
+            run_update = run.RunUpdate(status=run.RunStatus.FAILED.value)
+        updated_run = update_run(self.thread_id, self.run_id, run_update)
 
-            # Execute orchestrator
-            orchestrator_response = orchestrator_agent.generate(messages, runsteps)
-            print("\n\nOrchestrator Response: ", orchestrator_response, "\n\n")
-            if orchestrator_response == Actions.RETRIEVAL:
-                action = retrieval.Retrieval(
-                    self.run_id,
-                    self.thread_id,
-                    self.assistant_id,
-                    self.tools_map,
-                    summary,
-                )
-                action.generate(messages, runsteps)
-                continue
-            if orchestrator_response == Actions.WEB_RETREIVAL: # TODO: Sean, entry point for web retrieval
-                action = web_retrieval.WebRetrieval(
-                    self.run_id,
-                    self.thread_id,
-                    self.assistant_id,
-                    self.tools_map,
-                    summary,
-                )
-                action.generate(messages, runsteps)
-                continue
-            if orchestrator_response == Actions.COMPLETION:
-                action = final_answer.FinalAnswer(
-                    self.run_id,
-                    self.thread_id,
-                    self.assistant_id,
-                    self.tools_map,
-                    summary,
-                )
-                action.generate(messages, runsteps)
-                run_update = run.RunUpdate(
-                    status=run.RunStatus.COMPLETED.value,
-                    completed_at=runsteps.data[0].created_at,
-                )
-
-                # Call the API handler to update the run status
-                updated_run = update_run(self.thread_id, self.run_id, run_update)
-                continue
-            # retrieve from website
-            # 
-
-        print(f"Finished executing run {self.run_id}. Total loops: {t_loops}")
+        print(f"""\n\nFinished executing run with status {run_update.status} after {curr_step} steps.""")
 
     def get_run_id(self) -> str:
         return self.run_id
