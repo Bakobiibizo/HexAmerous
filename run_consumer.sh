@@ -4,7 +4,7 @@ if [ -f .env ]; then
     export $(cat .env | sed 's/#.*//g' | xargs)
 fi
 
-python consumer.py
+python src/consumer.py
 
-echo "Sleeping for 10 seconds"
-sleep 10
+echo "Sleeping for 100 seconds"
+sleep 100

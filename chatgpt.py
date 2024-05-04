@@ -4,6 +4,11 @@ from openai import OpenAI
 from dotenv import load_dotenv
 from typing import Union, List, Dict
 from loguru import logger
+from src.generators.manager import GeneratorManager
+
+manager= GeneratorManager()
+
+client = manager.get_generators()
 
 from enum import Enum
 # Load environment variables
@@ -45,14 +50,14 @@ class MODEL_LIST(Enum):
 
     def __eq__(self, other):
         return self.value == other
-    
+
 selected_model = MODEL_LIST.mixtral
 
 def change_selected_model(model: Union[MODEL_LIST, str]):
     selected_model = MODEL_LIST
     logger.info(f"Selected model changed to {selected_model}")
     return selected_model
-    
+
 
 # call openai chat api
 logger.info('loading chat_gpt')
@@ -62,10 +67,8 @@ context = []
 def chat_gpt(user_message):
     logger.info(prompt)
 
-    if len(context) > 0:
-
         # Create prompt
- 
+
 
     # Call OpenAI's Chat API
     result = openai.chat.completions.create(model=selected_model.value,
