@@ -141,22 +141,22 @@ You must always begin with "{ReactStepType.ACTION.value}: " .
             return self.generate_final_answer()
         elif action == Actions.RETRIEVAL:
             retrieval_class = retrieval.Retrieval(
-                self.run_id, self.thread_id, self.assistant_id, self.tool_items, self.react_steps[0].content
+                self
             )
-            run_step = retrieval_class.generate(self.messages, self.runsteps)
+            run_step = retrieval_class.generate()
             react_step = ReactStep(
-                step_type=ReactStepType.ACTION,
+                step_type=ReactStepType.OBSERVATION,
                 content=json.dumps(run_step.step_details.tool_calls[0].model_dump())
             )
             self.react_steps.append(react_step)
             return react_step
         elif action == Actions.WEB_RETRIEVAL:
             web_retrieval_class = web_retrieval.WebRetrieval(
-                self.run_id, self.thread_id, self.assistant_id, self.tool_items, self.react_steps[0].content
+                self
             )
-            run_step = web_retrieval_class.generate(self.messages, self.runsteps)
+            run_step = web_retrieval_class.generate()
             react_step = ReactStep(
-                step_type=ReactStepType.ACTION,
+                step_type=ReactStepType.OBSERVATION,
                 content=json.dumps(run_step.step_details.tool_calls[0].model_dump())
             )
             self.react_steps.append(react_step)
@@ -318,10 +318,13 @@ Final Answer: the final answer to the original input question"""
 
     def strip_generated_react_step(self, generation, start_key: str, runon_str: Optional[str] = None) -> str:
         # TODO: deprecate this once there is no run on step generation
-        stripped_beggining = generation.split(start_key, 1)[1].strip()
-        if runon_str is None:
-            return stripped_beggining
+        try:
+            stripped_generation = generation.split(start_key, 1)[1].strip()
+        except IndexError:
+            raise ValueError("Generation did not follow ReAct format:\n" + generation)
         
-        stripped_end = stripped_beggining.split(runon_str, 1)[0].strip()
-        return stripped_end
+        for step_type in ReactStepType:
+            stripped_generation = stripped_generation.split(step_type.value + ":", 1)[0].strip()
+
+        return stripped_generation
 

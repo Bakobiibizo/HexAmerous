@@ -11,79 +11,56 @@ from data_models import run
 import os
 
 # import coala
-from utils.coala import CoALA
+from agents import coala
 
 
-# TODO: Sean, update this, this is where the execution happens
 class WebRetrieval:
     def __init__(
         self,
-        run_id: str,
-        thread_id: str,
-        assistant_id: str,
-        tools_map: dict[str, ActionItem],
-        job_summary: str,
+        coala_class: "coala.CoALA",
     ):
-        self.query_maker_instructions = f"""Your role is generate a query for semantic search according to current working memory.
-Even if there is no relevant information in the working memory, you should still generate a query to retrieve the most relevant information from the University of Florida (UF).
-Only respond with the query iteself NOTHING ELSE.""" # TODO: Sean, bespoke prompt currently used for creating the retrieval query
-        self.run_id = run_id
-        self.thread_id = thread_id
-        self.assistant_id = assistant_id
-        self.tool_items = tools_map
-        self.job_summary = job_summary
-        self.coala = None
-        self.assistant = None
+        self.coala_class = coala_class
 
     def generate(
         self,
-        messages: SyncCursorPage[ThreadMessage],
-        runsteps: SyncCursorPage[run.RunStep],
-        content: Optional[str] = None,
     ) -> run.RunStep:
         # get relevant retrieval query
-        self.coala = CoALA(
-            runsteps=runsteps,
-            messages=messages,
-            job_summary=self.job_summary,
-            tools_map=self.tool_items,
-        )
+
+        instructions = f"""Your role is generate a query for semantic search according to current working memory.
+Even if there is no relevant information in the working memory, you should still generate a query to retrieve the most relevant information from the University of Florida (UF).
+Only respond with the query iteself NOTHING ELSE.
+
+"""
 
         messages = [
             {
                 "role": "user",
-                "content": self.compose_query_system_prompt(),
+                "content": instructions + self.compose_query_system_prompt(),
             },
         ]
         response = litellm_client.chat.completions.create(
-            model=os.getenv("LITELLM_MODEL"),  # Replace with your model of choice
+            model=os.getenv("LITELLM_MODEL"),
             messages=messages,
-            max_tokens=200,  # You may adjust the token limit as necessary
+            max_tokens=200,
         )
         query = response.choices[0].message.content
-        print("WebRetrieval query: ", query)
-        # TODO: retrieve from db, and delete mock retrieval document
 
-        retrieved_documents = retriever1.invoke(query)  # TODO: Sean, this is where the retrieval happens
-        print("WebRetrieval Retrieved documents: ", retrieved_documents)
+        # Retrieve documents based on the query
+        retrieved_documents = retriever1.invoke(query)
         retrieved_documents = [doc.page_content for doc in retrieved_documents]
 
-        run_step = create_web_retrieval_runstep(  # TODO: Sean, this is important, this is how state is managed
-            self.thread_id,
-            self.run_id,
-            self.assistant_id,
+        run_step = create_web_retrieval_runstep(
+            self.coala_class.thread_id,
+            self.coala_class.run_id,
+            self.coala_class.assistant_id,
             retrieved_documents,
-            site="HG",
+            site="https://www.ufl.edu/",
         )
         return run_step
 
     def compose_query_system_prompt(self) -> str:
-        trace = self.coala.compose_trace()
+        trace = self.coala_class.compose_react_trace()
 
-        composed_instruction = f"""{self.query_maker_instructions} 
-
-Current working memory:
-Question: {self.job_summary}
-{trace}""" # TODO: Sean, this prompt should not change too much
-        print("\n\nWEB_RETRIEVAL SYSTEM PROMP: ", composed_instruction)
+        composed_instruction = f"""Current working memory:
+{trace}"""
         return composed_instruction
