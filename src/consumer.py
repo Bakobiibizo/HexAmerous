@@ -1,4 +1,3 @@
-import threading
 from concurrent.futures import ThreadPoolExecutor
 import pika
 import os
@@ -41,7 +40,9 @@ class RabbitMQConsumer:
 
     def callback(self, ch, method, properties, body):
         try:
-            self.executor.submit(self.process_message_and_ack, body, ch, method)
+            self.executor.submit(
+                self.process_message_and_ack, body, ch, method
+            )
         except Exception as e:
             print(f"Failed to submit the task to the executor: {e}")
 

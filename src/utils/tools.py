@@ -38,7 +38,7 @@ def actions_to_map(actions: List[str]) -> dict[str, ActionItem]:
         if action == Actions.TEXT_GENERATION.value:
             actions_map[action] = ActionItem(
                 type=Actions.TEXT_GENERATION.value,
-                description="Communicate to the user either to summarize or express the next tasks to be executed.",
+                description="Communicate to the user either to summarize or express the next tasks to be executed.",  # noqa
             )
         elif action == Actions.COMPLETION.value:
             actions_map[action] = ActionItem(
@@ -67,7 +67,7 @@ def tools_to_map(tools: List[Tool]) -> dict[str, ActionItem]:
         elif isinstance(tool, ToolWebRetrieval):
             tools_map[tool.type] = ActionItem(
                 type=tool.type,
-                description="Retrieves information related to University of Florida (UF).",  # TODO: Sean, please provide a better description.
+                description="Retrieves information related to University of Florida (UF).",  # noqa
             )
         elif isinstance(tool, ToolCodeInterpreter):
             tools_map[tool.type] = ActionItem(

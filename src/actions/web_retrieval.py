@@ -1,11 +1,5 @@
-import json
-from typing import Optional
-from openai.types.beta.threads import ThreadMessage
-from openai.pagination import SyncCursorPage
-from utils.weaviate_utils import retrieve_file_chunks
 from utils.ops_api_handler import create_web_retrieval_runstep
-from utils.tools import ActionItem, Actions, actions_to_map
-from utils.openai_clients import litellm_client, assistants_client
+from utils.openai_clients import litellm_client
 from utils.basic_retriever import retriever1
 from data_models import run
 import os
@@ -30,7 +24,7 @@ class WebRetrieval:
 Even if there is no relevant information in the working memory, you should still generate a query to retrieve the most relevant information from the University of Florida (UF).
 Only respond with the query iteself NOTHING ELSE.
 
-"""
+"""  # noqa
 
         messages = [
             {

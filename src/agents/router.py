@@ -24,7 +24,9 @@ The tools available to you are:
 
     # TODO: add assistant and base tools off of assistant
     def generate(
-        self, tools: dict[str, ActionItem], paginated_messages: SyncCursorPage[ThreadMessage]
+        self,
+        tools: dict[str, ActionItem],
+        paginated_messages: SyncCursorPage[ThreadMessage],
     ) -> str:
         """
         Generates a response based on the chat history and role instructions.
@@ -35,7 +37,7 @@ The tools available to you are:
 
         Returns:
             str: It either returns `{PromptKeys.TRANSITION.value}` or a generated response.
-        """
+        """  # noqa
 
         messages = [
             {

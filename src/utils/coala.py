@@ -2,7 +2,6 @@ from typing import Literal
 from openai.pagination import SyncCursorPage
 from data_models import run
 from openai.types.beta.threads import ThreadMessage
-from openai.types.beta.threads.runs import RetrievalToolCall
 from utils.tools import Actions
 from utils.tools import ActionItem
 
@@ -34,7 +33,9 @@ class CoALA:
         trace_prompt = []
         for step in self.runsteps:
             if step.type == "tool_calls":
-                trace_prompt.append(f"Action: {step.step_details.tool_calls[0].type}")
+                trace_prompt.append(
+                    f"Action: {step.step_details.tool_calls[0].type}"
+                )
                 trace_prompt.append(
                     f"Observation: {step.step_details.tool_calls[0].model_dump()}"
                 )
@@ -43,7 +44,8 @@ class CoALA:
                     (
                         msg.content[0].text.value
                         for msg in self.messages.data
-                        if msg.id == step.step_details.message_creation.message_id
+                        if msg.id
+                        == step.step_details.message_creation.message_id
                     ),
                     None,
                 )
@@ -56,13 +58,17 @@ class CoALA:
         """
         action_prompts = []
         for tool in self.tools_map:
-            action_prompts.append(f"- {tool} ({self.tools_map[tool].description})")
+            action_prompts.append(
+                f"- {tool} ({self.tools_map[tool].description})"
+            )
         action_prompts.append(
-            f"- {Actions.COMPLETION.value} (Finish the process, generate the final answer)"
+            f"- {Actions.COMPLETION.value} (Finish the process, generate the final answer)"  # noqa
         )
         return "\n".join(action_prompts)
 
-    def compose_prompt(self, type: Literal["action", "thought", "final_answer"]):
+    def compose_prompt(
+        self, type: Literal["action", "thought", "final_answer"]
+    ):
         """
         Compose the prompt for the CoALA task
         """

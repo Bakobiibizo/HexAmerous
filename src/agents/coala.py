@@ -1,10 +1,10 @@
 from enum import Enum
-from typing import Optional, List, Tuple, Literal
+from typing import Optional, List
 from openai.types.beta.threads import ThreadMessage
 from openai.pagination import SyncCursorPage
 from pydantic import BaseModel
 from utils.tools import ActionItem, Actions, actions_to_map, tools_to_map
-from utils.ops_api_handler import create_message_runstep, create_retrieval_runstep, create_web_retrieval_runstep
+from utils.ops_api_handler import create_message_runstep
 from actions import retrieval, web_retrieval
 from utils.openai_clients import litellm_client, assistants_client
 from data_models import run
@@ -27,7 +27,13 @@ class ReactStep(BaseModel):
 
 
 class CoALA:
-    def __init__(self, run_id: str, thread_id: str, assistant_id: str, verbose: bool = True):
+    def __init__(
+        self,
+        run_id: str,
+        thread_id: str,
+        assistant_id: str,
+        verbose: bool = True,
+    ):
         self.verbose = verbose
 
         self.run_id = run_id
@@ -35,8 +41,12 @@ class CoALA:
         self.assistant_id = assistant_id
 
         self.assistant: Optional[Assistant] = None
-        self.messages: SyncCursorPage[ThreadMessage] = SyncCursorPage(data=[]) # in ascending order
-        self.runsteps: SyncCursorPage[run.RunStep] = SyncCursorPage(data=[]) # in ascending order
+        self.messages: SyncCursorPage[ThreadMessage] = SyncCursorPage(
+            data=[]
+        )  # in ascending order
+        self.runsteps: SyncCursorPage[run.RunStep] = SyncCursorPage(
+            data=[]
+        )  # in ascending order
 
         self.tool_items: dict[str, ActionItem] = {}
         self.action_items = actions_to_map(
@@ -48,17 +58,14 @@ class CoALA:
 
         self.react_steps: List[ReactStep] = []
 
-
     def generate_question(self) -> ReactStep:
         coala_prompt = self.compose_coala_prompt()
-        tools_list_prompt = "[" + ", ".join(
-            list(self.tool_items.keys())
-        ) + "]"
+        tools_list_prompt = "[" + ", ".join(list(self.tool_items.keys())) + "]"
         latest_message = self.messages.data[-1].content[0].text.value
         orchestrator_instruction = f"""Summarize the purpose of the message <<{latest_message}>> into a single comprehensive statement.
 Ensure that the summary includes all relevant details needed for effective use of the following tools: {tools_list_prompt}.
-You must always begin with "{ReactStepType.QUESTION.value}: " ."""
-        
+You must always begin with "{ReactStepType.QUESTION.value}: " ."""  # noqa
+
         # message history (episodic memory)
         generator_messages = [
             {"role": message.role, "content": message.content[0].text.value}
@@ -66,7 +73,10 @@ You must always begin with "{ReactStepType.QUESTION.value}: " ."""
         ]
         # final instruction to generate question
         generator_messages.append(
-            {"role": "user", "content": orchestrator_instruction+coala_prompt}
+            {
+                "role": "user",
+                "content": orchestrator_instruction + coala_prompt,
+            }
         )
         response = litellm_client.chat.completions.create(
             model=os.getenv("LITELLM_MODEL"),
@@ -74,19 +84,28 @@ You must always begin with "{ReactStepType.QUESTION.value}: " ."""
             max_tokens=500,
         )
         content = response.choices[0].message.content
-        stripped_content = self.strip_generated_react_step(content, ReactStepType.QUESTION.value + ":", ReactStepType.THOUGHT.value)
-        
-        react_step = ReactStep(step_type=ReactStepType.QUESTION, content=stripped_content)
+        stripped_content = self.strip_generated_react_step(
+            content,
+            ReactStepType.QUESTION.value + ":",
+            ReactStepType.THOUGHT.value,
+        )
+
+        react_step = ReactStep(
+            step_type=ReactStepType.QUESTION, content=stripped_content
+        )
         self.react_steps.append(react_step)
 
         return react_step
-    
+
     def generate_thought(self) -> ReactStep:
         coala_prompt = self.compose_coala_prompt()
         orchestrator_instruction = f"""Your role is to think (outloud) about what to do next.
-You must always begin with "{ReactStepType.THOUGHT.value}: " ."""
+You must always begin with "{ReactStepType.THOUGHT.value}: " ."""  # noqa
         generator_messages = [
-            {"role": "user", "content": orchestrator_instruction+coala_prompt}
+            {
+                "role": "user",
+                "content": orchestrator_instruction + coala_prompt,
+            }
         ]
         response = litellm_client.chat.completions.create(
             model=os.getenv("LITELLM_MODEL"),
@@ -94,19 +113,23 @@ You must always begin with "{ReactStepType.THOUGHT.value}: " ."""
             max_tokens=500,
         )
         content = response.choices[0].message.content
-        stripped_content = self.strip_generated_react_step(content, ReactStepType.THOUGHT.value + ":", ReactStepType.ACTION.value)
+        stripped_content = self.strip_generated_react_step(
+            content,
+            ReactStepType.THOUGHT.value + ":",
+            ReactStepType.ACTION.value,
+        )
 
         # save run step
         create_message_runstep(
             self.thread_id, self.run_id, self.assistant_id, stripped_content
         )
 
-        react_step = ReactStep(step_type=ReactStepType.THOUGHT, content=stripped_content)
+        react_step = ReactStep(
+            step_type=ReactStepType.THOUGHT, content=stripped_content
+        )
         self.react_steps.append(react_step)
 
         return react_step
-    
-    
 
     def generate_action(
         self,
@@ -116,9 +139,12 @@ You must always begin with "{ReactStepType.THOUGHT.value}: " ."""
 You should only use an action once, do not repeat actions.
 You must always begin with "{ReactStepType.ACTION.value}: " .
 
-"""
+"""  # noqa
         generator_messages = [
-            {"role": "user", "content": orchestrator_instruction+coala_prompt}
+            {
+                "role": "user",
+                "content": orchestrator_instruction + coala_prompt,
+            }
         ]
         response = litellm_client.chat.completions.create(
             model=os.getenv("LITELLM_MODEL"),
@@ -126,50 +152,59 @@ You must always begin with "{ReactStepType.ACTION.value}: " .
             max_tokens=100,
         )
         content = response.choices[0].message.content
-        stripped_content = self.strip_generated_react_step(content, ReactStepType.ACTION.value + ":", ReactStepType.OBSERVATION.value)
+        stripped_content = self.strip_generated_react_step(
+            content,
+            ReactStepType.ACTION.value + ":",
+            ReactStepType.OBSERVATION.value,
+        )
         for key in self.tool_items.keys():
             if key == stripped_content:
-                react_step = ReactStep(step_type=ReactStepType.ACTION, content=Actions(key).value)
+                react_step = ReactStep(
+                    step_type=ReactStepType.ACTION, content=Actions(key).value
+                )
                 self.react_steps.append(react_step)
                 return react_step
 
         # raise error if no action is found
         raise ValueError(f"No action found in response: {content}")
-    
+
     def execute_action(self, action: Actions) -> ReactStep:
         if action == Actions.COMPLETION:
             return self.generate_final_answer()
         elif action == Actions.RETRIEVAL:
-            retrieval_class = retrieval.Retrieval(
-                self
-            )
+            retrieval_class = retrieval.Retrieval(self)
             run_step = retrieval_class.generate()
             react_step = ReactStep(
                 step_type=ReactStepType.OBSERVATION,
-                content=json.dumps(run_step.step_details.tool_calls[0].model_dump())
+                content=json.dumps(
+                    run_step.step_details.tool_calls[0].model_dump()
+                ),
             )
             self.react_steps.append(react_step)
             return react_step
         elif action == Actions.WEB_RETRIEVAL:
-            web_retrieval_class = web_retrieval.WebRetrieval(
-                self
-            )
+            web_retrieval_class = web_retrieval.WebRetrieval(self)
             run_step = web_retrieval_class.generate()
             react_step = ReactStep(
                 step_type=ReactStepType.OBSERVATION,
-                content=json.dumps(run_step.step_details.tool_calls[0].model_dump())
+                content=json.dumps(
+                    run_step.step_details.tool_calls[0].model_dump()
+                ),
             )
             self.react_steps.append(react_step)
             return react_step
         else:
             raise ValueError(f"Action {action} not supported")
-        
+
     def generate_final_answer(self) -> ReactStep:
         coala_prompt = self.compose_coala_prompt()
         orchestrator_instruction = f"""Your role is to provide the user with a single comprehensive "Final Answer" to conclude the run.
-You must always begin with "Final Answer: " ."""
+You must always begin with "Final Answer: " ."""  # noqa
         generator_messages = [
-            {"role": "user", "content": orchestrator_instruction+coala_prompt}
+            {
+                "role": "user",
+                "content": orchestrator_instruction + coala_prompt,
+            }
         ]
         response = litellm_client.chat.completions.create(
             model=os.getenv("LITELLM_MODEL"),
@@ -177,18 +212,23 @@ You must always begin with "Final Answer: " ."""
             max_tokens=500,
         )
         content = response.choices[0].message.content
-        stripped_content = self.strip_generated_react_step(content, ReactStepType.FINAL_ANSWER.value + ":", ReactStepType.THOUGHT.value)
+        stripped_content = self.strip_generated_react_step(
+            content,
+            ReactStepType.FINAL_ANSWER.value + ":",
+            ReactStepType.THOUGHT.value,
+        )
 
         # save run step
         create_message_runstep(
             self.thread_id, self.run_id, self.assistant_id, stripped_content
         )
 
-        react_step = ReactStep(step_type=ReactStepType.FINAL_ANSWER, content=stripped_content)
+        react_step = ReactStep(
+            step_type=ReactStepType.FINAL_ANSWER, content=stripped_content
+        )
         self.react_steps.append(react_step)
 
         return react_step
-            
 
     def compose_coala_prompt(
         self,
@@ -196,7 +236,8 @@ You must always begin with "Final Answer: " ."""
         few_shot_instruction = self.compose_few_shot_instruction()
         react_trace_prompt = self.compose_react_trace()
         tools_prompt = "\n".join(
-            f"- {tool.type} ({tool.description})" for _, tool in self.tool_items.items()
+            f"- {tool.type} ({tool.description})"
+            for _, tool in self.tool_items.items()
         )
 
         return f"""You will observe that there may already be steps after "Begin!".
@@ -217,9 +258,7 @@ Begin!
 {react_trace_prompt}"""
 
     def compose_few_shot_instruction(self) -> str:
-        tools_list_prompt = "[" + ", ".join(
-            list(self.tool_items.keys())
-        ) + "]"
+        tools_list_prompt = "[" + ", ".join(list(self.tool_items.keys())) + "]"
         return f"""Question: the input question you must answer
 Thought: you should always think about what to do
 Action: the action to take, should be one of {tools_list_prompt}
@@ -274,7 +313,8 @@ Final Answer: the final answer to the original input question"""
                     (
                         msg.content[0].text.value
                         for msg in self.messages.data
-                        if msg.id == step.step_details.message_creation.message_id
+                        if msg.id
+                        == step.step_details.message_creation.message_id
                     ),
                     None,
                 )
@@ -310,21 +350,29 @@ Final Answer: the final answer to the original input question"""
         return runsteps
 
     def set_assistant_tools(self) -> None:
-        self.tool_items = {**tools_to_map(self.assistant.tools), **actions_to_map(
-            [
-                Actions.COMPLETION.value,
-            ]
-        )}
+        self.tool_items = {
+            **tools_to_map(self.assistant.tools),
+            **actions_to_map(
+                [
+                    Actions.COMPLETION.value,
+                ]
+            ),
+        }
 
-    def strip_generated_react_step(self, generation, start_key: str, runon_str: Optional[str] = None) -> str:
+    def strip_generated_react_step(
+        self, generation, start_key: str, runon_str: Optional[str] = None
+    ) -> str:
         # TODO: deprecate this once there is no run on step generation
         try:
             stripped_generation = generation.split(start_key, 1)[1].strip()
         except IndexError:
-            raise ValueError("Generation did not follow ReAct format:\n" + generation)
-        
+            raise ValueError(
+                "Generation did not follow ReAct format:\n" + generation
+            )
+
         for step_type in ReactStepType:
-            stripped_generation = stripped_generation.split(step_type.value + ":", 1)[0].strip()
+            stripped_generation = stripped_generation.split(
+                step_type.value + ":", 1
+            )[0].strip()
 
         return stripped_generation
-

@@ -1,10 +1,5 @@
-import json
-from typing import Optional
-from openai.types.beta.threads import ThreadMessage
-from openai.pagination import SyncCursorPage
 from utils.weaviate_utils import retrieve_file_chunks
 from utils.ops_api_handler import create_retrieval_runstep
-from utils.tools import ActionItem, Actions, actions_to_map
 from utils.openai_clients import litellm_client, assistants_client
 from data_models import run
 import os
@@ -29,7 +24,7 @@ class Retrieval:
 Even if there is no relevant information in the working memory, you should still generate a query to retrieve the most relevant information from the available files.
 Only respond with the query iteself NOTHING ELSE.
 
-"""
+"""  # noqa
         messages = [
             {
                 "role": "user",
@@ -37,7 +32,9 @@ Only respond with the query iteself NOTHING ELSE.
             },
         ]
         response = litellm_client.chat.completions.create(
-            model=os.getenv("LITELLM_MODEL"),  # Replace with your model of choice
+            model=os.getenv(
+                "LITELLM_MODEL"
+            ),  # Replace with your model of choice
             messages=messages,
             max_tokens=200,  # You may adjust the token limit as necessary
         )
