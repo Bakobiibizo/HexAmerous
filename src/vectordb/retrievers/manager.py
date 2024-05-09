@@ -2,6 +2,7 @@
 Retriever Manager. Based on Weaviate's Verba.
 https://github.com/weaviate/Verba
 """
+
 from typing import List, Tuple, Dict
 from weaviate.client import Client
 from loguru import logger
@@ -13,7 +14,6 @@ from src.vectordb.retrievers.SimpleRetriever import SimpleRetriever
 from src.vectordb.retrievers.WindowRetriever import WindowRetriever
 
 
-
 class RetrieverManager:
     """
     RetrieverManager class for managing retrievers.
@@ -22,6 +22,7 @@ class RetrieverManager:
         retrievers (Dict[str, Retriever]): Dictionary of retrievers.
         selected_retriever (Retriever): Selected retriever for retrieval operations.
     """
+
     def __init__(self):
         """
         Initializes the RetrieverManager with two retrievers, WindowRetriever and SimpleRetriever, and sets the selected retriever to WindowRetriever.

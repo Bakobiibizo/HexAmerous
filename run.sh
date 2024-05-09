@@ -5,4 +5,4 @@ source venv/bin/activate
 
 # Run your Python script HexAmerous.py
 echo "Running your Python script HexAmerous.py"
-python HexAmerous
+python HexAmerous.py
