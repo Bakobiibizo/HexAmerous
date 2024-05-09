@@ -2,6 +2,7 @@
 UnstructuredPDF Reader. Based on Weaviate's Verba.
 https://github.com/weaviate/Verba
 """
+
 import base64
 import glob
 import os
@@ -20,6 +21,7 @@ class UnstructuredPDF(Reader):
     """
     UnstructuredPDF Reader that handles ORC of PDF files. Does require an API key from https://unstructured.io/api-key-hosted. Should be included in your .env file as UNSTRUCTURED_API_KEY.
     """
+
     def __init__(self):
         """
         Initializes an instance of the UnstructuredPDF class.
@@ -115,7 +117,7 @@ class UnstructuredPDF(Reader):
 
     def load_bites(self, bites_string, file_name, document_type: str) -> List[Document]:
         """
-        Loads the content from the provided `bites_string` by decoding it, making a POST request to the `UNSTRUCTURED_API_URL` with the decoded content, and processing the response to create a Document object. The created Document is returned in a List. 
+        Loads the content from the provided `bites_string` by decoding it, making a POST request to the `UNSTRUCTURED_API_URL` with the decoded content, and processing the response to create a Document object. The created Document is returned in a List.
 
         Parameters:
             bites_string: A string containing the content to be loaded.
@@ -144,7 +146,9 @@ class UnstructuredPDF(Reader):
 
         file_data = {"files": open("reconstructed.pdf", "rb")}
 
-        response = requests.post(url, headers=headers, data=data, files=file_data, timeout=30)
+        response = requests.post(
+            url, headers=headers, data=data, files=file_data, timeout=30
+        )
 
         json_response = response.json()
 
@@ -198,7 +202,9 @@ class UnstructuredPDF(Reader):
 
         file_data = {"files": open(file_path, "rb")}
 
-        response = requests.post(url, headers=headers, data=data, files=file_data, timeout=30)
+        response = requests.post(
+            url, headers=headers, data=data, files=file_data, timeout=30
+        )
 
         file_data["files"].close()
 
@@ -230,7 +236,7 @@ class UnstructuredPDF(Reader):
             self: The UnstructuredPDF instance
             dir_path (Path): The path to the directory to load files from
             document_type (str): The type of the document
-        
+
         Returns:
             List[Document]: A list of Document objects representing the loaded files
         """

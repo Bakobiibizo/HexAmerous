@@ -2,6 +2,7 @@
 Chunker Manager. Manager class that handles chunking classes. Based one Weaviate's Verba.
 https://github.com/weaviate/Verba
 """
+
 import tiktoken
 from loguru import logger
 from typing_extensions import List, Dict
@@ -17,6 +18,7 @@ class ChunkerManager:
     """
     Chunker Manager class. Handles chunking classes.
     """
+
     def __init__(self):
         """
         Initializes a new instance of the ChunkerManager class.
@@ -110,7 +112,7 @@ class ChunkerManager:
                 for chunk in chunks:
                     tokens = encoding.encode(chunk.text, disallowed_special=())
                     chunk.set_tokens(tokens)
-                    while self.token_count <1000:
+                    while self.token_count < 1000:
                         for token in tokens:
                             self.token_count += 1
                             self.batch.append(token)

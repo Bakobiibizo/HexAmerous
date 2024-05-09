@@ -2,6 +2,7 @@
 Simple Reader for .txt, .md, .mdx, and .json files. Based on Weaviate's Verba,
 https://github.com/weaviate/Verba
 """
+
 import base64
 import glob
 import json
@@ -18,6 +19,7 @@ class SimpleReader(Reader):
     """
     The SimpleReader reads .txt, .md, .mdx, and .json files. It can handle both paths, content and bites.
     """
+
     def __init__(self):
         """
         Initializes a new instance of the SimpleReader class.
@@ -186,7 +188,7 @@ class SimpleReader(Reader):
         Returns:
             List[Document]: A list of Document objects representing the loaded documents.
 
-        This function initializes an empty list to store the documents. It then converts the `dir_path` to a string if it is a Path object. 
+        This function initializes an empty list to store the documents. It then converts the `dir_path` to a string if it is a Path object.
 
         Next, it loops through each file type specified in `self.file_types`. For each file type, it uses the `glob` module to find all the files in `dir_path` and its subdirectories that match the current file type.
 

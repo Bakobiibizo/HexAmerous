@@ -7,6 +7,7 @@ from typing_extensions import List, Dict, Union
 from datetime import datetime
 from loguru import logger
 from enum import Enum
+
 # Load environment variables
 load_dotenv()
 
@@ -28,19 +29,22 @@ class MODEL_LIST(Enum):
 
     def __repr__(self):
         return self.value
-    
+
 
 def change_selected_model(model: Union[MODEL_LIST, str]):
     selected_model = MODEL_LIST.MIXTRAL_7B
     logger.info(f"Selected model changed to {selected_model}")
     return selected_model
 
+
 # call openai chat api
+
 
 class Manager(BaseModel):
     context: List[Dict[str, str]] = []
     context_counts: List[float] = []
     full_count: Union[int, float] = 0
+
 
 class ContextManager(Manager):
     def __init__(self, context: Dict[str, str]):
@@ -52,7 +56,7 @@ class ContextManager(Manager):
 
     def add_context(self, message: Dict[str, str]):
         self.context.append(message)
-    
+
     def rough_context_counter(self, context: str):
         text = f"{context}"
         words = text.split(" ")
@@ -77,7 +81,7 @@ class ContextManager(Manager):
             messages_count -= 1
             self.context.pop(0)
             self.context_counts.pop(0)
-            
+
             full_count += count
             print(full_count)
             if full_count > 16000:
@@ -88,58 +92,53 @@ class ContextManager(Manager):
         print(self.context)
         return self.context
 
-system_prompt = {
-    "role": "system",
-    "content": "You are a helpful assistant."
-}
+
+system_prompt = {"role": "system", "content": "You are a helpful assistant."}
+
 
 def get_context_manager():
     return ContextManager(context=system_prompt)
+
 
 context_manager = get_context_manager()
 
 print("loading")
 
 
-context_manager.add_context({
-                "role": "user",
-                "content": "Hi there, how are you today?"
-})
+context_manager.add_context({"role": "user", "content": "Hi there, how are you today?"})
 
-context_manager.add_context({
-                "role": "assistant",
-                "content": "I am doing well, thank you for asking. I am learning a lot about the world and I am excited to learn more. What can I help you with today?"
-})
+context_manager.add_context(
+    {
+        "role": "assistant",
+        "content": "I am doing well, thank you for asking. I am learning a lot about the world and I am excited to learn more. What can I help you with today?",
+    }
+)
 
 
 def chat_gpt(user_message):
-    context_manager.add_context({
-        "role": "user",
-        "content": f"{datetime.now()}: {user_message}"
-    })
-    
+    context_manager.add_context(
+        {"role": "user", "content": f"{datetime.now()}: {user_message}"}
+    )
+
     print(context_manager.context)
-    body = {
-        "model": f"{selected_model}",
-        "messages": context_manager.context
-    }
+    body = {"model": f"{selected_model}", "messages": context_manager.context}
     headers = {
         "Content-Type": "application/json",
-        "Authorization": f"x-api-key {os.getenv('AGENTARTIFICIAL_API_KEY')}"
+        "Authorization": f"x-api-key {os.getenv('AGENTARTIFICIAL_API_KEY')}",
     }
     url = os.getenv("AGENTARTIFICIAL_URL")
     # Call OpenAI's Chat API
     result = requests.post(url=str(url), json=body, headers=headers)
     print(result)
     # Read the current value of the counter from a file
-    with open("./log/log_count.txt", "r", encoding='utf-8') as f:
+    with open("./log/log_count.txt", "r", encoding="utf-8") as f:
         log_count = str(f.read().strip())
     # get response from OpenAI
-    if result.status_code == 200:   
+    if result.status_code == 200:
         message = result.json()["choices"][0]["message"]
-    
-    # append log
-        with open(f"./log/{log_count}.txt", "a", encoding='utf-8') as f:
+
+        # append log
+        with open(f"./log/{log_count}.txt", "a", encoding="utf-8") as f:
             f.write(f"User: {user_message}\n\nAssistant: {message['content']}\n\n")
 
             # add context

@@ -2,6 +2,7 @@
 Tiktoken Token Chunker. Based on Weaviate's Verba.
 https://github.com/weaviate/Verba
 """
+
 import tiktoken
 from tqdm import tqdm
 from loguru import logger
@@ -15,13 +16,8 @@ class TokenChunker(Chunker):
     """
     TokenChunker built with tiktoken.
     """
-    def __init__(
-        self,
-        name,
-        requires_library,
-        requires_env,
-        description
-        ):
+
+    def __init__(self, name, requires_library, requires_env, description):
         """
         Initializes the TokenChunker class.
 
@@ -37,7 +33,7 @@ class TokenChunker(Chunker):
             name=name,
             requires_library=requires_library,
             requires_env=requires_env,
-            description=description
+            description=description,
         )
         self.name = "TokenChunker"
         self.requires_library = ["tiktoken"]

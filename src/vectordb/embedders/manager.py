@@ -2,6 +2,7 @@
 Embedding Manager for handling the Embedder classes. Based on Weaviate's Verba.
 https://github.com/weaviate/Verba
 """
+
 from weaviate.client import Client
 from typing import List
 from loguru import logger
@@ -19,6 +20,7 @@ class EmbeddingManager:
     """
     Embedding Manager for handling embedder classes.
     """
+
     def __init__(self):
         """
         Constructor for EmbeddingManager class. Initializes the embedders dictionary with different Embedder instances and sets the selected embedder to ADAEmbedder by default.
@@ -32,10 +34,7 @@ class EmbeddingManager:
         self.selected_embedder: Embedder = self.embedders["ADAEmbedder"]
 
     def embed(
-        self,
-        documents: List[Document],
-        client: Client,
-        batch_size: int = 100
+        self, documents: List[Document], client: Client, batch_size: int = 100
     ) -> bool:
         """
         Embeds a list of Verba documents and its chunks to Weaviate.

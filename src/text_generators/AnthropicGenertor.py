@@ -8,7 +8,8 @@ from src.text_generators.interface import available_generators, Generator
 
 api_key = check_api_keys()
 
-#TODO Refactor this whole thing
+# TODO Refactor this whole thing
+
 
 class AnthropicGenerator(Generator):
     def __init__(self, api_key=None):
@@ -133,7 +134,9 @@ class PromptConverter:
 #    asyncio.run(text)
 #
 
+
 def get_anthropic_generator():
     return AnthropicGenertor(api_key)
+
 
 available_generators.generators["anthropic"] = get_anthropic_generator

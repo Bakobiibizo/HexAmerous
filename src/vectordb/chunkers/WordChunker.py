@@ -2,6 +2,7 @@
 WordChunker for vectorstore. Based on Weaviate's Verba.
 https://github.com/weaviate/Verba
 """
+
 import spacy
 from tqdm import tqdm
 from loguru import logger
@@ -16,13 +17,8 @@ class WordChunker(Chunker):
     """
     WordChunker for Verba built with spaCy.
     """
-    def __init__(
-        self,
-        name,
-        requires_library,
-        requires_env,
-        description
-):
+
+    def __init__(self, name, requires_library, requires_env, description):
         """
         Initializes the WordChunker object.
 
@@ -38,7 +34,7 @@ class WordChunker(Chunker):
             name=name,
             requires_library=requires_library,
             requires_env=requires_env,
-            description=description
+            description=description,
         )
         self.name = "WordChunker"
         self.requires_library = ["spacy"]

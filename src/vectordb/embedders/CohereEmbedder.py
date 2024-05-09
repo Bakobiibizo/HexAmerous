@@ -2,6 +2,7 @@
 Cohere Embedder. Based on Weaviate's Verba.
 https://github.com/weaviate/Verba
 """
+
 from weaviate.client import Client
 from typing_extensions import List
 
@@ -13,6 +14,7 @@ class CohereEmbedder(Embedder):
     """
     CohereEmbedder for Verba.
     """
+
     def __init__(self):
         """
         Initializes a new instance of the class.
@@ -30,19 +32,18 @@ class CohereEmbedder(Embedder):
             None
         """
         super().__init__(
-            description=("Embeds and retrieves objects using Cohere's ember multilingual-v2.0 model"),
+            description=(
+                "Embeds and retrieves objects using Cohere's ember multilingual-v2.0 model"
+            ),
             name="CohereEmbedder",
             requires_env=["COHERE_API_KEY"],
-            requires_library=None
-            )
+            requires_library=None,
+        )
         self.vectorizer = "text2vec-cohere"
         self.tokenizer = CohereEmbedder()
 
     def embed(
-        self,
-        documents: List[Document],
-        client: Client,
-        batch_size: int = 100
+        self, documents: List[Document], client: Client, batch_size: int = 100
     ) -> bool:
         """
         Embeds the given list of documents and their chunks into Weaviate using the SentenceTransformer model.

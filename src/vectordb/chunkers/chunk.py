@@ -2,11 +2,13 @@
 Chunk. Based off of Weaviate's Verba.
 https://github.com/weaviate/Verba
 """
+
 from typing_extensions import Dict
 
 
 class Chunk:
     "Chunk class that represents a chunk of text."
+
     def __init__(
         self,
         text: str = "",

@@ -2,6 +2,7 @@
 Document class for Vectordb. Based on Weaviate's Verba.
 https://github.com/weaviate/Verba
 """
+
 from typing_extensions import List, Dict, Optional
 
 from src.vectordb.chunkers.chunk import Chunk
@@ -11,6 +12,7 @@ class Document:
     """
     Document class. Standard document for data ingestion into Vectordb.
     """
+
     def __init__(
         self,
         text: Optional[str] = "",

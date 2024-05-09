@@ -16,13 +16,10 @@ text_splitter = TokenTextSplitter(chunk_size=300, chunk_overlap=25)
 
 def scrape_site(url):
 
-    urls = [
-        str(url)
-    ]
+    urls = [str(url)]
 
     # File loader/scraper
-    loader = PlaywrightURLLoader(
-        urls=urls, remove_selectors=["header", "footer"])
+    loader = PlaywrightURLLoader(urls=urls, remove_selectors=["header", "footer"])
     raw_data = loader.load()
     data = raw_data[0].page_content
 
@@ -31,8 +28,7 @@ def scrape_site(url):
     print(texts)
 
     # Store in database
-    chromadb = Chroma.from_texts(
-        texts, embeddings, persist_directory='./docs/')
+    chromadb = Chroma.from_texts(texts, embeddings, persist_directory="./docs/")
     chromadb.persist()
 
     return chromadb
@@ -48,9 +44,10 @@ def scrape_site_map(site_path, collection_name):
 
     # Store in database
     metadata = collection_name
-    meta = metadata if metadata else 'file_path'
+    meta = metadata if metadata else "file_path"
     vectordb = Chroma.from_documents(
-        documents=docs, metadata=meta, embedding=embeddings, persist_directory='./docs/')
+        documents=docs, metadata=meta, embedding=embeddings, persist_directory="./docs/"
+    )
     vectordb.persist()
 
     return vectordb

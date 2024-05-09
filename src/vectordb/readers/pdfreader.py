@@ -2,6 +2,7 @@
 PDF Reader that handles ORC of PDF files. Based on Weaviate's Verba
 https://github.com/weaviate/Verba
 """
+
 import base64
 import glob
 import os
@@ -16,12 +17,11 @@ from src.vectordb.readers.document import Document
 from src.vectordb.readers.interface import InputForm, Reader
 
 
-
-
 class PDFReader(Reader):
     """
     The PDFReader reads .pdf files using Unstructured. It can handle both paths, content and bites. Requires the PyPDF2 library.
     """
+
     def __init__(self):
         """
         Initializes the PDFReader object with the necessary file types, required libraries, name, description, and input form.
@@ -141,7 +141,7 @@ class PDFReader(Reader):
         Returns:
             List[Document]: A list of Document objects representing the loaded documents.
 
-        This function initializes an empty list to store the documents. It then converts the `dir_path` to a string if it is a Path object. 
+        This function initializes an empty list to store the documents. It then converts the `dir_path` to a string if it is a Path object.
 
         Next, it loops through each file type specified in `self.file_types`. For each file type, it uses the `glob` module to find all the files in `dir_path` and its subdirectories that match the current file type.
 

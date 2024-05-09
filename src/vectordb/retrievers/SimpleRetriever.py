@@ -2,6 +2,7 @@
 Simple Retriever. Based on Weaviate's Verba.
 https://github.com/weaviate/Verba
 """
+
 from typing_extensions import List, Tuple
 from weaviate.client import Client
 from weaviate.hybrid import HybridFusion

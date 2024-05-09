@@ -6,13 +6,14 @@ class Llama2Generator(Generator):
     """
     Llama2Generator Generator.
     """
+
     def __init__(self, selected_model: str):
         super().__init__(
             api=os.getenv("HUGGINGFACE_API_KEY"),
             url=f"https://huggingface.co/{selected_model}",
             template=available_templates.templates[selected_model],
             context_window=8000,
-            context=[]
+            context=[],
         )
         self.name = "Llama2Generator"
         self.description = "Generator using Meta's Llama-2-7b-chat-hf model"
@@ -84,11 +85,15 @@ class Llama2Generator(Generator):
             )
 
             input = {k: v.to(self.device) for k, v in input.items()}
-            attention_mask = input.get("attention_mask", None)  # Get the attention mask, if provided
+            attention_mask = input.get(
+                "attention_mask", None
+            )  # Get the attention mask, if provided
             input_len = input["input_ids"].shape[1]
             msg.info(f"Tokenized finished with {input_len} tokens")
 
-            position_ids = torch.arange(0, input_len, dtype=torch.long, device=self.device).unsqueeze(0)
+            position_ids = torch.arange(
+                0, input_len, dtype=torch.long, device=self.device
+            ).unsqueeze(0)
 
             for output_len in range(output_length):
                 updated_position_ids = torch.arange(
@@ -109,12 +114,16 @@ class Llama2Generator(Generator):
                 current_token_id = output[0][-1]
                 if current_token_id == self.tokenizer.eos_token_id:
                     break
-                current_token = self.tokenizer.convert_ids_to_tokens([current_token_id], skip_special_tokens=False)
+                current_token = self.tokenizer.convert_ids_to_tokens(
+                    [current_token_id], skip_special_tokens=False
+                )
                 if type(current_token) == List:
                     current_token = " ".join(current_token)
                 current_token = current_token.replace("<0x0A>", "\n").replace("▁", " ")
                 # Update input for next iteration
-                input["input_ids"] = torch.cat((input["input_ids"], current_token_id.view(1, 1)), dim=1)
+                input["input_ids"] = torch.cat(
+                    (input["input_ids"], current_token_id.view(1, 1)), dim=1
+                )
                 attention_mask = torch.cat(
                     (
                         attention_mask,
@@ -161,11 +170,15 @@ class Llama2Generator(Generator):
         query = " ".join(queries)
         user_context = " ".join(context)
 
-        llama_prompt += f"Answer this query: '{query}' with this context: {user_context} [/INST] "
+        llama_prompt += (
+            f"Answer this query: '{query}' with this context: {user_context} [/INST] "
+        )
 
         return llama_prompt
 
+
 def get_huggingface_generator(api_key: str):
     return HuggingFaceGenerator(api_key=api_key)
+
 
 available_generators.generators["huggingface"] = get_huggingface_generator

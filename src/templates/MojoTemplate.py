@@ -20,7 +20,7 @@ class MojoTemplate(BaseTemplate):
             task="You provide verbose detailed and comprehensive answers to questions. You make sure to go through your answers carefully step by step to ensure the information is correct.",
             example="",
             tools="",
-            system_prompt=self.create_system_prompt()
+            system_prompt=self.create_system_prompt(),
         )
 
 
@@ -35,8 +35,10 @@ def main():
     """
     return MojoTemplate()
 
+
 def get_mojo_template():
     return MojoTemplate()
+
 
 templates.templates["MojoTemplate"] = get_mojo_template
 

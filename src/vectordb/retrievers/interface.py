@@ -12,13 +12,14 @@ class Retriever(Component):
     """
     Retriever interface for retrieving data from Weaviate.
     """
+
     def __init__(
         self,
         name: str,
         requires_env: List[str],
         requires_library: List[str],
-        description: str
-        ) -> None:
+        description: str,
+    ) -> None:
         """
         Initializes a new instance of the class.
         """
@@ -26,7 +27,7 @@ class Retriever(Component):
             description=description,
             name=name,
             requires_env=requires_env,
-            requires_library=requires_library
+            requires_library=requires_library,
         )
 
     def retrieve(
@@ -49,7 +50,7 @@ class Retriever(Component):
         Raises:
             NotImplementedError: If the load method is not implemented by a subclass.
         """
-        
+
         raise NotImplementedError("load method must be implemented by a subclass.")
 
     def sort_chunks(self, chunks: List[Chunk]) -> List[Chunk]:

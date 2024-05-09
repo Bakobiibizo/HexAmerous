@@ -3,17 +3,13 @@ from src.vectordb.readers.document import Document
 from src.vectordb.readers.interface import InputForm
 from src.vectordb.component import Component
 
+
 class Chunker(Component):
     """
     Interface for Verba Chunking.
     """
-    def __init__(
-        self,
-        name,
-        description,
-        requires_library,
-        requires_env
-        ):
+
+    def __init__(self, name, description, requires_library, requires_env):
         """
         Initializes the Chunker object.
 
@@ -29,7 +25,7 @@ class Chunker(Component):
             name=name,
             requires_env=requires_env,
             requires_library=requires_library,
-            description=description
+            description=description,
         )
         self.input_form = InputForm.CHUNKER.value  # Default for all Chunkers
         self.default_units = 100
@@ -55,4 +51,3 @@ class Chunker(Component):
             NotImplementedError: If the chunk method is not implemented by a subclass.
         """
         raise NotImplementedError("chunk method must be implemented by a subclass.")
-

@@ -2,6 +2,7 @@
 Github Reader. Based on Weaviate's Verba.
 https://github.com/weaviate/Verba
 """
+
 import base64
 import json
 import os
@@ -19,6 +20,7 @@ class GithubReader(Reader):
     """
     The GithubReader downloads files from Github and ingests them into Weaviate.
     """
+
     def __init__(self) -> None:
         """
         Initializes a new instance of the GithubReader class.
@@ -108,10 +110,10 @@ class GithubReader(Reader):
     def fetch_docs(self, path: str) -> List:
         """
         Fetches documents based on the given path from a GitHub repository.
-        
+
         Parameters:
             path (str): The path to fetch documents from in the format owner/repo.
-        
+
         Returns:
             List: A list of file paths for the fetched documents.
         """

@@ -40,7 +40,7 @@ class GeneratorManager:
         :rtype: List[str]
         """
         return list(self.generators.keys())
-        
+
     def truncate_convtext_dicts(
         self, context_dicts: List[Dict[str, str]], max_tokens: int
     ) -> List[Dict[str, str]]:
@@ -58,8 +58,8 @@ class GeneratorManager:
 
         """
         import tiktoken
+
         encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
-        
 
         # Start with the newest conversations
         for item_dict in reversed(context_dicts):
@@ -86,4 +86,3 @@ class GeneratorManager:
 
         # The List has been built in reverse order so we reverse it again
         return list(reversed(self.truncated_dicts))
-

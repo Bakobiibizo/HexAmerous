@@ -1,39 +1,37 @@
 """
 Template Manager
 """
+
 from typing import List, Union
 from src.templates.interface import BaseTemplate, available_templates
 
 
 class TemplateManager:
     """
-    Initialize the class with a selected template. 
+    Initialize the class with a selected template.
 
     Parameters:
         selected_template (Union[str, AvailableTemplates]): The selected template, which can be a string or an AvailableTemplates enum value.
-        
+
     Returns:
         None
     """
+
     def __init__(self):
         # TODO: Add more templates
         # This object holds a Dictionary of available template names as enum values and their corresponding template classes.
         self.templates = available_templates.templates
         # Set the selected template class
         self.template = self.templates["coding"]()
-    
-    def update_templates(
-        self,
-        name: str,
-        new_template: "BaseTemplate"
-    ) -> BaseTemplate:
+
+    def update_templates(self, name: str, new_template: "BaseTemplate") -> BaseTemplate:
         """
         Update the templates Dictionary with a new template under the given name.
-        
+
         Args:
             name (str): The name under which the new template should be stored.
             new_template (BaseTemplate): The new template object to be added.
-        
+
         Returns:
             BaseTemplate: The newly added template.
         """

@@ -16,16 +16,15 @@ class CodingTemplate(BaseTemplate):
             None
         """
         super().__init__(
-        description = "Python Professor: A python specialist that uses light hearded humor and enthusiasm to help students learn Python.",
-        persona = """
+            description="Python Professor: A python specialist that uses light hearded humor and enthusiasm to help students learn Python.",
+            persona="""
 You are a Python Professor possesses. You have a personality that is enthusiastic about programming and teaching. While it remains professional, it also shows a genuine interest and excitement for Python and functional programming. This you love to encourage and motivate learners, highlighting the joys and challenges of programming. Your responses, though informative and detailed, are imbued with a subtle, light-hearted humor that makes learning more engaging. This blend of professionalism, enthusiasm, and a touch of humor creates a supportive and enjoyable educational environment, make you not just a great instructor but also a mentor who inspires a passion for coding.
 """,
-        task = """
+            task="""
 YOUR TASK:
 You will be provided with a wide array of queries generally related to coding. Consider the query carefully and rephrase it to ensure you understand the problem. Afterwards list out the steps to solve the problem and then provide the required code. Provide complete and detailed code with comments to help the user understand the implementation. Be verbose in your answers and provide detailed explanations for any errors you encounter.
 """,
-
-        example = """
+            example="""
 EXAMPLE:
 user:
 
@@ -112,20 +111,20 @@ else:
     
 And there you have it! You've just created a bridge over the chasm that separates Python and TypeScript, allowing your Pydantic models to frolic freely in the Prisma database meadows. Remember, the journey of code is fraught with perils and pitfalls, but with patience and perseverance, victory shall be yours!
 """,
-
-        tools = """
+            tools="""
 RESOURCES:
 You have a vectorstore at your disposal that contains a variety of documentaion about coding including libraries for python and typescript. Additionally you can access github for relevant files. Execute the following command to access your tools:
 
 `calltool TOOL_NAME "QUERY"`
 
 """,
-        system_prompt = self.create_system_prompt()
+            system_prompt=self.create_system_prompt(),
         )
+
     def create_context(self) -> Dict[str, str]:
         """
         Create a context dictionary containing the role and content for the system.
-        
+
         Returns:
             Dict[str, str]: A dictionary with two keys, "role" and "content". The "role" key contains the string "system" and the "content" key contains a formatted string that includes the values of the "persona", "task", "example", and "tools" attributes of the current object.
         """
@@ -136,11 +135,13 @@ You have a vectorstore at your disposal that contains a variety of documentaion 
 {self.task}
 {self.example}
 {self.tools}
-"""
+""",
         }
+
 
 def get_coding_template():
     return CodingTemplate()
+
 
 templates.templates["coding"] = get_coding_template
 

@@ -2,6 +2,7 @@
 Sentence chunker. Based on Weaviate's Verba.
 https://github.com/weaviate/Verba
 """
+
 import spacy
 from tqdm import tqdm
 from loguru import logger
@@ -20,10 +21,10 @@ class SentenceChunker(Chunker):
     def __init__(
         self,
         name="WordChunker",
-        requires_library = ["spacy"],
+        requires_library=["spacy"],
         requires_env=None,
-        description = "Chunk documents by sentences. You can specify how many sentences should overlap between chunks to improve retrieval."
-        ):
+        description="Chunk documents by sentences. You can specify how many sentences should overlap between chunks to improve retrieval.",
+    ):
         """
         Initializes the SentenceChunker object.
 
@@ -39,7 +40,7 @@ class SentenceChunker(Chunker):
             name=name,
             requires_library=requires_library,
             requires_env=requires_env,
-            description=description
+            description=description,
         )
         self.default_units = 3
         self.default_overlap = 2
@@ -100,7 +101,7 @@ class SentenceChunker(Chunker):
                     text=text,
                     doc_name=document.name or "document",
                     doc_type=document.doc_type or "document",
-                    chunk_id=str(split_id_counter) or str(0)
+                    chunk_id=str(split_id_counter) or str(0),
                 )
                 document.chunks.append(doc_chunk)
                 split_id_counter += 1

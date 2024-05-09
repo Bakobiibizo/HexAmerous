@@ -2,7 +2,11 @@ import os
 import json
 import httpx
 from typing import List, Dict, Optional, Callable, Iterator
-from src.text_generators.interface import Generator, GeneratorConfig, available_generators
+from src.text_generators.interface import (
+    Generator,
+    GeneratorConfig,
+    available_generators,
+)
 from src.templates.interface import available_templates, base_template
 from dotenv import load_dotenv
 
@@ -17,8 +21,8 @@ class AgentArtificialGenerator(Generator):
         api=str(os.getenv("AGENTARTIFICIAL_API_KEY")),
         context_window=10000,
         context=[],
-        model="llama3_8b"
-        ):
+        model="llama3_8b",
+    ):
         """
         Initializes an instance of the AgentArtificialGenerator class.
 
@@ -38,11 +42,11 @@ class AgentArtificialGenerator(Generator):
             url=url,
             api=api,
             context_window=context_window,
-            context=context      
+            context=context,
         )
         self.model = model
         self.client = httpx.Client()
-        
+
     def set_apikey(self) -> bool:
         """
         A description of the entire function, its parameters, and its return types.
@@ -93,8 +97,15 @@ class AgentArtificialGenerator(Generator):
             bool: True if the template is successfully set, False otherwise.
         """
         return bool(self.template)
-    
-    def set_configuration(self, template: Callable, url: str, api: str, context_window: int, context: List[Dict[str, str]]):
+
+    def set_configuration(
+        self,
+        template: Callable,
+        url: str,
+        api: str,
+        context_window: int,
+        context: List[Dict[str, str]],
+    ):
         """
         Sets the configuration for the AgentArtificialGenerator object.
 
@@ -116,7 +127,7 @@ class AgentArtificialGenerator(Generator):
             url=url,
             api=api,
             context_window=context_window,
-            context=context
+            context=context,
         ).model_dump()
 
     def install_depenedencies(self):
@@ -133,15 +144,15 @@ class AgentArtificialGenerator(Generator):
         """
         try:
             import httpx  # type: ignore
+
             if not httpx:
                 raise ImportError
         except ImportError:
             os.system("pip install httpx")
 
     def prepare_messages(
-        self, 
-        queries: Optional[List[str]]=None
-        ) -> List[Dict[str,str]]:
+        self, queries: Optional[List[str]] = None
+    ) -> List[Dict[str, str]]:
         """
         Prepare messages for the conversation.
 
@@ -151,7 +162,7 @@ class AgentArtificialGenerator(Generator):
         Returns:
             List[Dict[str, str]]: A list of messages in the format {"role": str, "content": str}.
         """
-        
+
         if not self.context:
             self.context = [self.template.create_system_prompt()]  # type: ignore
         if not queries:
@@ -174,16 +185,9 @@ class AgentArtificialGenerator(Generator):
                 - model (str): The model to be used for generating the response.
                 - messages (List[Dict[str, str]]): The list of messages in the format {"role": str, "content": str}.
         """
-        return {
-            "model": self.model,
-            "messages": self.context
-        }
+        return {"model": self.model, "messages": self.context}
 
-    def generate(
-        self,
-        queries,
-        url
-        ):
+    def generate(self, queries, url):
         """
         Generates a response using the given queries and sends a POST request to the specified URL.
 
@@ -198,8 +202,10 @@ class AgentArtificialGenerator(Generator):
         body = self.prepare_body()
         response = self.client.post(url, json=json.dumps(body))
         return response.json()
-        
-    async def generate_stream(self, messages, url="the-roost- agentartificial.ngrok.dev", model="codellama"):
+
+    async def generate_stream(
+        self, messages, url="the-roost- agentartificial.ngrok.dev", model="codellama"
+    ):
         """
         Asynchronously generates a stream of responses using the given messages and sends a POST request to the specified URL.
 
@@ -214,19 +220,14 @@ class AgentArtificialGenerator(Generator):
         Raises:
             None
         """
-        
-        payload = {
-          "messages": messages,
-          "model": model,
-          "streaming": True
-        }
+
+        payload = {"messages": messages, "model": model, "streaming": True}
         headers = {
-          "Authorization": f"Bearer {self.api}",
-          "Content-Type": "application/json"
+            "Authorization": f"Bearer {self.api}",
+            "Content-Type": "application/json",
         }
         res = self.client.post(url, data=payload, headers=headers)
         yield res.read()
-
 
 
 def get_agentartificial_generator():
@@ -244,6 +245,5 @@ def get_agentartificial_generator():
 def get_agentartficial_generator():
     return AgentArtificialGenerator()
 
+
 available_generators.add_generator("agent_artificial", get_agentartificial_generator)
-
-

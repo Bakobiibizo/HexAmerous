@@ -2,6 +2,7 @@
 Embedder Interface. Based on Weaviate's Verba.
 https://github.com/weaviate/Verba
 """
+
 from tqdm import tqdm
 from typing import List, Dict, Tuple, Union, Optional
 from weaviate import Client
@@ -9,20 +10,25 @@ from loguru import logger
 from src.vectordb.readers.document import Document
 from src.vectordb.readers.interface import InputForm
 from src.vectordb.component import Component
-from src.vectordb.schema.schema_generator import VECTORIZERS, EMBEDDINGS, strip_non_letters
+from src.vectordb.schema.schema_generator import (
+    VECTORIZERS,
+    EMBEDDINGS,
+    strip_non_letters,
+)
 
 
 class Embedder(Component):
     """
     Interface for Verba Embedding.
     """
+
     def __init__(
         self,
         name: str,
         description: str,
         requires_env: List[str],
-        requires_library: Optional[List[str]]=None,
-        ):
+        requires_library: Optional[List[str]] = None,
+    ):
         """
         Initializes a new instance of the class.
 
@@ -39,17 +45,14 @@ class Embedder(Component):
             name=name,
             description=description,
             requires_env=requires_env,
-            requires_library=requires_library
+            requires_library=requires_library,
         )
         self.input_form = InputForm.TEXT.value  # Default for all Embedders
         self.vectorizer = ""
 
     def embed(
-        self, 
-        documents: List[Document],
-        client: Client, 
-        batch_size: int = 100
-        ) -> bool:
+        self, documents: List[Document], client: Client, batch_size: int = 100
+    ) -> bool:
         """
         A method for embedding data using the given client and batch size.
 
@@ -96,7 +99,7 @@ class Embedder(Component):
                 temp_batch = []
                 token_counter = 0
                 for chunk in document.chunks:
-                    if not chunk or not chunk.tokens:  
+                    if not chunk or not chunk.tokens:
                         break
                     if token_counter + chunk.tokens <= 5000:
                         token_counter += chunk.tokens
@@ -303,12 +306,12 @@ class Embedder(Component):
     def search_documents(self, client: Client, query: str, doc_type: str) -> List:
         """
         Search for documents from Weaviate based on the given query and document type.
-        
+
         Args:
             client (Client): The Weaviate client used to query the database.
             query (str): The search query.
             doc_type (str): The document type to search for. If None, all document types will be searched.
-        
+
         Returns:
             List: A list of documents matching the search query.
         """
@@ -408,7 +411,7 @@ class Embedder(Component):
     ) -> Union[str, Tuple[Union[str, None], Union[float, None]]]:
         """
         Retrieve results from semantic cache based on query and distance threshold.
-        
+
         :param client: The client object used to query the semantic cache.
         :type client: Client
         :param query: The query string to search for in the semantic cache.
@@ -436,17 +439,19 @@ class Embedder(Component):
         ).do()
         if not match_results["data"]:
             return None, None
-        if "data" in match_results and len(match_results["data"]["Get"][self.get_cache_class()]) > 0 and (
-            query
-            == match_results["data"]["Get"][self.get_cache_class()][0]["query"]
+        if (
+            "data" in match_results
+            and len(match_results["data"]["Get"][self.get_cache_class()]) > 0
+            and (
+                query
+                == match_results["data"]["Get"][self.get_cache_class()][0]["query"]
+            )
         ):
             logger.info("Direct match from cache")
             if not match_results["data"]["Get"][self.get_cache_class()][0]["system"]:
                 return None, None
             return (
-                match_results["data"]["Get"][self.get_cache_class()][0][
-                    "system"
-                ],
+                match_results["data"]["Get"][self.get_cache_class()][0]["system"],
                 0.0,
             )
 
@@ -486,13 +491,7 @@ class Embedder(Component):
         logger.info("Retrieved similar from cache")
         return result["system"], float(result["_additional"]["distance"])
 
-
-    def add_to_semantic_cache(
-        self,
-        client: Client,
-        query: str,
-        system: str
-        ):
+    def add_to_semantic_cache(self, client: Client, query: str, system: str):
         """
         Adds a query and its corresponding system response to the semantic cache.
 

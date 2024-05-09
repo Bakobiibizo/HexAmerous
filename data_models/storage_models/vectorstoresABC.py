@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any, List, Dict
 
+
 class AbstractVectorStore(ABC):
     """
     Abstract base class for VectorStore.

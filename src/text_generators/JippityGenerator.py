@@ -1,5 +1,6 @@
 from src.text_generators.interface import Generator, available_generators
 
+
 class GPT4Generator(Generator):
     """
     GPT4 Generator.
@@ -88,7 +89,9 @@ class GPT4Generator(Generator):
         except Exception:
             raise
 
-    def prepare_messages(self, queries: List[str], context: List[str], conversation: Dict[str, str]) -> Dict[str, str]:
+    def prepare_messages(
+        self, queries: List[str], context: List[str], conversation: Dict[str, str]
+    ) -> Dict[str, str]:
         """
         Prepares a List of messages formatted for a Retrieval Augmented Generation chatbot system, including system instructions, previous conversation, and a new user query with context.
 
@@ -122,7 +125,9 @@ class GPT4Generator(Generator):
 
         return messages
 
+
 def get_jippity_generator():
     return JippityGenerator()
+
 
 available_generators.generators["jippity"] = get_jippity_generator

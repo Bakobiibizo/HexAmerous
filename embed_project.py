@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import os
 import glob
-#from embeddings import create_embedding
+
+# from embeddings import create_embedding
 
 
-#def run_embed_project(file_path):
+# def run_embed_project(file_path):
 #    project_folder = file_path
 #    output_folder = '/docs/'
 #    # Get all .py files in the project folder and its subdirectories

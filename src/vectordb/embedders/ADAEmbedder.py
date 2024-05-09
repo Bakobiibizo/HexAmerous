@@ -1,6 +1,7 @@
 """
 ADAEmbedder. Based on Weaviate's Verba.
 """
+
 import os
 import openai
 from weaviate.client import Client
@@ -12,10 +13,12 @@ from src.vectordb.readers.document import Document
 
 load_dotenv()
 
+
 class ADAEmbedder(Embedder):
     """
     ADAEmbedder for Verba.
     """
+
     def __init__(self) -> None:
         """
         Constructor for ADAEmbedder class. Initializes the name, required environment variables,
@@ -32,10 +35,7 @@ class ADAEmbedder(Embedder):
         self.openai.api_key = str(os.getenv("OPENAI_API_KEY"))
 
     def embed(
-        self,
-        documents: List[Document],
-        client: Client,
-        batch_size: int = 100
+        self, documents: List[Document], client: Client, batch_size: int = 100
     ) -> bool:
         """
         Embeds the given list of documents and their chunks into Weaviate using the SentenceTransformer model.
@@ -46,6 +46,8 @@ class ADAEmbedder(Embedder):
             bool
         """
         return self.import_data(documents, client)
-    
+
     def vectorize_query(self, query: str):
-        return self.openai.embeddings.create(input=[query], model="text-embedding-ada-002")
+        return self.openai.embeddings.create(
+            input=[query], model="text-embedding-ada-002"
+        )

@@ -27,10 +27,7 @@ available_generators.generators["huggingface"] = get_huggingface_generator
 available_generators.generators["jippity"] = get_jippity_generator
 
 
-
 class HexGenerator:
     def __init__(self):
-        self.generator = GeneratorManager(
-            selected_generator=""
-        )
+        self.generator = GeneratorManager(selected_generator="")
         self.template = TemplateManager()

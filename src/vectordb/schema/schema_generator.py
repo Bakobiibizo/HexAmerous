@@ -2,6 +2,7 @@
 Schema Generator. Based on Weaviate's Verba.
 https://github.com/weaviate/Verba
 """
+
 import re
 import os
 from dotenv import load_dotenv
@@ -11,8 +12,12 @@ from typing_extensions import List, Dict, Optional, Tuple
 
 load_dotenv()
 
-VECTORIZERS = {"text2vec-openai", "text2vec-cohere"}  # Needs to match with Weaviate modules
+VECTORIZERS = {
+    "text2vec-openai",
+    "text2vec-cohere",
+}  # Needs to match with Weaviate modules
 EMBEDDINGS = {"MiniLM"}  # Custom Vectors
+
 
 def strip_non_letters(s: str):
     """
@@ -26,10 +31,9 @@ def strip_non_letters(s: str):
     """
     return re.sub(r"[^a-zA-Z0-9]", "_", s)
 
+
 def verify_vectorizer(
-    schema: Dict,
-    vectorizer: str,
-    skip_properties: Optional[List[str]] = None
+    schema: Dict, vectorizer: str, skip_properties: Optional[List[str]] = None
 ) -> Dict:
     """
     Verify the vectorizer and update the schema accordingly.
@@ -58,19 +62,18 @@ def verify_vectorizer(
         skip_properties = []
     modified_schema = schema.copy()
 
-    #adding specific config for Azure OpenAI
+    # adding specific config for Azure OpenAI
     vectorizer_config = None
-    if os.getenv("OPENAI_API_TYPE") == "azure" and vectorizer=="text2vec-openai":
+    if os.getenv("OPENAI_API_TYPE") == "azure" and vectorizer == "text2vec-openai":
         resource_name = os.getenv("AZURE_OPENAI_RESOURCE_NAME")
         model = os.getenv("AZURE_OPENAI_EMBEDDING_MODEL")
         if resource_name is None or model is None:
-            
-            raise ValueError("AZURE_OPENAI_RESOURCE_NAME and AZURE_OPENAI_EMBEDDING_MODEL should be set when OPENAI_API_TYPE is azure. Resource name is XXX in http://XXX.openai.azure.com")
-        vectorizer_config = { 
-            "text2vec-openai": {
-                    "deploymentId": model,
-                    "resource_name": resource_name
-            }
+
+            raise ValueError(
+                "AZURE_OPENAI_RESOURCE_NAME and AZURE_OPENAI_EMBEDDING_MODEL should be set when OPENAI_API_TYPE is azure. Resource name is XXX in http://XXX.openai.azure.com"
+            )
+        vectorizer_config = {
+            "text2vec-openai": {"deploymentId": model, "resource_name": resource_name}
         }
 
     # Verify Vectorizer
@@ -94,10 +97,8 @@ def verify_vectorizer(
 
     return modified_schema
 
-def add_suffix(
-    schema: Dict, 
-    vectorizer: str
-    ) -> Tuple[Dict, str]:
+
+def add_suffix(schema: Dict, vectorizer: str) -> Tuple[Dict, str]:
     """
     A function that adds a suffix to the class property of the schema based on the vectorizer provided.
 
@@ -114,6 +115,7 @@ def add_suffix(
         modified_schema["classes"][0]["class"] + "_" + strip_non_letters(vectorizer)
     )
     return modified_schema, modified_schema["classes"][0]["class"]
+
 
 def reset_schemas(
     client: Optional[Client] = None,
@@ -139,9 +141,10 @@ def reset_schemas(
     client.schema.delete_class(chunk_name)
     client.schema.delete_class(cache_name)
 
+
 def init_schemas(
-    client: Optional[Client]=None,
-    vectorizer: Optional[str]=None,
+    client: Optional[Client] = None,
+    vectorizer: Optional[str] = None,
     force: bool = False,
     check: bool = False,
 ) -> bool:
@@ -172,11 +175,12 @@ def init_schemas(
         logger.warning(f"Schema initialization failed {str(e)}")
         return False
 
+
 def init_documents(
-    client: Client, 
-    vectorizer: Optional[str] = None, 
-    force: bool = False, 
-    check: bool = False
+    client: Client,
+    vectorizer: Optional[str] = None,
+    force: bool = False,
+    check: bool = False,
 ) -> Tuple[Dict, Dict]:
     """
     Initializes the schemas for a given client and vectorizer.
@@ -312,11 +316,12 @@ def init_documents(
 
     return document_schema, chunk_schema
 
+
 def init_cache(
-    client: Client, 
-    vectorizer: Optional[str] = None, 
-    force: bool = False, 
-    check: bool = False
+    client: Client,
+    vectorizer: Optional[str] = None,
+    force: bool = False,
+    check: bool = False,
 ) -> Dict:
     """
     Initializes the cache schema for a given client and vectorizer.
@@ -385,11 +390,8 @@ def init_cache(
 
     return cache_schema
 
-def init_suggestion(
-    client: Client,
-    force: bool = False,
-    check: bool = False
-) -> Dict:
+
+def init_suggestion(client: Client, force: bool = False, check: bool = False) -> Dict:
     """
     Initializes the schema for suggestions based on the client, force flag, and check flag.
 
@@ -435,7 +437,9 @@ def init_suggestion(
             client.schema.create(suggestion_schema)
             logger.info(f"{suggestion_name} schema created")
         else:
-            logger.warning(f"Skipped deleting {suggestion_name} schema, nothing changed")
+            logger.warning(
+                f"Skipped deleting {suggestion_name} schema, nothing changed"
+            )
     else:
         client.schema.create(suggestion_schema)
         logger.info(f"{suggestion_name} schema created")
