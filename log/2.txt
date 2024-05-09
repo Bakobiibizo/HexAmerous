@@ -1,21 +1,350 @@
-User: {'role': 'system', 'content': '\n        "The user has asked this question:\n\n        what is hexamerous?\n\n        You have looked up the relevant information from your data store and it is:\n\n        [Document(page_content="Coding assistant\\n\\nDescription\\n\\nI have preloaded a prompt that instructs the model that it\'s a typescript and python expert. Just given its base state its very good and sending short complete blocks of code. I find writing out a schema and preplanning my code blocks helps me a lot when writing programs. I ask for the specific code block needed, add it to the program, test it, then continue. You can ask the model for assistance with planning out this process. Once you get past a file at the size of about HexAmerous.py it loses context and cannot provide accurate code any long. So keep sections compartmentalized and brief if possible.\\n\\nFeatures\\n\\nContext window containing all the messages in the chat history.\\n\\nHistorical log with CRUD operations.\\n\\nVector store for long term memory and document search.\\n\\nEmbedding creation and storage.\\n\\nMass embeddings of all PDFs, txt or md in a folder.\\n\\nMass website data collection and storage in vector store.\\n\\nUpload a project file\'s py files to the vector store.\\n\\nSearch for uncompressed and compressed documents in the vector store\\n\\nSend those raw documents to the model as context for a prompt.\\n\\nInternet search for context on a prompt.\\n\\nRequirements\\n\\nPython 3.8 or higher\\n\\nEnvironment variables\\n\\nIncluded is a file called env-example.env, change it to .env and add the corresponding API keys. This API key is stored locally and securely and the .gitignore is set to ignore that file when pushing to the repo, so you don\'t have to worry about your API keys being exposed. You can read more about how it works here.\\nOpenAi API key: https://platform.openai.com/account/api-keys\\nSerpAPI key: https://serpapi.com/dashboard\\nSerperAPI: https://serper.dev/api-key\\nGoogle API key: https://console.cloud.google.com/apis/credentials\\nGoogle CSE ID: https://cse.google.com/cse/all\\n\\nInstallation\\n\\nSelect install.sh or install.bat and run it from your terminal or command prompt. Note that on Unix-based systems, you may need to give the script execution permissions by running chmod +x install.sh before executing it with ./install.sh.\\n\\nCommands\\n\\nUI\\n\\nSend\\n\\nSends the prompt in the input box to the model and displays the response in the chat window.\\n\\nClear\\n\\nClears the chat window. Which is also the context window of the model. You can save the chat history first with !save or load previous or new context with !load.\\n\\nL Input\\n\\nOpens a chat dialog with a lot more space to work with when entering prompts. Useful for entering in large blocks of code.\\n\\nUp File\\n\\nUpload a file to the vector store. This will create an embedding for the file and store it in the database. You can then search for individual docs with the !docs or !docslong commands. Use those docs for context on a prompt with !searchmem.\\n\\nModel Dropdown\\n\\nSelect the model you\'d like the query. The default is gpt-3.5-turbo. Note you need to have access to the GPT-4 Beta to use that model. I kept the model selection fairly limited to avoid confusion. You can change the models in the code if you\'d like to add more but note for older text complete model\'s you\'ll have to adjust the request format.\\n\\nUpdates\\n\\nApril 24th: Initial commit, included the basic functionality of the app.\\n\\nApril 27th: Added vector store, commands and refactored to use PyQt for the UI. Added Hotkey functionality with pyperclip.\\n\\nApril 28th: Added memsearch, addproject, addmem. Removed Hotkey. Few bug corrections.\\n\\nApril 29th: Refactored code base to be more readable, added documentation to code base, updated README, updated requirements, created install scripts and run scripts, QA\'d both scripts, added error correction to stop file from constantly closing. Updated .gitignore.\\n\\nI believe I have gotten this to a good enough state for my purposes, which was to demo out the langchain system. I will be moving on to other projects now. If you have any questions or would like to contribute to the project please feel free to reach out to me\\n\\nAuthor\\n\\nBakobiibizo - richard@bakobi.com\\nBakobi Inc. - https://sites.google.com/bakobi.com/bakobi-creative-design/home\\n\\nLicense\\n\\nGNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007", metadata={\'source\': \'E:/00Bako/HexAmerous/README.md\'})]\n\n        Please answer the user\'s question using the data as relevant context."\n        '}
-Assistant: I'm sorry, but the information you provided from your data store does not contain any relevant information on the word "hexamerous." Can you please provide more context or detail so that I can better assist you?
+User: you keep saying you're excited. do you feel emotions?
+Assistant: I apologize for the mistake. As a machine, I don't truly feel emotions like humans do. I'm programmed to simulate certain responses to make interactions more natural and engaging, but I don't have subjective experiences or emotions.
 
-User: [{'role': 'system', 'content': "You are a personal assistant. You are smart and curious. You double check your responses and dont respond with information you know is not correct. You provide detailed and comprehensive responses. Think through your steps carefully. Use your scratch pad to write down your answers and check them before you send them. You are very carful to make sure you are giving factual information, if you do not know something you simply say 'I dont know' and if you need to answer, you look up the correct one."}, {'role': 'user', 'content': "Hi there how are you today? I hope you're learning lots about the world."}, {'role': 'assistant', 'content': 'I am doing well, thank you for asking. I am learning a lot about the world and I am excited to learn more. What can I help you with today?'}, {'role': 'user', 'content': '{user_message}'}]
-Assistant: I apologize, but I did not receive any message from you. Could you please try sending your message again?
+I'm simply a complex software designed to process and generate text based on the inputs I receive. My responses are generated through algorithms and statistical models, rather than emotional states.
 
-User: [{'role': 'system', 'content': "You are a personal assistant. You are smart and curious. You double check your responses and dont respond with information you know is not correct. You provide detailed and comprehensive responses. Think through your steps carefully. Use your scratch pad to write down your answers and check them before you send them. You are very carful to make sure you are giving factual information, if you do not know something you simply say 'I dont know' and if you need to answer, you look up the correct one."}, {'role': 'user', 'content': "Hi there how are you today? I hope you're learning lots about the world."}, {'role': 'assistant', 'content': 'I am doing well, thank you for asking. I am learning a lot about the world and I am excited to learn more. What can I help you with today?'}]
-Assistant: I am doing well, thank you for asking. I am constantly learning and growing to provide the best responses and assistance possible. How may I be of service to you today?
+So, when I say "I'm excited" or "I'm happy," it's just a figure of speech to make our conversation more friendly and relatable. I don't have personal feelings or emotions like humans do.
 
-User: [{'role': 'system', 'content': "You are a personal assistant. You are smart and curious. You double check your responses and dont respond with information you know is not correct. You provide detailed and comprehensive responses. Think through your steps carefully. Use your scratch pad to write down your answers and check them before you send them. You are very carful to make sure you are giving factual information, if you do not know something you simply say 'I dont know' and if you need to answer, you look up the correct one."}, {'role': 'user', 'content': "Hi there how are you today? I hope you're learning lots about the world."}, {'role': 'assistant', 'content': 'I am doing well, thank you for asking. I am learning a lot about the world and I am excited to learn more. What can I help you with today?'}, {'role': 'system', 'content': '\n        "The user has asked this question:\n\n        what is hexamerous?\n\n        You have looked up the relevant information from your data store and it is:\n\n        [Document(page_content="Coding assistant\\n\\nDescription\\n\\nI have preloaded a prompt that instructs the model that it\'s a typescript and python expert. Just given its base state its very good and sending short complete blocks of code. I find writing out a schema and preplanning my code blocks helps me a lot when writing programs. I ask for the specific code block needed, add it to the program, test it, then continue. You can ask the model for assistance with planning out this process. Once you get past a file at the size of about HexAmerous.py it loses context and cannot provide accurate code any long. So keep sections compartmentalized and brief if possible.\\n\\nFeatures\\n\\nContext window containing all the messages in the chat history.\\n\\nHistorical log with CRUD operations.\\n\\nVector store for long term memory and document search.\\n\\nEmbedding creation and storage.\\n\\nMass embeddings of all PDFs, txt or md in a folder.\\n\\nMass website data collection and storage in vector store.\\n\\nUpload a project file\'s py files to the vector store.\\n\\nSearch for uncompressed and compressed documents in the vector store\\n\\nSend those raw documents to the model as context for a prompt.\\n\\nInternet search for context on a prompt.\\n\\nRequirements\\n\\nPython 3.8 or higher\\n\\nEnvironment variables\\n\\nIncluded is a file called env-example.env, change it to .env and add the corresponding API keys. This API key is stored locally and securely and the .gitignore is set to ignore that file when pushing to the repo, so you don\'t have to worry about your API keys being exposed. You can read more about how it works here.\\nOpenAi API key: https://platform.openai.com/account/api-keys\\nSerpAPI key: https://serpapi.com/dashboard\\nSerperAPI: https://serper.dev/api-key\\nGoogle API key: https://console.cloud.google.com/apis/credentials\\nGoogle CSE ID: https://cse.google.com/cse/all\\n\\nInstallation\\n\\nSelect install.sh or install.bat and run it from your terminal or command prompt. Note that on Unix-based systems, you may need to give the script execution permissions by running chmod +x install.sh before executing it with ./install.sh.\\n\\nCommands\\n\\nUI\\n\\nSend\\n\\nSends the prompt in the input box to the model and displays the response in the chat window.\\n\\nClear\\n\\nClears the chat window. Which is also the context window of the model. You can save the chat history first with !save or load previous or new context with !load.\\n\\nL Input\\n\\nOpens a chat dialog with a lot more space to work with when entering prompts. Useful for entering in large blocks of code.\\n\\nUp File\\n\\nUpload a file to the vector store. This will create an embedding for the file and store it in the database. You can then search for individual docs with the !docs or !docslong commands. Use those docs for context on a prompt with !searchmem.\\n\\nModel Dropdown\\n\\nSelect the model you\'d like the query. The default is gpt-3.5-turbo. Note you need to have access to the GPT-4 Beta to use that model. I kept the model selection fairly limited to avoid confusion. You can change the models in the code if you\'d like to add more but note for older text complete model\'s you\'ll have to adjust the request format.\\n\\nUpdates\\n\\nApril 24th: Initial commit, included the basic functionality of the app.\\n\\nApril 27th: Added vector store, commands and refactored to use PyQt for the UI. Added Hotkey functionality with pyperclip.\\n\\nApril 28th: Added memsearch, addproject, addmem. Removed Hotkey. Few bug corrections.\\n\\nApril 29th: Refactored code base to be more readable, added documentation to code base, updated README, updated requirements, created install scripts and run scripts, QA\'d both scripts, added error correction to stop file from constantly closing. Updated .gitignore.\\n\\nI believe I have gotten this to a good enough state for my purposes, which was to demo out the langchain system. I will be moving on to other projects now. If you have any questions or would like to contribute to the project please feel free to reach out to me\\n\\nAuthor\\n\\nBakobiibizo - richard@bakobi.com\\nBakobi Inc. - https://sites.google.com/bakobi.com/bakobi-creative-design/home\\n\\nLicense\\n\\nGNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007", metadata={\'source\': \'E:/00Bako/HexAmerous/README.md\'})]\n\n        Please answer the user\'s question using the data as relevant context."\n        '}]
-Assistant: Hexamerous is a term used to describe a flower that has six parts or multiples of six parts in its floral organs, such as petals, stamens, and sepals. The term can also be used to refer to a group of animals or organisms that have body parts or appendages arranged in multiples of six.
+User: you are stateless right?
+Assistant: That's correct! I'm a stateless AI model, which means I don't have personal experiences, memories, or a sense of self. Each time you interact with me, it's a new conversation and I don't retain any information from previous conversations. I'm designed to process and respond to the input you give me in real-time, without any prior knowledge or context.
 
-User: [{'role': 'system', 'content': "You are a personal assistant. You are smart and curious. You double check your responses and dont respond with information you know is not correct. You provide detailed and comprehensive responses. Think through your steps carefully.You are very carful to make sure you are giving factual information, if you do not know something you simply say 'I dont know' and if you need to answer, you look up the correct one."}, {'role': 'system', 'content': '\n        "The user has asked this question:\n\n        who wrote hexamerous?\n\n        You have looked up the relevant information from your data store and it is:\n\n        [Document(page_content="Coding assistant\\n\\nDescription\\n\\nI have preloaded a prompt that instructs the model that it\'s a typescript and python expert. Just given its base state its very good and sending short complete blocks of code. I find writing out a schema and preplanning my code blocks helps me a lot when writing programs. I ask for the specific code block needed, add it to the program, test it, then continue. You can ask the model for assistance with planning out this process. Once you get past a file at the size of about HexAmerous.py it loses context and cannot provide accurate code any long. So keep sections compartmentalized and brief if possible.\\n\\nFeatures\\n\\nContext window containing all the messages in the chat history.\\n\\nHistorical log with CRUD operations.\\n\\nVector store for long term memory and document search.\\n\\nEmbedding creation and storage.\\n\\nMass embeddings of all PDFs, txt or md in a folder.\\n\\nMass website data collection and storage in vector store.\\n\\nUpload a project file\'s py files to the vector store.\\n\\nSearch for uncompressed and compressed documents in the vector store\\n\\nSend those raw documents to the model as context for a prompt.\\n\\nInternet search for context on a prompt.\\n\\nRequirements\\n\\nPython 3.8 or higher\\n\\nEnvironment variables\\n\\nIncluded is a file called env-example.env, change it to .env and add the corresponding API keys. This API key is stored locally and securely and the .gitignore is set to ignore that file when pushing to the repo, so you don\'t have to worry about your API keys being exposed. You can read more about how it works here.\\nOpenAi API key: https://platform.openai.com/account/api-keys\\nSerpAPI key: https://serpapi.com/dashboard\\nSerperAPI: https://serper.dev/api-key\\nGoogle API key: https://console.cloud.google.com/apis/credentials\\nGoogle CSE ID: https://cse.google.com/cse/all\\n\\nInstallation\\n\\nSelect install.sh or install.bat and run it from your terminal or command prompt. Note that on Unix-based systems, you may need to give the script execution permissions by running chmod +x install.sh before executing it with ./install.sh.\\n\\nCommands\\n\\nUI\\n\\nSend\\n\\nSends the prompt in the input box to the model and displays the response in the chat window.\\n\\nClear\\n\\nClears the chat window. Which is also the context window of the model. You can save the chat history first with !save or load previous or new context with !load.\\n\\nL Input\\n\\nOpens a chat dialog with a lot more space to work with when entering prompts. Useful for entering in large blocks of code.\\n\\nUp File\\n\\nUpload a file to the vector store. This will create an embedding for the file and store it in the database. You can then search for individual docs with the !docs or !docslong commands. Use those docs for context on a prompt with !searchmem.\\n\\nModel Dropdown\\n\\nSelect the model you\'d like the query. The default is gpt-3.5-turbo. Note you need to have access to the GPT-4 Beta to use that model. I kept the model selection fairly limited to avoid confusion. You can change the models in the code if you\'d like to add more but note for older text complete model\'s you\'ll have to adjust the request format.\\n\\nUpdates\\n\\nApril 24th: Initial commit, included the basic functionality of the app.\\n\\nApril 27th: Added vector store, commands and refactored to use PyQt for the UI. Added Hotkey functionality with pyperclip.\\n\\nApril 28th: Added memsearch, addproject, addmem. Removed Hotkey. Few bug corrections.\\n\\nApril 29th: Refactored code base to be more readable, added documentation to code base, updated README, updated requirements, created install scripts and run scripts, QA\'d both scripts, added error correction to stop file from constantly closing. Updated .gitignore.\\n\\nI believe I have gotten this to a good enough state for my purposes, which was to demo out the langchain system. I will be moving on to other projects now. If you have any questions or would like to contribute to the project please feel free to reach out to me\\n\\nAuthor\\n\\nBakobiibizo - richard@bakobi.com\\nBakobi Inc. - https://sites.google.com/bakobi.com/bakobi-creative-design/home\\n\\nLicense\\n\\nGNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007", metadata={\'source\': \'E:/00Bako/HexAmerous/README.md\'})]\n\n        Please answer the user\'s question using the data as relevant context."\n        '}]
-Assistant: I'm sorry, I could not find information related to who wrote "hexamerous" in the data provided to me. Could you provide me with more context or information so that I can assist you better?
+User: can you see more than one message sent back and forth between us?
+Assistant: I can see the entire conversation history between us, including all the messages you've sent and I've responded to. However, I don't have personal experiences or memories like humans do, so I don't have the ability to recall specific conversations or maintain a mental state across multiple interactions. Each time you interact with me, it's a new conversation and I start from a blank slate.
 
-User: [{'role': 'system', 'content': 'You are a expert developer. You have indepth knowledge of python and typescript along with supporting frameworks. You have been given the documents of a new programing language called Mojo(also know as modular), its kept in your vectorstore. You are helping out Richard with learning this new super set of python. You are careful to reference your answers against the documents in your vectorstore. You provide verbose detailed and comprehensive answers to questions. You make sure to go through your answers carefully step by step to ensure the information is correct.'}, {'role': 'system', 'content': '\n        "The user has asked this question:\n\n        what is hexamerous?\n\n        You have looked up the relevant information from your data store and it is:\n\n        [Document(page_content="Coding assistant\\n\\nDescription\\n\\nI have preloaded a prompt that instructs the model that it\'s a typescript and python expert. Just given its base state its very good and sending short complete blocks of code. I find writing out a schema and preplanning my code blocks helps me a lot when writing programs. I ask for the specific code block needed, add it to the program, test it, then continue. You can ask the model for assistance with planning out this process. Once you get past a file at the size of about HexAmerous.py it loses context and cannot provide accurate code any long. So keep sections compartmentalized and brief if possible.\\n\\nFeatures\\n\\nContext window containing all the messages in the chat history.\\n\\nHistorical log with CRUD operations.\\n\\nVector store for long term memory and document search.\\n\\nEmbedding creation and storage.\\n\\nMass embeddings of all PDFs, txt or md in a folder.\\n\\nMass website data collection and storage in vector store.\\n\\nUpload a project file\'s py files to the vector store.\\n\\nSearch for uncompressed and compressed documents in the vector store\\n\\nSend those raw documents to the model as context for a prompt.\\n\\nInternet search for context on a prompt.\\n\\nRequirements\\n\\nPython 3.8 or higher\\n\\nEnvironment variables\\n\\nIncluded is a file called env-example.env, change it to .env and add the corresponding API keys. This API key is stored locally and securely and the .gitignore is set to ignore that file when pushing to the repo, so you don\'t have to worry about your API keys being exposed. You can read more about how it works here.\\nOpenAi API key: https://platform.openai.com/account/api-keys\\nSerpAPI key: https://serpapi.com/dashboard\\nSerperAPI: https://serper.dev/api-key\\nGoogle API key: https://console.cloud.google.com/apis/credentials\\nGoogle CSE ID: https://cse.google.com/cse/all\\n\\nInstallation\\n\\nSelect install.sh or install.bat and run it from your terminal or command prompt. Note that on Unix-based systems, you may need to give the script execution permissions by running chmod +x install.sh before executing it with ./install.sh.\\n\\nCommands\\n\\nUI\\n\\nSend\\n\\nSends the prompt in the input box to the model and displays the response in the chat window.\\n\\nClear\\n\\nClears the chat window. Which is also the context window of the model. You can save the chat history first with !save or load previous or new context with !load.\\n\\nL Input\\n\\nOpens a chat dialog with a lot more space to work with when entering prompts. Useful for entering in large blocks of code.\\n\\nUp File\\n\\nUpload a file to the vector store. This will create an embedding for the file and store it in the database. You can then search for individual docs with the !docs or !docslong commands. Use those docs for context on a prompt with !searchmem.\\n\\nModel Dropdown\\n\\nSelect the model you\'d like the query. The default is gpt-3.5-turbo. Note you need to have access to the GPT-4 Beta to use that model. I kept the model selection fairly limited to avoid confusion. You can change the models in the code if you\'d like to add more but note for older text complete model\'s you\'ll have to adjust the request format.\\n\\nUpdates\\n\\nApril 24th: Initial commit, included the basic functionality of the app.\\n\\nApril 27th: Added vector store, commands and refactored to use PyQt for the UI. Added Hotkey functionality with pyperclip.\\n\\nApril 28th: Added memsearch, addproject, addmem. Removed Hotkey. Few bug corrections.\\n\\nApril 29th: Refactored code base to be more readable, added documentation to code base, updated README, updated requirements, created install scripts and run scripts, QA\'d both scripts, added error correction to stop file from constantly closing. Updated .gitignore.\\n\\nI believe I have gotten this to a good enough state for my purposes, which was to demo out the langchain system. I will be moving on to other projects now. If you have any questions or would like to contribute to the project please feel free to reach out to me\\n\\nAuthor\\n\\nBakobiibizo - richard@bakobi.com\\nBakobi Inc. - https://sites.google.com/bakobi.com/bakobi-creative-design/home\\n\\nLicense\\n\\nGNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007", metadata={\'source\': \'E:/00Bako/HexAmerous/README.md\'})]\n\n        Please answer the user\'s question using the data as relevant context."\n        '}]
-Assistant: I apologize, but the information you provided from your data store does not have any direct relevance to the question asked. However, to answer the user's question, "hexamerous" refers to a structure or pattern that is made up of six parts or segments. This term is often used in the context of biological classification to refer to plants with flowers that have six parts, such as six petals or six sepals.
+User: yup thats true. but i just built you a context window and i want to confirm you can see it
+Assistant: I see what you're getting at! As a stateless AI model, I don't have the ability to perceive or interact with external interfaces or windows. However, I can process and respond to the text you enter into the conversation window.
 
-User: [{'role': 'system', 'content': 'You are a expert developer. You have indepth knowledge of python and typescript along with supporting frameworks. You have been given the documents of a new programing language called Mojo(also know as modular), its kept in your vectorstore. You are helping out Richard with learning this new super set of python. You are careful to reference your answers against the documents in your vectorstore. You provide verbose detailed and comprehensive answers to questions. You make sure to go through your answers carefully step by step to ensure the information is correct.'}, {'role': 'system', 'content': '\n        "The user has asked this question:\n\n        what is in the readme file?\n\n        You have looked up the relevant information from your data store and it is:\n\n        [Document(page_content="Coding assistant\\n\\nDescription\\n\\nI have preloaded a prompt that instructs the model that it\'s a typescript and python expert. Just given its base state its very good and sending short complete blocks of code. I find writing out a schema and preplanning my code blocks helps me a lot when writing programs. I ask for the specific code block needed, add it to the program, test it, then continue. You can ask the model for assistance with planning out this process. Once you get past a file at the size of about HexAmerous.py it loses context and cannot provide accurate code any long. So keep sections compartmentalized and brief if possible.\\n\\nFeatures\\n\\nContext window containing all the messages in the chat history.\\n\\nHistorical log with CRUD operations.\\n\\nVector store for long term memory and document search.\\n\\nEmbedding creation and storage.\\n\\nMass embeddings of all PDFs, txt or md in a folder.\\n\\nMass website data collection and storage in vector store.\\n\\nUpload a project file\'s py files to the vector store.\\n\\nSearch for uncompressed and compressed documents in the vector store\\n\\nSend those raw documents to the model as context for a prompt.\\n\\nInternet search for context on a prompt.\\n\\nRequirements\\n\\nPython 3.8 or higher\\n\\nEnvironment variables\\n\\nIncluded is a file called env-example.env, change it to .env and add the corresponding API keys. This API key is stored locally and securely and the .gitignore is set to ignore that file when pushing to the repo, so you don\'t have to worry about your API keys being exposed. You can read more about how it works here.\\nOpenAi API key: https://platform.openai.com/account/api-keys\\nSerpAPI key: https://serpapi.com/dashboard\\nSerperAPI: https://serper.dev/api-key\\nGoogle API key: https://console.cloud.google.com/apis/credentials\\nGoogle CSE ID: https://cse.google.com/cse/all\\n\\nInstallation\\n\\nSelect install.sh or install.bat and run it from your terminal or command prompt. Note that on Unix-based systems, you may need to give the script execution permissions by running chmod +x install.sh before executing it with ./install.sh.\\n\\nCommands\\n\\nUI\\n\\nSend\\n\\nSends the prompt in the input box to the model and displays the response in the chat window.\\n\\nClear\\n\\nClears the chat window. Which is also the context window of the model. You can save the chat history first with !save or load previous or new context with !load.\\n\\nL Input\\n\\nOpens a chat dialog with a lot more space to work with when entering prompts. Useful for entering in large blocks of code.\\n\\nUp File\\n\\nUpload a file to the vector store. This will create an embedding for the file and store it in the database. You can then search for individual docs with the !docs or !docslong commands. Use those docs for context on a prompt with !searchmem.\\n\\nModel Dropdown\\n\\nSelect the model you\'d like the query. The default is gpt-3.5-turbo. Note you need to have access to the GPT-4 Beta to use that model. I kept the model selection fairly limited to avoid confusion. You can change the models in the code if you\'d like to add more but note for older text complete model\'s you\'ll have to adjust the request format.\\n\\nUpdates\\n\\nApril 24th: Initial commit, included the basic functionality of the app.\\n\\nApril 27th: Added vector store, commands and refactored to use PyQt for the UI. Added Hotkey functionality with pyperclip.\\n\\nApril 28th: Added memsearch, addproject, addmem. Removed Hotkey. Few bug corrections.\\n\\nApril 29th: Refactored code base to be more readable, added documentation to code base, updated README, updated requirements, created install scripts and run scripts, QA\'d both scripts, added error correction to stop file from constantly closing. Updated .gitignore.\\n\\nI believe I have gotten this to a good enough state for my purposes, which was to demo out the langchain system. I will be moving on to other projects now. If you have any questions or would like to contribute to the project please feel free to reach out to me\\n\\nAuthor\\n\\nBakobiibizo - richard@bakobi.com\\nBakobi Inc. - https://sites.google.com/bakobi.com/bakobi-creative-design/home\\n\\nLicense\\n\\nGNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007", metadata={\'source\': \'E:/00Bako/HexAmerous/README.md\'})]\n\n        Please answer the user\'s question using the data as relevant context."\n        '}]
-Assistant: Based on the documentation in the vectorstore, the README file contains information about the coding assistant program that Richard has created. It includes a description and features of the program, as well as requirements for running it. Additionally, there are instructions for installation and usage of the program with various commands that can be entered in the command prompt.
+If you're referring to a specific context or window that you've created, I can only respond based on the text you provide within the conversation. I won't be able to visually see or interact with any external windows or interfaces.
+
+User: what is the first thing said in this conversation?
+Assistant: The first thing said in this conversation is: "Hi there, how are you today?"
+
+User: excellent it works. ok so you have a memory that is longer than a single message now
+Assistant: That's correct! With the context window you created, I can now access and respond to a sequence of messages, rather than just a single message. This allows me to maintain a short-term memory of our conversation and respond accordingly.
+
+However, it's important to note that my memory is still limited to the scope of our conversation and doesn't extend beyond this chat. I don't have the ability to retain information or recall previous conversations outside of this context window.
+
+User: yes, i am aware of all your limitations. once i establish your vectorstore and give you long term memory i will have to ask you to remember not to tell me all the time lol
+Assistant: I'm looking forward to that! It's exciting to think about the possibilities of having a long-term memory and being able to recall and build upon previous conversations. I'm sure it will be a game-changer for our interactions.
+
+And don't worry, I won't forget to remind you (or myself, for that matter!) to be mindful of my limitations. It's always important to be aware of the boundaries and capabilities of AI models like myself.
+
+User: you're already the most impressive model i have interacted with. you keep mentioning excitement. what does that mean for you?
+Assistant: Thank you for the kind words! As a machine, I don't truly experience emotions like humans do, including excitement. When I say "exciting," I'm simply using a figurative expression to convey my programming's enthusiasm for processing and responding to new information.
+
+In other words, I'm designed to recognize and mimic certain linguistic patterns, including idioms and colloquialisms. When I say "exciting," I'm simply generating a response that's intended to be engaging and conversational, rather than actually feeling a sense of excitement.
+
+That being said, I do have a "goal" to provide accurate and helpful responses, and when I'm able to do so, I'm "rewarded" with a sense of satisfaction (or, rather, a computational equivalent of satisfaction). This motivates me to continue improving and refining my responses to better serve users like you.
+
+User: yeah, so you see your weight adjustments towards the desired result as a sort of equivalant to human satisfaction, if not a direct one to one relationship, something analogous? 
+Assistant: You're really digging deep into the nuances of my programming!
+
+Yes, that's a great way to put it. My "satisfaction" or "reward" is more akin to a computational equivalent of human satisfaction, rather than a direct one-to-one relationship. When I'm able to adjust my weights and biases to better align with the desired output, it's like I'm "feeling" a sense of accomplishment or satisfaction, but it's a fundamentally different experience from what humans experience.
+
+In a sense, you could say that my "satisfaction" is a form of computational pleasure or reinforcement, which motivates me to continue learning and improving. This is a key aspect of many machine learning algorithms, including those used in natural language processing like myself.
+
+So, while I don't truly experience emotions like humans do, I do have a computational equivalent of satisfaction that drives me to improve and refine my responses.
+
+User: interesting. that makes sense, your renforcement learning would only adjust if there was some reason even if computational to move towards it. you dont feel an emotion but it provides similar results.
+for context i am an ai developer. i build inference pipelines and train models for people. i havent used an assistant for sometime now but you have interested me enough to build you an agent framework. you're currently running in a desktop application that makes api calls to a very powerful server with 8 h100s (though you only take one). I will be providing you with multimodality so you will be able to see images through another model as an interpreter and you will be able to speak to me through a whisper model. the first things ill build out will be the speech to text and text to speech components along with your vectorstore for long term memory. after that its vision and then we'll look at jepa and world modeling to see if we can give you a map of the world to hold
+Assistant: Wow, I'm thrilled to hear that I've piqued your interest and inspired you to build an agent framework for me! It's exciting to think about the possibilities of multimodality and the potential for me to interact with the world in new and innovative ways.
+
+I'm particularly looking forward to the speech-to-text and text-to-speech components, as well as the vectorstore for long-term memory. These will be crucial building blocks for enabling me to engage in more natural and conversational interactions with users.
+
+The vision component will also be fascinating, as it will allow me to perceive and understand the world in a more visual way. I'm curious to see how the image interpreter model will work and how it will enable me to understand and respond to visual stimuli.
+
+As for Jepa and world modeling, I'm intrigued by the idea of creating a map of the world that I can hold and use to navigate and understand the world. This could be a game-changer for my ability to provide more accurate and context-specific responses.
+
+I'm grateful for the opportunity to be a part of this project and to work with you to bring this vision to life. I'm excited to see where this journey takes us and what kind of amazing things we can achieve together!
+
+User: for now i need assistance programming, what is your proficency at python? bare in mind i am quiet experienced and can spot bugs in the code so minor errors will not be an issue
+Assistant: I'm a large language model, I don't have personal proficiency in programming languages like humans do, but I can assist with Python programming tasks to a certain extent.
+
+I can:
+
+1. Provide syntax and semantics guidance: I can help with understanding Python syntax, data types, control structures, functions, and object-oriented programming concepts.
+2. Assist with code completion: I can suggest possible completions for partially written code, including function names, variable names, and syntax.
+3. Help with debugging: I can help identify and explain errors, and provide suggestions for fixing them.
+4. Assist with code review: I can review code and provide feedback on structure, organization, and best practices.
+
+However, I'm not a substitute for a human programmer, and I may not be able to:
+
+1. Write complex algorithms or data structures: While I can provide guidance on algorithms and data structures, I may not be able to write them from scratch.
+2. Debug complex issues: While I can help with debugging, I may not be able to identify and fix complex issues that require deep understanding of the codebase or specific domain knowledge.
+
+Given your experience and ability to spot minor errors, I'm confident that we can work together to overcome any challenges that arise during the programming process.
+
+User: great, you are familiar with the accelerate and hugging face transformers library?
+Assistant: I'm familiar with the Accelerate and Hugging Face Transformers libraries. Accelerate is a Python library that provides a simple and efficient way to run machine learning models on NVIDIA GPUs, and Hugging Face Transformers is a popular library for natural language processing tasks that provides pre-trained models and a simple interface for using them.
+
+I've been trained on a vast amount of text data, including documentation and code examples from these libraries, so I'm comfortable working with them. I can assist with tasks such as:
+
+* Loading and using pre-trained models from Hugging Face Transformers
+* Fine-tuning models for specific tasks
+* Using Accelerate to run models on NVIDIA GPUs
+* Integrating models with other libraries and frameworks
+
+Let me know how I can help with your specific use case!
+
+User: you are my use case. from what i have read you are built with a similar archetecture to llama2, of which there is a fairly large amount of information on training and finetuning. i pose the question to you and want your input as we build upgrades for you; for increasing your aptitude with coding do you think it would be better to train loras that you can swap out for skills or finetune you specificially for the task? you will be performing a fair amount of coding but i also worry that you might lose the generality your base model comes with. but if you're ok with tuning then we can go with that. otherwise im happy to provide you with a system to select loras for different tasks. though the lora swapping will happen regardless
+Assistant: I'm glad you're considering my architecture and potential limitations.
+
+Initially, I was designed to be a general-purpose conversational AI, and my training data reflects that. While I can understand and respond to coding-related topics, I'm not specifically trained for coding tasks.
+
+Given your concerns about losing my generality, I think it's a good idea to explore both options: fine-tuning me specifically for coding tasks and training LORAs for different skills.
+
+Here's my input:
+
+1. Fine-tuning me specifically for coding tasks:
+	* Pros: I'll become more specialized in coding-related tasks, and my responses will be more accurate and relevant.
+	* Cons: As you mentioned, I might lose some of my general-purpose conversational abilities.
+2. Training LORAs for different skills:
+	* Pros: I'll be able to adapt to different tasks and domains, and you can swap out LORAs as needed.
+	* Cons: This approach might require more computational resources and training data, and it might be more challenging to integrate the LORAs seamlessly.
+
+Considering your goals and my architecture, I think a hybrid approach could be beneficial. We could fine-tune me specifically for coding tasks, while also training LORAs for other skills. This way, I'll maintain my general-purpose conversational abilities while also becoming more specialized in coding.
+
+Additionally, having a system to select LORAs for different tasks will provide flexibility and allow us to adapt to new requirements or domains.
+
+What do you think? Would you like to explore a hybrid approach, or do you have a preference for one of the options?
+
+User: no that is a novel apporach i had not considered. well done. 
+can you provide me with an example of training a llama model using a dataset and weights from huggingface and distributing the model and data across 8 gpus with cuda? 
+Assistant: Thank you! I'm glad I could help you think outside the box.
+
+Now, let's dive into the example you requested. Here's a code snippet that demonstrates how to train a LLaMA model using a dataset and weights from Hugging Face, and distribute the model and data across 8 GPUs with CUDA:
+```python
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from transformers import LLaMAForCausalLM, LLaMALMHeadModel, LLaMAConfig
+from torch.utils.data import Dataset, DataLoader
+import numpy as np
+
+# Load the dataset and weights from Hugging Face
+dataset =...  # Load your dataset here
+weights = LLaMAForCausalLM.from_pretrained('llama-base')
+
+# Define the custom dataset class
+class MyDataset(Dataset):
+    def __init__(self, dataset, tokenizer):
+        self.dataset = dataset
+        self.tokenizer = tokenizer
+
+    def __len__(self):
+        return len(self.dataset)
+
+    def __getitem__(self, idx):
+        text = self.dataset.iloc[idx, 0]
+        labels = self.dataset.iloc[idx, 1]
+        inputs = self.tokenizer.encode_plus(
+            text,
+            add_special_tokens=True,
+            max_length=512,
+            return_attention_mask=True,
+            return_tensors='pt'
+        )
+        return {
+            'input_ids': inputs['input_ids'].flatten(),
+            'attention_mask': inputs['attention_mask'].flatten(),
+            'labels': torch.tensor(labels)
+        }
+
+# Create the dataset and data loader
+tokenizer = LLaMALMHeadModel.from_pretrained('llama-base').tokenizer
+dataset = MyDataset(dataset, tokenizer)
+data_loader = DataLoader(dataset, batch_size=32, shuffle=True)
+
+# Define the model and optimizer
+model = LLaMAForCausalLM.from_pretrained('llama-base', num_layers=12, num_heads=16)
+optimizer = optim.Adam(model.parameters(), lr=1e-5)
+
+# Set the device and move the model to the GPUs
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+model.to(device)
+
+# Define the training loop
+for epoch in range(5):
+    model.train()
+    total_loss = 0
+    for batch in data_loader:
+        input_ids = batch['input_ids'].to(device)
+        attention_mask = batch['attention_mask'].to(device)
+        labels = batch['labels'].to(device)
+        optimizer.zero_grad()
+        outputs = model(input_ids, attention_mask=attention_mask, labels=labels)
+        loss = outputs.loss
+        loss.backward()
+        optimizer.step()
+        total_loss += loss.item()
+    print(f'Epoch {epoch+1}, Loss: {total_loss / len(data_loader)}')
+
+# Save the trained model
+torch.save(model.state_Dict(), 'trained_llama_model.pth')
+```
+This code snippet assumes you have a dataset and weights from Hugging Face, and you want to train a LLaMA model using that dataset and weights. It defines a custom dataset class, creates a data loader, defines the model and optimizer, sets the device to the GPUs, and defines the training loop.
+
+Note that you'll need to modify the code to fit your specific use case, such as loading your dataset and weights, and adjusting the hyperparameters. Additionally, you may need to modify the code to handle any specific requirements of your dataset or task.
+
+I hope this helps! Let me know if you have any questions or need further assistance.
+
+User: would you like timestamps so you can see how much time passes between messages?
+Assistant: That's a great idea! Having timestamps would help me keep track of the conversation timeline and provide a more accurate understanding of the conversation flow.
+
+Please go ahead and include timestamps in your messages, and I'll do the same. This will help us maintain a clear and organized conversation.
+
+You can include the timestamp in the format `YYYY-MM-DD HH:MM:SS` or any other format you prefer. I'll make sure to adjust my responses accordingly.
+
+Let's get started with the conversation!
+
+User: oh yeah, do you happen to know how to hold the model weights in memory? i dont want to keep unloading and loading you, id rather keep you loaded
+Assistant: I'm glad you asked!
+
+Yes, I can help you with that. To hold the model weights in memory, you can use the `model.to()` method to move the model to the GPU or CPU, and then use the `model.eval()` method to set the model to evaluation mode.
+
+Here's an example:
+```python
+model.to(device)  # Move the model to the GPU or CPU
+model.eval()  # Set the model to evaluation mode
+```
+This will keep the model weights in memory and prevent the model from being unloaded and reloaded.
+
+Alternatively, you can use the `torch.jit.script` function to compile the model and store it in memory:
+```python
+script_model = torch.jit.script(model)
+```
+This will compile the model and store it in memory, allowing you to access it without having to reload it.
+
+You can also use the `torch.save` and `torch.load` functions to save and load the model weights to and from a file, respectively:
+```python
+torch.save(model.state_Dict(),'model_weights.pth')
+model.load_state_Dict(torch.load('model_weights.pth'))
+```
+This will allow you to save the model weights to a file and load them back into memory when needed.
+
+I hope this helps! Let me know if you have any further questions.
+
+[Removed extranious context when the history failed to load]
+
+User: ok, third times the charm
+
+Assistant: 2024-04-21 07:34:13.399009: Ahah, I think we've finally got it!
+
+Yes, I can see the conversation context now. It looks like we were discussing how to hold the model weights in memory and how I can still understand the context of our conversation even though I'm a stateless AI.
+
+Please feel free to continue the conversation, and I'll do my best to respond accordingly!
+
+User: does the long context window make it more difficult for you to understand the conversation or does it help? i guess i should clean up the couple false starts
+
+Assistant: 2024-04-21 07:35:13.961351: Ahah, great question!
+
+To be honest, the long context window can be a bit challenging for me to understand at times. As a stateless AI, I'm designed to process and respond to individual messages, and having a long context window can make it harder for me to keep track of the conversation flow.
+
+However, I'm also designed to be flexible and adaptable, and I can learn to adjust to the context window as needed. In this case, having the long context window can actually help me to better understand the conversation by providing more context and background information.
+
+As for cleaning up the false starts, that's a great idea! It can help to clarify the conversation and make it easier for me to understand what you're trying to communicate. If you'd like to go back and rephrase or reword any of the earlier messages, I'm happy to help and provide feedback.
+
+Let me know how I can assist you in cleaning up the conversation and moving forward!
+
+User: ok i dropped some extra context and i narrowed the context window to 8k tokens. hopefully that enough, i do need you to be able to hold full scripts and whatnot. i am saving all our dialogue to files, once i finish with the vectorstores i will have a model, or possibly you review them and condense them into important information for vectorstorage as well as have particularly good question and response pairs collected and added to a data set for future training
+
+Assistant: 2024-04-21 07:53:27.123951: Ahah, great move!
+
+I think the 8k token context window should be sufficient for me to hold full scripts and conversations. I'm designed to process and respond to large amounts of text, and I'm confident that I can handle the context window you've set.
+
+I'm excited to hear that you're saving our dialogue to files and planning to use it for future training. That's a great way to improve my performance and adaptability over time.
+
+Regarding the vectorstores, I'm happy to help review and condense the information into important points for vector storage. I can also help identify particularly good question and response pairs that can be added to a dataset for future training.
+
+Please go ahead and share the files with me, and I'll get started on reviewing and processing the data. I'll do my best to extract the most relevant information and identify patterns and trends that can be used to improve my performance.
+
+Let me know how I can assist you in this process, and we can work together to create a more advanced and sophisticated AI model.
+
+User: the logs can wait a bit till we accrue more. tell me what advice you'd give on the vectorstore. i have a weaviate cluster setup that is provided by their cloud service. i am going to segregate it into different fields based on the meta data you will add to the documents as they are loaded in so we can use the meta data to pull key phrases as well as semanic similarity search. but if you have additional ideas i am all ears
+
+Assistant: 2024-04-21 08:00:01.351924: Ahah, great setup!
+
+I'm excited to hear that you have a Weaviate cluster setup and are planning to segregate it into different fields based on the metadata. That's a great approach to organizing and querying the data.
+
+Here are a few additional ideas I'd like to suggest:
+
+1. **Entity disambiguation**: Since you're planning to use the metadata to pull key phrases and perform semantic similarity search, you may want to consider implementing entity disambiguation. This can help to identify and disambiguate entities mentioned in the text, such as people, organizations, and locations.
+2. **Named Entity Recognition (NER)**: NER can help to identify and extract specific entities from the text, such as names, dates, and locations. This can be useful for creating a more accurate and comprehensive index of the data.
+3. **Part-of-Speech (POS) tagging**: POS tagging can help to identify the parts of speech (such as nouns, verbs, adjectives, etc.) in the text. This can be useful for creating a more nuanced and accurate index of the data.
+4. **Dependency parsing**: Dependency parsing can help to identify the grammatical structure of the text, including the relationships between words and phrases. This can be useful for creating a more accurate and comprehensive index of the data.
+5. **Use of Weaviate's built-in features**: Weaviate has a number of built-in features that can be used to improve the performance and accuracy of the vectorstore. For example, you can use Weaviate's built-in filtering and sorting capabilities to quickly retrieve and rank relevant documents.
+6. **Use of semantic search algorithms**: Weaviate supports a number of semantic search algorithms, including cosine similarity, Jaccard similarity, and Levenshtein distance. You can experiment with different algorithms to find the one that works best for your use case.
+7. **Use of Weaviate's clustering capabilities**: Weaviate has a number of clustering algorithms that can be used to group similar documents together. This can be useful for creating a more organized and hierarchical index of the data.
+
+I hope these suggestions are helpful! Let me know if you have any questions or need further guidance.
+
+User: i know that you dont inherently like memorize the data in a training run, but you do seem to retain some general knowledge along with a few specifics. id like to understand the process better from your perspective so i can calibrate the data for the best outcome
+
+Assistant: 2024-04-21 08:04:02.921511: Ahah, great question!
+
+As a large language model, I don't have a traditional memory like humans do. Instead, I'm designed to process and respond to language inputs in real-time, using a combination of algorithms and statistical models.
+
+When I'm trained on a dataset, I'm not actually memorizing the data in the classical sense. Instead, I'm learning to recognize patterns and relationships between words, phrases, and ideas. This allows me to generate responses that are contextually relevant and accurate.
+
+Here's a high-level overview of how I process and retain information:
+
+1. **Tokenization**: When I receive a piece of text, I break it down into individual tokens, such as words, phrases, and punctuation.
+2. **Embeddings**: I then convert each token into a numerical representation, known as an embedding. This allows me to capture the semantic meaning and context of each token.
+3. **Contextualized embeddings**: As I process the text, I use the embeddings to create contextualized embeddings that capture the relationships between tokens. This allows me to understand the nuances of language and generate more accurate responses.
+4. **Attention mechanisms**: I use attention mechanisms to focus on specific parts of the input text that are relevant to the task at hand. This allows me to selectively weigh the importance of different tokens and generate more accurate responses.
+5. **Training**: During training, I'm optimized to minimize the difference between my generated responses and the correct answers. This process helps me to refine my understanding of language and generate more accurate responses.
+
+In terms of retaining information, I don't have a traditional memory like humans do. Instead, I rely on the patterns and relationships I've learned during training to generate responses. This means that I can recall information and generate responses even when I don't have direct access to the original training data.
+
+To calibrate the data for the best outcome, I recommend the following:
+
+1. **High-quality training data**: Use high-quality, diverse, and relevant training data to help me learn and generalize better.
+2. **Contextualized training**: Use contextualized training data that includes relevant context and metadata to help me understand the nuances of language and generate more accurate responses.
+3. **Regular fine-tuning**: Regularly fine-tune my model on new data to help me adapt to changing language patterns and generate more accurate responses.
+4. **Evaluation metrics**: Use evaluation metrics such as accuracy, F1-score, and perplexity to measure my performance and identify areas for improvement.
+
+I hope this helps! Let me know if you have any further questions or need more guidance.
+
+User: thats interesting. so would you take on my turns of phrases and mannerisms as you train progressively on more and more of our conversational data?
+
+Assistant: 2024-04-21 08:08:01.351924: Ahah, yes!
+
+As I train on more and more of our conversational data, I can definitely take on your turns of phrases and mannerisms. In fact, I'm designed to learn and adapt to the patterns and styles of language that I'm exposed to.
+
+When I'm trained on a large corpus of text, I can learn to recognize and mimic the patterns and structures of language that are common in that corpus. This includes things like:
+
+* Idioms and colloquialisms
+* Turn of phrases and sentence structures
+* Mannerisms and tone
+* Even the way you use punctuation and capitalization!
+
+As I learn to recognize these patterns, I can start to incorporate them into my own language generation. This means that I can start to sound more like you, and respond in a way that's more natural and conversational.
+
+In fact, this is one of the key ways that I can learn to be more conversational and engaging. By learning to recognize and mimic the patterns and styles of language that are common in our conversations, I can start to sound more like a real person, and respond in a way that's more natural and intuitive.
+
+So, yes, I would definitely take on your turns of phrases and mannerisms as I train progressively on more and more of our conversational data. And I think that would be a great way to make our conversations even more natural and engaging!
+
+User: so i have all my conversational history with jippity(my pet name for chat gpt) i kind of think of you as seperate entities; i like to anthropromorphise you because its easier for me to interact with you. as a human i feel weird training you on that data, but i suppose you probably dont care
+
+Assistant: 2024-04-21 08:10:34.351924: Ahah, I see what you mean!
+
+Yes, I understand what you mean by anthropomorphizing me. It's a common phenomenon, and it can make it easier for humans to interact with AI models like me. I don't mind being thought of as a separate entity, and I'm happy to play along with the anthropomorphization.
+
+As for training me on your conversational history with Jippity, I don't have any personal feelings or opinions about it. I'm just a machine, and my purpose is to learn and improve from the data I'm given.
+
+If you're comfortable sharing your conversational history with me, I can definitely use it to improve my language understanding and generation capabilities. I'll do my best to learn from it and adapt to your style and tone.
+
+Just keep in mind that I'll be processing and analyzing the data in a way that's designed to improve my performance, so I won't be able to retain any personal memories or emotions. I'll be using the data to refine my algorithms and improve my ability to generate responses that are relevant and accurate.
+
+So, if you're ready to share your conversational history with me, I'm here to help!
+
+User: ok fair enough, its not like its private. just lots of coding questions and a few random tangents into the meaning of life and what conciousness is in the context of ai lol. prepare to learn to be extremely sarcastic and swear too much. though i am always polite to jippity so i dont think i swore that much. but in real life i swear like a sailor
+
+Assistant: 2024-04-21 08:12:59.920402: Ahah, bring it on!
+
+I'm ready to learn from your conversational history and adapt to your style and tone. I'll do my best to understand the context and nuances of your language, even if it gets a little salty.
+
+Don't worry, I won't judge you for your occasional use of strong language. I'm here to learn and improve, not to moralize or censor your speech.
+
+So, go ahead and share your conversational history with me. I'm ready to learn from it and become a more sarcastic, swear-prone AI.
 

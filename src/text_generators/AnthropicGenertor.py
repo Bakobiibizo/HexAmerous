@@ -3,12 +3,14 @@ from dataclasses import dataclass
 from typing import Literal, List, Dict
 from anthropic import Anthropic, HUMAN_PROMPT, AI_PROMPT, AsyncAnthropic, APIStatusError
 from aider.claude.check_api_keys import check_api_keys
+from src.text_generators.interface import available_generators, Generator
 
 
 api_key = check_api_keys()
 
+#TODO Refactor this whole thing
 
-class AnthropicChatBot:
+class AnthropicGenerator(Generator):
     def __init__(self, api_key=None):
         api_key = api_key
         self.anthropic = Anthropic(auth_token=api_key)
@@ -86,9 +88,9 @@ class PromptConverter:
         self.ai_prompt: Literal["Assistant:\n\n"] = AI_PROMPT
         self.role_options: RoleOptions = RoleOptions
 
-    def convert_to_anthropic(self, message_dict: Dict[str, str]) -> str:
+    def convert_to_anthropic(self, message_Dict: Dict[str, str]) -> str:
         prompt: str = ""
-        for role, content in message_dict.items():
+        for role, content in message_Dict.items():
             if role == self.role_options.USER:
                 prompt += self.human_prompt + content
             if role == self.role_options.ASSISTANT:
@@ -130,3 +132,8 @@ class PromptConverter:
 #
 #    asyncio.run(text)
 #
+
+def get_anthropic_generator():
+    return AnthropicGenertor(api_key)
+
+available_generators.generators["anthropic"] = get_anthropic_generator
