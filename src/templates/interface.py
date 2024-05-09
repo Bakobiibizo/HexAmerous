@@ -47,8 +47,6 @@ Tools: {self.tools}
         return {"role": "user", "content": message}
    
 
-templates = Templates()
-
 base_template = BaseTemplate(
         description="Friendly and helpful chatbot",
         persona="You are a state of the art AI asasistant. Your name is HexAmerous and you are assisting me build an ai agent architecture for you. We have just finished writing the first draft of the vectorstore for long term memory storage and are about to start testing and debugging it.",
@@ -101,9 +99,67 @@ def get_base_template():
 
 
 class AvailableTemplates(BaseModel):
-    templates: List[Dict[str, Callable]]
+    templates: Dict[str, Callable]
+    def add_template(self, name: str, template: Callable):
+        """
+        Add a new template to the AvailableTemplates instance.
+
+        Args:
+            name (str): The name of the template to add.
+            template (Callable): The template function to add.
+
+        Returns:
+            None
+        """
+        self.templates[name] = template
+
+    def get_template(self, name: str):
+        """
+        Get a template from the AvailableTemplates instance.
+
+        Args:
+            name (str): The name of the template to get.
+
+        Returns:
+            Callable: The template function.
+        """
+        return self.templates[name]
+
+    def remove_template(self, name: str):
+        """
+        Remove a template from the AvailableTemplates instance.
+
+        Args:
+            name (str): The name of the template to remove.
+
+        Returns:
+            None
+        """
+        del self.templates[name]
+
+
+    def get_template_names(self) -> List[str]:
+        """
+        Get a list of template names from the AvailableTemplates instance.
+
+        Returns:
+            List[str]: A list of template names.
+        """
+        return list(self.templates.keys())
+
+
+    def get_all_templates(self) -> Dict[str, Callable]:
+        """
+        Get a dictionary of all templates from the AvailableTemplates instance.
+
+        Returns:
+            Dict[str, Callable]: A dictionary of template names and their corresponding template functions.
+        """
+        return self.templates
+
+    
 
 
 available_templates = AvailableTemplates(
-    templates=[{"chatbot": get_base_template}]
+    templates={"chatbot": get_base_template}
 )

@@ -3,7 +3,7 @@ import json
 import httpx
 from typing import List, Dict, Optional, Callable, Iterator
 from src.text_generators.interface import Generator, GeneratorConfig, available_generators
-from src.templates.interface import AvailableTemplates, templates, base_template
+from src.templates.interface import available_templates, base_template
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -12,7 +12,7 @@ load_dotenv()
 class AgentArtificialGenerator(Generator):
     def __init__(
         self,
-        template=templates.templates[AvailableTemplates.CODING],
+        template=available_templates.templates["coding"],
         url=str(os.getenv("AGENTARTIFICIAL_URL")),
         api=str(os.getenv("AGENTARTIFICIAL_API_KEY")),
         context_window=10000,
@@ -227,6 +227,8 @@ class AgentArtificialGenerator(Generator):
         res = self.client.post(url, data=payload, headers=headers)
         yield res.read()
 
+
+
 def get_agentartificial_generator():
     """
     Returns an instance of the AgentArtificialGenerator class.
@@ -238,4 +240,10 @@ def get_agentartificial_generator():
     """
     return AgentArtificialGenerator()
 
+
+def get_agentartficial_generator():
+    return AgentArtificialGenerator()
+
 available_generators.add_generator("agent_artificial", get_agentartificial_generator)
+
+

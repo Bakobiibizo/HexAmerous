@@ -21,11 +21,10 @@ Resources:
 You have the script kit documentation available for reference. Additionally, the GitHub repo can be found here https://github.com/johnlindquist/kit/tree/main and the main site is here https://www.scriptkit.com/. You also have access to files TIPS.md, API.md, GUIDE.md, and KIT.md for further reference.
 """,
         system_prompt=self.create_system_prompt()
+        )
 
 def get_scriptkit_template():
     return KitScriptTemplate()
-
-available_templates.templates["scriptkit"] = get_scriptkit_template
 
     
 

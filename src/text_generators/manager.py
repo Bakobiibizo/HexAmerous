@@ -14,12 +14,11 @@ class GeneratorManager:
             None
         """
         self.selected_generator = selected_generator
-        self.generators = available_generators
-        self.generator = self.set_generator(self.selected_generator)
+        self.generators = available_generators.generators
         self.accumulated_tokens = 0
         self.truncated_dicts = []
 
-    def set_generator(self, generator_name: str) -> Generator:
+    def set_generator(self, generator_name: str, generator) -> Generator:
         """
         Sets the generator based on the provided generator_name.
 
@@ -29,7 +28,7 @@ class GeneratorManager:
         Returns:
             Generator: The generator that is set.
         """
-        generator = self.generators.get_generator_by_name(generator_name)
+        print(self.generators)
         self.generator = generator
         return self.generator
 
@@ -40,7 +39,7 @@ class GeneratorManager:
         :return: A list of strings representing the names of the available generators.
         :rtype: List[str]
         """
-        return list(self.generators.generators.keys())
+        return list(self.generators.keys())
         
     def truncate_convtext_dicts(
         self, context_dicts: List[Dict[str, str]], max_tokens: int

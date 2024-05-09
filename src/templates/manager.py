@@ -15,15 +15,12 @@ class TemplateManager:
     Returns:
         None
     """
-    def __init__(self, selected_template: Union[str, AvailableTemplates]):
+    def __init__(self):
         # TODO: Add more templates
         # This object holds a Dictionary of available template names as enum values and their corresponding template classes.
         self.templates = available_templates.templates
         # Set the selected template class
-        self.selected_template = self.templates[str(selected_template)]
-        self.select_template(self.selected_template)
-        # Set the system prompt
-        self.template = self.get_prompt_template()
+        self.template = self.templates["coding"]()
     
     def update_templates(
         self,

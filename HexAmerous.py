@@ -130,13 +130,13 @@ class ChatWidget(QWidget):
     def set_widget_properties(self):
         self.user_input.setFocus()
         self.send_button.setStyleSheet(
-            "background-color: rgba(67, 3, 81, 0.3); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold; height: 50px; width: 100px;")
+            "background-color: rgba(67, 3, 81, 0.3); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold; height: 50px; width: 100px; rounded: 10px;")
         self.clear_button.setStyleSheet(
-            "background-color: rgba(67, 3, 81, 0.3); color: #f9f9f9;font-family: 'Cascadia Code';  font-size: 14pt; font-weight: bold; height: 50px; width: 100px;")
+            "background-color: rgba(67, 3, 81, 0.3); color: #f9f9f9;font-family: 'Cascadia Code';  font-size: 14pt; font-weight: bold; height: 50px; width: 100px; rounded: 10px;")
         self.large_text_input_button.setStyleSheet(
-            "background-color: rgba(67, 3, 81, 0.3); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold; height: 50px; width: 100px;")
+            "background-color: rgba(67, 3, 81, 0.3); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold; height: 50px; width: 100px; rounded: 10px;")
         self.upload_button.setStyleSheet(
-            "background-color: rgba(67, 3, 81, 0.3); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold; height: 50px; width: 100px;")
+            "background-color: rgba(67, 3, 81, 0.3); color: #f9f9f9; font-family: 'Cascadia Code'; font-size: 14pt; font-weight: bold; height: 50px; width: 100px; rounded: 10px;")
         self.combo_box.addItem("GPT-3.5-Turbo")
         self.combo_box.addItem("GPT-4")
         self.combo_box.setStyleSheet(
