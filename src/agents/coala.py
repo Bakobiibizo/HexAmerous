@@ -5,7 +5,7 @@ from openai.pagination import SyncCursorPage
 from pydantic import BaseModel
 from utils.tools import ActionItem, Actions, actions_to_map, tools_to_map
 from utils.ops_api_handler import create_message_runstep
-from actions import retrieval, web_retrieval
+from actions import web_retrieval, file_search
 from utils.openai_clients import litellm_client, assistants_client
 from data_models import run
 import os
@@ -171,8 +171,8 @@ You must always begin with "{ReactStepType.ACTION.value}: " .
     def execute_action(self, action: Actions) -> ReactStep:
         if action == Actions.COMPLETION:
             return self.generate_final_answer()
-        elif action == Actions.RETRIEVAL:
-            retrieval_class = retrieval.Retrieval(self)
+        elif action == Actions.FILE_SEARCH:
+            retrieval_class = file_search.FileSearch(self)
             run_step = retrieval_class.generate()
             react_step = ReactStep(
                 step_type=ReactStepType.OBSERVATION,

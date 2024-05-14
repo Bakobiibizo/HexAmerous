@@ -14,7 +14,7 @@ class Actions(Enum):
     # function, retrieval, code_interpreter, text_generation, completion
     FUNCTION = "function"
     WEB_RETRIEVAL = "web_retrieval"
-    RETRIEVAL = "retrieval"
+    FILE_SEARCH = "file_search"
     CODE_INTERPRETER = "code_interpreter"
     TEXT_GENERATION = "text_generation"
     COMPLETION = "completion"

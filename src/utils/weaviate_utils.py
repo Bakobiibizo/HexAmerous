@@ -1,7 +1,7 @@
-import weaviate
-import weaviate.classes as wvc
-import os
 from typing import List
+import weaviate
+import os
+import math
 
 WEAVIATE_URL = os.getenv("WEAVIATE_URL")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -13,27 +13,38 @@ weaviate_client = weaviate.connect_to_wcs(
         "X-OpenAI-Api-Key": OPENAI_API_KEY,
     },
 )
+LIMIT = 2
 
 
-def retrieve_file_chunks(file_ids: List[str], query: str) -> List[str]:
-    collection = None
-    try:
-        collection = weaviate_client.collections.get(name="opengpts")
-    except Exception:
-        collection = weaviate_client.collections.create(
-            name="opengpts",
-            vectorizer_config=wvc.config.Configure.Vectorizer.text2vec_openai(),
+def id_to_string(id: int) -> str:
+    # need to remove all the - from the uuid
+    return str(id).replace("-", "")
+
+
+def retrieve_file_chunks(vector_store_ids: List[str], query: str) -> List[str]:
+    chunks = []
+    for vector_store_id in vector_store_ids:
+        collection = None
+        if weaviate_client.collections.exists(
+            name=id_to_string(vector_store_id)
+        ):
+            collection = weaviate_client.collections.get(
+                name=id_to_string(vector_store_id)
+            )
+        else:
+            raise Exception(f"Collection {vector_store_id} does not exist.")
+
+        retrieve_file_chunks = collection.query.near_text(
+            query=query,
+            limit=math.ceil(LIMIT / len(vector_store_ids)),
         )
+        print("RETRIEVE FILE CHUNKS: ", retrieve_file_chunks)
 
-    retrieve_file_chunks = collection.query.near_text(
-        query=query,
-        limit=2,
-        filters=wvc.query.Filter.by_property("file_id").contains_any(file_ids),
-    )
-    print("RETRIEVE FILE CHUNKS: ", retrieve_file_chunks)
-
-    chunks = [
-        chunk.properties["text"] for chunk in retrieve_file_chunks.objects
-    ]
+        chunks.extend(
+            [
+                chunk.properties["text"]
+                for chunk in retrieve_file_chunks.objects
+            ]
+        )
 
     return chunks
