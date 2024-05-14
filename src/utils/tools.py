@@ -1,12 +1,12 @@
 from enum import Enum
 from typing import List
 from openai.types.beta.assistant import (
-    Tool,
     ToolWebRetrieval,
-    ToolRetrieval,
-    ToolFunction,
-    ToolCodeInterpreter,
 )
+from openai.types.beta.assistant_tool import AssistantTool
+from openai.types.beta.file_search_tool import FileSearchTool
+from openai.types.beta.code_interpreter_tool import CodeInterpreterTool
+from openai.types.beta.function_tool import FunctionTool
 from pydantic import BaseModel
 
 
@@ -48,18 +48,18 @@ def actions_to_map(actions: List[str]) -> dict[str, ActionItem]:
     return actions_map
 
 
-def tools_to_map(tools: List[Tool]) -> dict[str, ActionItem]:
+def tools_to_map(tools: List[AssistantTool]) -> dict[str, ActionItem]:
     """
     Converts a list of AssistantTool objects to a dictionary.
     """
     tools_map = {}
     for tool in tools:
-        if isinstance(tool, ToolFunction):
+        if isinstance(tool, FunctionTool):
             tools_map[tool.type] = ActionItem(
                 type=tool.type,
                 description="Generates text based on input data.",
             )
-        elif isinstance(tool, ToolRetrieval):
+        elif isinstance(tool, FileSearchTool):
             tools_map[tool.type] = ActionItem(
                 type=tool.type,
                 description="Retrieves information from files provided.",
@@ -69,7 +69,7 @@ def tools_to_map(tools: List[Tool]) -> dict[str, ActionItem]:
                 type=tool.type,
                 description="Retrieves information related to University of Florida (UF).",  # noqa
             )
-        elif isinstance(tool, ToolCodeInterpreter):
+        elif isinstance(tool, CodeInterpreterTool):
             tools_map[tool.type] = ActionItem(
                 type=tool.type,
                 description="Interprets and executes code.",

@@ -4,8 +4,8 @@ import requests
 import os
 from dotenv import load_dotenv
 from data_models import run
-from openai.types.beta.threads import ThreadMessage
-from openai.types.beta.threads.runs import RetrievalToolCall
+from openai.types.beta.threads.message import Message
+from openai.types.beta.threads.runs import FileSearchToolCall
 from openai.types.beta.threads.runs.web_retrieval_tool_call import (
     WebRetrievalToolCall,
 )
@@ -43,7 +43,7 @@ def update_run(
 
 def create_message(
     thread_id: str, content: str, role: Literal["user", "assistant"]
-) -> ThreadMessage:
+) -> Message:
     # Create a thread with a message
     message = assistants_client.beta.threads.messages.create(
         thread_id=thread_id, content=content, role=role
@@ -86,10 +86,10 @@ def create_retrieval_runstep(
     thread_id: str, run_id: str, assistant_id: str, documents: List[str]
 ) -> dict:
     # Assuming the `ToolCall` is properly defined elsewhere to include `RetrievalToolCall`. # noqa
-    tool_call = RetrievalToolCall(
+    tool_call = FileSearchToolCall(
         id="unique_tool_call_id",  # This should be a unique identifier.
-        retrieval={"documents": documents},
-        type="retrieval",
+        file_search={"documents": documents},
+        type="file_search",
     )
 
     # Prepare run step details with the tool call

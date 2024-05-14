@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import Optional, List
-from openai.types.beta.threads import ThreadMessage
+from openai.types.beta.threads.message import Message
 from openai.pagination import SyncCursorPage
 from pydantic import BaseModel
 from utils.tools import ActionItem, Actions, actions_to_map, tools_to_map
@@ -41,7 +41,7 @@ class CoALA:
         self.assistant_id = assistant_id
 
         self.assistant: Optional[Assistant] = None
-        self.messages: SyncCursorPage[ThreadMessage] = SyncCursorPage(
+        self.messages: SyncCursorPage[Message] = SyncCursorPage(
             data=[]
         )  # in ascending order
         self.runsteps: SyncCursorPage[run.RunStep] = SyncCursorPage(
@@ -335,7 +335,7 @@ Final Answer: the final answer to the original input question"""
         self.assistant = assistant
         return assistant
 
-    def retrieve_messages(self) -> SyncCursorPage[ThreadMessage]:
+    def retrieve_messages(self) -> SyncCursorPage[Message]:
         messages = assistants_client.beta.threads.messages.list(
             thread_id=self.thread_id, order="asc"
         )

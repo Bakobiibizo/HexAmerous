@@ -3,7 +3,7 @@ from constants import PromptKeys
 from utils.tools import ActionItem, Actions, tools_to_map
 from utils.ops_api_handler import create_message_runstep, update_run
 from data_models import run
-from openai.types.beta.threads import ThreadMessage
+from openai.types.beta.threads.message import Message
 from utils.openai_clients import assistants_client
 from openai.types.beta.thread import Thread
 from openai.types.beta import Assistant
@@ -25,7 +25,7 @@ class ExecuteRun:
         self.run_config = run_config
 
         self.run: Optional[run.Run] = None
-        self.messages: Optional[SyncCursorPage(ThreadMessage)] = None
+        self.messages: Optional[SyncCursorPage(Message)] = None
         self.thread: Optional[Thread] = None
         self.assistant: Optional[Assistant] = None
         self.tools_map: Optional[dict[str, ActionItem]] = None
