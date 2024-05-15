@@ -1,8 +1,6 @@
 from enum import Enum
 from typing import List
-from openai.types.beta.assistant import (
-    ToolWebRetrieval,
-)
+from openai.types.beta.web_retrieval_tool import WebRetrievalTool
 from openai.types.beta.assistant_tool import AssistantTool
 from openai.types.beta.file_search_tool import FileSearchTool
 from openai.types.beta.code_interpreter_tool import CodeInterpreterTool
@@ -64,7 +62,7 @@ def tools_to_map(tools: List[AssistantTool]) -> dict[str, ActionItem]:
                 type=tool.type,
                 description="Retrieves information from files provided.",
             )
-        elif isinstance(tool, ToolWebRetrieval):
+        elif isinstance(tool, WebRetrievalTool):
             tools_map[tool.type] = ActionItem(
                 type=tool.type,
                 description="Retrieves information related to University of Florida (UF).",  # noqa

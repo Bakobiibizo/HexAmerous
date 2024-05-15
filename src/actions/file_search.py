@@ -57,10 +57,6 @@ Only respond with the query iteself NOTHING ELSE.
         )
         query = response.choices[0].message.content
         # TODO: retrieve from db, and delete mock retrieval document
-        print(
-            "\n\n\nself.coala_class.assistant.tool_resources: ",
-            self.coala_class.assistant.tool_resources,
-        )
         vector_store_ids = (
             self.coala_class.assistant.tool_resources.file_search.vector_store_ids
         )

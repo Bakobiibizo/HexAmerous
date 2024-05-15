@@ -125,13 +125,13 @@ def create_web_retrieval_runstep(
     thread_id: str,
     run_id: str,
     assistant_id: str,
-    documents: List[str],
+    retreived_content: List[str],
     site: str,
 ) -> dict:
     # Assuming the `ToolCall` is properly defined elsewhere to include `RetrievalToolCall`. # noqa
     tool_call = WebRetrievalToolCall(
         id="unique_tool_call_id",  # TODO: This should be a unique identifier.
-        retrieval={"documents": documents},
+        retrieval=retreived_content,
         site=site,
         type="web_retrieval",
     )

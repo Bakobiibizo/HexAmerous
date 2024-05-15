@@ -1,10 +1,9 @@
 from utils.ops_api_handler import create_web_retrieval_runstep
 from utils.openai_clients import litellm_client
-from utils.basic_retriever import retriever1
 from data_models import run
 import os
-
-# import coala
+import requests
+import urllib.parse
 from agents import coala
 
 
@@ -14,6 +13,19 @@ class WebRetrieval:
         coala_class: "coala.CoALA",
     ):
         self.coala_class = coala_class
+
+    def query_rag(self, topic, query):
+        url = f"http://rag.pro/getModel/{topic}/{urllib.parse.quote(query)}"
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            return response.json()
+        else:
+            raise Exception(
+                "API request failed with status code: {}".format(
+                    response.status_code
+                )
+            )
 
     def generate(
         self,
@@ -40,15 +52,14 @@ Only respond with the query iteself NOTHING ELSE.
         query = response.choices[0].message.content
 
         # Retrieve documents based on the query
-        retrieved_documents = retriever1.invoke(query)
-        retrieved_documents = [doc.page_content for doc in retrieved_documents]
+        retrieved_content = self.query_rag("UFL", query)
 
         run_step = create_web_retrieval_runstep(
             self.coala_class.thread_id,
             self.coala_class.run_id,
             self.coala_class.assistant_id,
-            retrieved_documents,
-            site="https://www.ufl.edu/",
+            retrieved_content,
+            site="UFL",
         )
         return run_step
 
