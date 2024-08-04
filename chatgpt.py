@@ -6,6 +6,7 @@ from pathlib import Path
 from pydantic import BaseModel
 from typing import Dict, List, Optional
 from dotenv import load_dotenv
+<<<<<<< Updated upstream
 from models import (
     Agent,
     AgentABC,
@@ -17,10 +18,31 @@ from models import (
     ContextABC, 
     StoragePaths
 )
+=======
+
+from enum import Enum
+from src.text_generators.JippityGenerator import get_jippity_generator
+
 
 load_dotenv()
 
+manager = get_jippity_generator()
+
+client = manager.get_generators()
+>>>>>>> Stashed changes
+
+load_dotenv()
+
+<<<<<<< Updated upstream
 logger = loguru.logger
+=======
+openai = OpenAI()
+openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.base_url = os.getenv("OPENAI_BASE_URL")
+
+logger.info("loading HexAmerous")
+
+>>>>>>> Stashed changes
 
 logger.info("Welcome to HexAmerous, your coding assistant!")
 

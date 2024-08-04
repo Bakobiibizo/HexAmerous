@@ -1,11 +1,18 @@
 # -*- coding: utf-8 -*-
 from langchain.document_loaders import UnstructuredFileLoader
 from langchain.embeddings.openai import OpenAIEmbeddings
+<<<<<<< Updated upstream
 from langchain.llms import OpenAI
 from langchain.vectorstores import Chroma
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import nltk
 import openai
+=======
+from langchain.vectorstores import Chroma
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+import nltk
+
+>>>>>>> Stashed changes
 from dotenv import load_dotenv
 import os
 
@@ -15,7 +22,10 @@ nltk.download("punkt")
 
 print("Loading global variables")
 # Load Langchain variables
+<<<<<<< Updated upstream
 openai.api_key = os.getenv("OPENAI_API_KEY")
+=======
+>>>>>>> Stashed changes
 
 embeddings = OpenAIEmbeddings()
 
@@ -23,12 +33,20 @@ llm = OpenAI(temperature=0)
 
 vectorstore_location = "./docs/"
 
+<<<<<<< Updated upstream
 text_splitter = RecursiveCharacterTextSplitter(separators=["\\n"])
+=======
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=300, chunk_overlap=25)
+>>>>>>> Stashed changes
 
 print("base_formatter function")
 
 
+<<<<<<< Updated upstream
 def check_filepath(file_path):
+=======
+def check_file(file_path):
+>>>>>>> Stashed changes
     loader = UnstructuredFileLoader(file_path)
     docs = loader.load()
     print(docs)
@@ -75,6 +93,7 @@ print("create_embedding function")
 
 
 def create_embedding(file_path, optional_arg="metadata"):
+<<<<<<< Updated upstream
     print("creating embedding", file_path)
     data = file_path if list else check_filepath(file_path)
     metatdata = optional_arg or "file_path"
@@ -84,6 +103,16 @@ def create_embedding(file_path, optional_arg="metadata"):
         embeddings=embeddings,
         texts=data,
         metadatas=metatdata,
+=======
+    print("creating embedding")
+    data = check_file(file_path)
+    metadata = optional_arg
+    meta = metadata if metadata else "file_path"
+    vectordb = Chroma.from_documents(
+        documents=data,
+        metadata=meta,
+        embedding=embeddings,
+>>>>>>> Stashed changes
         persist_directory=vectorstore_location,
     )
     vectordb.persist()
