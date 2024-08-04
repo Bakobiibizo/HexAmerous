@@ -12,12 +12,15 @@ from loguru import logger
 from src.vectordb.readers.document import Document
 from src.vectordb.embedders.interface import Embedder
 
+
 class MiniLMEmbedder(Embedder):
     """
     MiniLMEmbedder for Verba.
     """
+
     model = AutoModel
     tokenizer = AutoTokenizer
+
     def __init__(self):
         """
         Initializes the MiniLMEmbedder class.
@@ -40,10 +43,11 @@ class MiniLMEmbedder(Embedder):
         self.description = "Embeds and retrieves objects using SentenceTransformer's all-MiniLM-L6-v2 model"
         self.vectorizer = "MiniLM"
         try:
+
             def get_device():
                 """
                 Returns the appropriate device for running the model based on the availability of CUDA-enabled GPUs and Multi-Process Service (MPS).
-        
+
                 :return: A torch.device object representing the device to be used for running the model.
                 :rtype: torch.device
                 """
@@ -132,10 +136,7 @@ class MiniLMEmbedder(Embedder):
 
             for batch in batches:
                 inputs = self.tokenizer(
-                    text=batch,
-                    return_tensors="pt",
-                    padding=True,
-                    truncation=True
+                    text=batch, return_tensors="pt", padding=True, truncation=True
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 with torch.no_grad():
@@ -156,10 +157,10 @@ class MiniLMEmbedder(Embedder):
     def vectorize_query(self, query: str) -> List[float]:
         """
         Vectorize a query by calling the vectorize_chunk method and return the resulting vector.
-        
+
         Parameters:
             query (str): The query to be vectorized.
-        
+
         Returns:
             List[float]: A list of floats representing the vectorized query.
         """

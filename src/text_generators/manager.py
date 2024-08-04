@@ -20,9 +20,9 @@ class GeneratorManager:
         self.generators = {**all_generators}
         self.accumulated_tokens = 0
         self.truncated_dicts = []
-        self.generator = None
+        self.generator = self.set_generator(selected_generator)
 
-    def set_generator(self, generator_name: str, generator) -> Generator:
+    def set_generator(self, generator_name: str) -> Generator:
         """
         Sets the generator based on the provided generator_name.
 
@@ -44,7 +44,7 @@ class GeneratorManager:
         :rtype: List[str]
         """
         return list(self.generators.keys())
-        
+
     def truncate_context_dicts(
         self, context_dicts: List[Dict[str, str]], max_tokens: int
     ) -> List[Dict[str, str]]:
@@ -62,8 +62,8 @@ class GeneratorManager:
 
         """
         import tiktoken
+
         encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
-        
 
         # Start with the newest conversations
         for item_dict in reversed(context_dicts):
@@ -90,4 +90,3 @@ class GeneratorManager:
 
         # The List has been built in reverse order so we reverse it again
         return list(reversed(self.truncated_dicts))
-

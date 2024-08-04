@@ -3,8 +3,6 @@ from typing import Any
 from src.data_models.component import Component
 
 
-
-
 class Embedder(Component):
     """
     Interface for Embedding.
@@ -300,15 +298,17 @@ class Embedder(Component):
             .with_limit(1)
         ).do()
 
-        if "data" in match_results and len(match_results["data"]["Get"][self.get_cache_class()]) > 0 and (
-            query
-            == match_results["data"]["Get"][self.get_cache_class()][0]["query"]
+        if (
+            "data" in match_results
+            and len(match_results["data"]["Get"][self.get_cache_class()]) > 0
+            and (
+                query
+                == match_results["data"]["Get"][self.get_cache_class()][0]["query"]
+            )
         ):
             msg.good("Direct match from cache")
             return (
-                match_results["data"]["Get"][self.get_cache_class()][0][
-                    "system"
-                ],
+                match_results["data"]["Get"][self.get_cache_class()][0]["system"],
                 0.0,
             )
 

@@ -1,4 +1,3 @@
-
 class Chunker(Component):
     """
     Interface for Verba Chunking.

@@ -1,4 +1,3 @@
-
 class TokenChunker(Chunker):
     """
     TokenChunker for Verba built with tiktoken.

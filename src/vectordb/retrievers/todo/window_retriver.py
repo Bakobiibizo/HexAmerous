@@ -15,6 +15,7 @@ class WindowRetriever(Retriever):
     """
     Window Retriever. uses hybrid search to retrieve relevant chunks and adds their surrounding context
     """
+
     def __init__(self):
         """
         Initialize a new instance of the WindowRetriever class.
@@ -32,7 +33,7 @@ class WindowRetriever(Retriever):
             name="WindowRetriever",
             description="WindowRetriever uses Hybrid Search to retrieve relevant chunks and adds their surrounding context",
             requires_env=[],
-            requires_library=[]            
+            requires_library=[],
         )
         self.description = "WindowRetriever uses Hybrid Search to retrieve relevant chunks and adds their surrounding context"
         self.name = "WindowRetriever"
@@ -190,9 +191,12 @@ class WindowRetriever(Retriever):
                             .do()
                         )
 
-                        if "data" in chunk_retrieval_results and chunk_retrieval_results["data"]["Get"][
-                                                        embedder.get_chunk_class()
-                                                    ]:
+                        if (
+                            "data" in chunk_retrieval_results
+                            and chunk_retrieval_results["data"]["Get"][
+                                embedder.get_chunk_class()
+                            ]
+                        ):
                             chunk_obj = Chunk(
                                 chunk_retrieval_results["data"]["Get"][
                                     embedder.get_chunk_class()
@@ -212,7 +216,7 @@ class WindowRetriever(Retriever):
                             )
                             added_chunks[str(_range)] = chunk_obj
 
-            for chunk in added_chunks:                    
+            for chunk in added_chunks:
                 if chunk not in doc_name_map[doc]:
                     doc_name_map[doc][chunk] = added_chunks[chunk]
 

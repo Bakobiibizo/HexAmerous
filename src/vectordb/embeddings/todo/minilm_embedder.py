@@ -1,5 +1,3 @@
-
-
 class MiniLMEmbedder(Embedder):
     """
     MiniLMEmbedder for Verba.

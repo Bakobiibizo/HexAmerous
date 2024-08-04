@@ -32,8 +32,6 @@ def retrieve_file_chunks(file_ids: List[str], query: str) -> List[str]:
     )
     print("RETRIEVE FILE CHUNKS: ", retrieve_file_chunks)
 
-    chunks = [
-        chunk.properties["text"] for chunk in retrieve_file_chunks.objects
-    ]
+    chunks = [chunk.properties["text"] for chunk in retrieve_file_chunks.objects]
 
     return chunks

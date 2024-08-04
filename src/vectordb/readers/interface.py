@@ -20,13 +20,14 @@ class Reader(Component):
     """
     Interface for Verba Readers.
     """
+
     def __init__(
         self,
         name,
         description,
         requires_library,
         requires_env,
-        ):
+    ):
         """
         Initializes a new instance of the class.
 

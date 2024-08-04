@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field
 from typing import Union, List, Dict
 from datetime import date as Date
 
+
 class Document(BaseModel):
     text: str = Field(default="")
     type: str = Field(default="")

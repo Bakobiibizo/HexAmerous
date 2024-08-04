@@ -11,6 +11,7 @@ class Document:
     """
     Document class. Standard document for data ingestion into Vectordb.
     """
+
     def __init__(
         self,
         text: Optional[str] = "",

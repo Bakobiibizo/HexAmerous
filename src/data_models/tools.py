@@ -7,15 +7,16 @@ class Tool(BaseModel):
     function: Callable
     description: str
 
+
 class Tools(BaseModel):
     def __init__(self, new_tools: List[Tool]):
         super().__init__()
         self.tools = self.set_tools(new_tools)
-        
+
     def set_tools(self, new_tools: List[Tool]):
         self.tools = new_tools
         return self.tools
-        
+
     def add(self, tool: Tool):
         self.tools.append(tool)
 
@@ -32,7 +33,7 @@ class Tools(BaseModel):
         for tool in self.tools:
             if tool.name == name:
                 return tool
-    
+
     def use(self, name: str, query: str):
         for tool in self.tools:
             if tool.name == name:
@@ -42,8 +43,8 @@ class Tools(BaseModel):
         returnString = ""
         for tool in self.tools:
             returnString += f"{tool.name}\n"
-        return returnString 
-    
+        return returnString
+
     def describe(self):
         returnString = ""
         for tool in self.tools:

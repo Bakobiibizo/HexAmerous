@@ -106,9 +106,7 @@ class ExecuteRun:
             )
             self.messages = messages
             runsteps = assistants_client.beta.threads.runs.steps.list(
-                thread_id=self.thread_id,
-                run_id=self.run_id,
-                order="asc"
+                thread_id=self.thread_id, run_id=self.run_id, order="asc"
             )
             self.runsteps = runsteps
 
@@ -137,7 +135,9 @@ class ExecuteRun:
                 )
                 action.generate(messages, runsteps)
                 continue
-            if orchestrator_response == Actions.WEB_RETREIVAL: # TODO: Sean, entry point for web retrieval
+            if (
+                orchestrator_response == Actions.WEB_RETREIVAL
+            ):  # TODO: Sean, entry point for web retrieval
                 action = web_retrieval.WebRetrieval(
                     self.run_id,
                     self.thread_id,
@@ -165,7 +165,7 @@ class ExecuteRun:
                 updated_run = update_run(self.thread_id, self.run_id, run_update)
                 continue
             # retrieve from website
-            # 
+            #
 
         print(f"Finished executing run {self.run_id}. Total loops: {t_loops}")
 

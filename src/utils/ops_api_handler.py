@@ -113,6 +113,7 @@ def create_retrieval_runstep(
 
     return run.RunStep(**response.json())
 
+
 def create_web_retrieval_runstep(
     thread_id: str, run_id: str, assistant_id: str, documents: List[str], site: str
 ) -> dict:

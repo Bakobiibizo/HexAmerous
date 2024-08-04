@@ -1,5 +1,3 @@
-
-
 class WordChunker(Chunker):
     """
     WordChunker for Verba built with spaCy.

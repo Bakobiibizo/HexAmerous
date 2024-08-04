@@ -30,18 +30,7 @@ from PyQt5.QtWidgets import (
     QSizeGrip,
     QStylePainter,
 )
-from chatgpt import chat_gpt, change_selected_model, context_manager
-# from embeddings import (
-#    create_embedding,
-#    create_mass_embedding,
-# )
-# from embed_project import run_embed_project
-# from scrappy import scrape_site, scrape_site_map
-# from custom_agents import (
-#    base_retriever,
-#    data_base_memory_search,
-#
-# )
+from main import HexGenerator
 
 
 from dotenv import load_dotenv

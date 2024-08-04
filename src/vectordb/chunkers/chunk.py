@@ -7,6 +7,7 @@ from typing_extensions import Dict
 
 class Chunk:
     "Chunk class that represents a chunk of text."
+
     def __init__(
         self,
         text: str = "",

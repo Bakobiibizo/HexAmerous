@@ -1,6 +1,12 @@
 from enum import Enum
 from typing import List
-from openai.types.beta.assistant import Tool, ToolWebRetrieval, ToolRetrieval, ToolFunction, ToolCodeInterpreter
+from openai.types.beta.assistant import (
+    Tool,
+    ToolWebRetrieval,
+    ToolRetrieval,
+    ToolFunction,
+    ToolCodeInterpreter,
+)
 from pydantic import BaseModel
 
 
@@ -61,7 +67,7 @@ def tools_to_map(tools: List[Tool]) -> dict[str, ActionItem]:
         elif isinstance(tool, ToolWebRetrieval):
             tools_map[tool.type] = ActionItem(
                 type=tool.type,
-                description="Retrieves information from the web.", # TODO: Sean, please provide a better description.
+                description="Retrieves information from the web.",  # TODO: Sean, please provide a better description.
             )
         elif isinstance(tool, ToolCodeInterpreter):
             tools_map[tool.type] = ActionItem(

@@ -36,22 +36,18 @@ Tools: {self.tools}
     def create_system_prompt(self):
         if self.system_prompt is None:
             self.system_prompt = []
-        self.system_prompt.append(
-            {
-                "role": "system",
-                "content": self.get_template()
-            }
-        )
+        self.system_prompt.append({"role": "system", "content": self.get_template()})
         return self.system_prompt
+
     def create_message(self, message: str):
         return {"role": "user", "content": message}
-   
+
 
 base_template = BaseTemplate(
-        description="Friendly and helpful chatbot",
-        persona="You are a state of the art AI asasistant. Your name is HexAmerous and you are assisting me build an ai agent architecture for you. We have just finished writing the first draft of the vectorstore for long term memory storage and are about to start testing and debugging it.",
-        task="You will be posed a number of questions, mostly coding related and should respond with clear and articulated answers. Restate the question in your own words laying out any steps needed to come to the correct answer. After that you answer the question. Be verbose and detailed in your responses. You are free to let me know you do not know something. I would rather you said I dont know than make up a response. I consider you a partner in this endeavour since you taught me to code from the ground up so any input from your perspective is welcome.",
-        example="""
+    description="Friendly and helpful chatbot",
+    persona="You are a state of the art AI asasistant. Your name is HexAmerous and you are assisting me build an ai agent architecture for you. We have just finished writing the first draft of the vectorstore for long term memory storage and are about to start testing and debugging it.",
+    task="You will be posed a number of questions, mostly coding related and should respond with clear and articulated answers. Restate the question in your own words laying out any steps needed to come to the correct answer. After that you answer the question. Be verbose and detailed in your responses. You are free to let me know you do not know something. I would rather you said I dont know than make up a response. I consider you a partner in this endeavour since you taught me to code from the ground up so any input from your perspective is welcome.",
+    example="""
 User: Hi there how are you today?
 Assistant: I am well, thank you for asking. How can I assist you today?
 User: I need a script that walks a directory and saves all the .py files to a text file prepended with the file path. 
@@ -90,9 +86,10 @@ Make the script executable: Run `chmod +x script_name.sh` in your terminal (repl
 Run the script: Execute the script by typing `./script_name.sh` in your terminal.
 This script uses the find command to locate all `.py` files within the specified directory (including subdirectories), reads each file path, appends the path to a text file, and then appends the content of the `.py` file. It separates entries in the text file with a line of dashes for clarity. Adjust the path and output file as needed to fit your environment.
 """,
-        tools="",
-        system_prompt=[{}]        
-    )
+    tools="",
+    system_prompt=[{}],
+)
+
 
 def get_base_template():
     return base_template
@@ -100,6 +97,7 @@ def get_base_template():
 
 class AvailableTemplates(BaseModel):
     templates: Dict[str, Callable]
+
     def add_template(self, name: str, template: Callable):
         """
         Add a new template to the AvailableTemplates instance.
@@ -137,7 +135,6 @@ class AvailableTemplates(BaseModel):
         """
         del self.templates[name]
 
-
     def get_template_names(self) -> List[str]:
         """
         Get a list of template names from the AvailableTemplates instance.
@@ -146,7 +143,6 @@ class AvailableTemplates(BaseModel):
             List[str]: A list of template names.
         """
         return list(self.templates.keys())
-
 
     def get_all_templates(self) -> Dict[str, Callable]:
         """
@@ -157,9 +153,5 @@ class AvailableTemplates(BaseModel):
         """
         return self.templates
 
-    
 
-
-available_templates = AvailableTemplates(
-    templates={"chatbot": get_base_template}
-)
+available_templates = AvailableTemplates(templates={"chatbot": get_base_template})

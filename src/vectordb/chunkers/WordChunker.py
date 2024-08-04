@@ -16,13 +16,8 @@ class WordChunker(Chunker):
     """
     WordChunker for Verba built with spaCy.
     """
-    def __init__(
-        self,
-        name,
-        requires_library,
-        requires_env,
-        description
-):
+
+    def __init__(self, name, requires_library, requires_env, description):
         """
         Initializes the WordChunker object.
 
@@ -38,7 +33,7 @@ class WordChunker(Chunker):
             name=name,
             requires_library=requires_library,
             requires_env=requires_env,
-            description=description
+            description=description,
         )
         self.name = "WordChunker"
         self.requires_library = ["spacy"]

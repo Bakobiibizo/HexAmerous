@@ -18,13 +18,14 @@ class BaseTemplate(BaseModel):
     Methods:
         get_template() -> str:
             Returns a formatted template string with persona, task, example, and tools.
-        
+
         update_templates(new_template: "BaseTemplate"):
             Updates the template attributes with a new template.
-        
+
         create_system_prompt():
             Creates a system prompt based on the template content.
     """
+
     description: str
     persona: str
     task: str
@@ -61,12 +62,7 @@ Tools: {self.tools}
         """
         if self.system_prompt is None:
             self.system_prompt = []
-        self.system_prompt.append(
-            {
-                "role": "system",
-                "content": self.get_template()
-            }
-        )
+        self.system_prompt.append({"role": "system", "content": self.get_template()})
         return self.system_prompt
 
 
@@ -77,4 +73,4 @@ class AvailableTemplates(Enum):
 class Templates(BaseModel):
     selected_template: BaseTemplate
     available_templates: AvailableTemplates
-    templates: Dict[str, BaseTemplate] 
+    templates: Dict[str, BaseTemplate]

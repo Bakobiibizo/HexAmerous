@@ -4,7 +4,7 @@ from typing import Any, List, Dict, Optional, Union
 
 class TokenizerConfig(BaseModel):
     name: str
-    description: str 
+    description: str
     model: str
     tokenizer: str
     device: Any

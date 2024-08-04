@@ -25,7 +25,7 @@ class WebRetrieval:
     ):
         self.query_maker_instructions = f"""Your role is generate a query for semantic search to retrieve important according to current working memory and the available files.
 Even if there is no relevant information in the working memory, you should still generate a query to retrieve the most relevant information from the available files.
-Only respond with the query iteself NOTHING ELSE.""" # TODO: Sean, bespoke prompt currently used for creating the retrieval query
+Only respond with the query iteself NOTHING ELSE."""  # TODO: Sean, bespoke prompt currently used for creating the retrieval query
         self.run_id = run_id
         self.thread_id = thread_id
         self.assistant_id = assistant_id
@@ -80,6 +80,6 @@ Only respond with the query iteself NOTHING ELSE.""" # TODO: Sean, bespoke promp
 
 Current working memory:
 Question: {self.job_summary}
-{trace}""" # TODO: Sean, this prompt should not change too much
+{trace}"""  # TODO: Sean, this prompt should not change too much
         print("\n\nRETRIEVAL SYSTEM PROMP: ", composed_instruction)
         return composed_instruction

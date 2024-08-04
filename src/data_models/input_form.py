@@ -2,6 +2,7 @@ from enum import Enum
 from src.data_models.component import Component
 from src.data_models.document import Document
 
+
 class InputForm(Enum):
     UPLOAD = "UPLOAD"  # Input Form to upload text files directly
     INPUT = "INPUT"  # Simple Text Input in Frontend

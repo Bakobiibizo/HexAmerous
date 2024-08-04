@@ -7,4 +7,3 @@ class Component(BaseModel):
     requires_env: List[str]
     requires_library: List[str]
     description: str
-

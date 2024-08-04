@@ -1,6 +1,7 @@
 from src.data_models.document import Document
 from src.data_models.chunk import Chunk
 
+
 class SentenceChunker(Chunker):
     """
     SentenceChunker for Verba built with spaCy.

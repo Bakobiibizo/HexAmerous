@@ -1,4 +1,3 @@
-
 class ADAEmbedder(Embedder):
     """
     ADAEmbedder for Verba.

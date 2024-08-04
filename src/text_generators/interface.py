@@ -39,7 +39,7 @@ class Generator(BaseModel, ABC):
         Returns:
             bool: True if the context is successfully set, False otherwise.
         """
-    
+
     @abstractmethod
     def set_context_window(self) -> bool:
         """
@@ -58,10 +58,7 @@ class Generator(BaseModel, ABC):
         """
 
     @abstractmethod
-    async def generate(
-        self,
-        messages: List[Dict[str, str]]
-    ) -> Dict[str, str]:
+    async def generate(self, messages: List[Dict[str, str]]) -> Dict[str, str]:
         """
         Asynchronously generates a response based on a list of messages.
 
@@ -71,11 +68,10 @@ class Generator(BaseModel, ABC):
         Returns:
             Dict[str, str]: A dictionary representing the generated response.
         """
-    
+
     @abstractmethod
     async def generate_stream(
-        self,
-        messages: List[Dict[str, str]]
+        self, messages: List[Dict[str, str]]
     ) -> Iterator[Dict[str, str]]:
         """
         Asynchronously generates a stream of response dictionaries based on a list of messages.
@@ -92,12 +88,12 @@ class Generator(BaseModel, ABC):
         self,
         queries: List[str],
         context: List[Dict[str, str]],
-        messages: List[Dict[str, str]]
+        messages: List[Dict[str, str]],
     ) -> List[Dict[str, str]]:
         """
         A description of the entire function, its parameters, and its return types.
         """
-        
+
 
 class GeneratorConfig(BaseModel):
     template: Callable

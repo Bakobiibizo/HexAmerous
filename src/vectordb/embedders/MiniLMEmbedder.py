@@ -17,8 +17,10 @@ class MiniLMEmbedder(Embedder):
     """
     MiniLMEmbedder for Verba.
     """
+
     model: AutoModel
     tokenizer: AutoTokenizer
+
     def __init__(self):
         """
         Initializes the MiniLMEmbedder class.
@@ -41,10 +43,11 @@ class MiniLMEmbedder(Embedder):
         self.vectorizer = "MiniLM"
 
         try:
+
             def get_device():
                 """
                 Returns the appropriate device for running the model based on the availability of CUDA-enabled GPUs and Multi-Process Service (MPS).
-                
+
                 :return: A torch.device object representing the device to be used for running the model.
                 :rtype: torch.device
                 """
@@ -61,8 +64,8 @@ class MiniLMEmbedder(Embedder):
                 "sentence-transformers/all-MiniLM-L6-v2", device_map=self.device
             )
             self.tokenizer = AutoTokenizer.from_pretrained(
-                pretrained_model_name_or_path="sentence-transformers/all-MiniLM-L6-v2", 
-                device_map=self.device
+                pretrained_model_name_or_path="sentence-transformers/all-MiniLM-L6-v2",
+                device_map=self.device,
             )
             self.model = self.model.to(self.device)
 
@@ -95,13 +98,13 @@ class MiniLMEmbedder(Embedder):
     def vectorize_chunk(self, chunk) -> Union[List[float], None]:
         """
         Vectorize a chunk of text into a list of floats representing the average embedding of the tokens in the chunk.
-        
+
         Parameters:
             chunk (str): The text chunk to be vectorized.
-        
+
         Returns:
             List[float]: A list of floats representing the average embedding of the tokens in the chunk.
-        
+
         Raises:
             RuntimeError: If there is an error creating the embeddings.
         """
@@ -136,10 +139,7 @@ class MiniLMEmbedder(Embedder):
 
             for batch in batches:
                 inputs = self.tokenizer(
-                    text=batch,
-                    return_tensors="pt",
-                    padding=True,
-                    truncation=True
+                    text=batch, return_tensors="pt", padding=True, truncation=True
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 with torch.no_grad():

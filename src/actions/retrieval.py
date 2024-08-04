@@ -61,9 +61,7 @@ Only respond with the query iteself NOTHING ELSE."""
         query = response.choices[0].message.content
         print("Retrieval query: ", query)
         # TODO: retrieve from db, and delete mock retrieval document
-        retrieved_documents = retrieve_file_chunks(
-            self.assistant.file_ids, query
-        )
+        retrieved_documents = retrieve_file_chunks(self.assistant.file_ids, query)
 
         run_step = create_retrieval_runstep(
             self.thread_id, self.run_id, self.assistant_id, retrieved_documents

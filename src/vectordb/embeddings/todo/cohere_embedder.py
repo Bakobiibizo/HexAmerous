@@ -1,4 +1,3 @@
-
 class CohereEmbedder(Embedder):
     """
     CohereEmbedder for Verba.
