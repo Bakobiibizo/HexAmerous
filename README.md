@@ -19,11 +19,7 @@ This will create a `run` object that will be sent to the `RabbitMQ` queue. Then 
 
 ## Description
 
-<<<<<<< Updated upstream
-I have preloaded a prompt that instructs the model that it's a typescript and python expert. Just given its base state its very good and sending short complete blocks of code. I find writing out a schema and preplanning my code blocks helps me a lot when writing programs. I ask for the specific code block needed, add it to the program, test it, then continue. You can ask the model for assistance with planning out this process. Once you get past a file at the size of about `HexAmerous.py` it loses context and cannot provide accurate code any long. So keep sections compartmentalized and brief if possible.
-=======
 I have preloaded a prompt that instructs the model that it's a typescript and python expert. Just given its base state its very good and sending short complete blocks of code. I find writing out a schema and preplanning my code blocks helps me a lot when writing programs. I ask for the specific code block needed, add it to the program, test it, then continue. You can ask the model for assistance with planning out this process. Once you get past a file at the size of about [`HexAmerous.py`](HexAmerous.py) it loses context and cannot provide accurate code any longer. So keep sections compartmentalized and brief if possible.
->>>>>>> Stashed changes
 
 ## Features
 
@@ -45,19 +41,11 @@ Python 3.8 or higher
 ## Environment variables
 
 Included is a file `called env-example.env`, change it to `.env` and add the corresponding API keys. This API key is stored locally and securely and the .gitignore is set to ignore that file when pushing to the repo, so you don't have to worry about your API keys being exposed. You can read more about how it works [here](https://pypi.org/project/python-dotenv/).
-<<<<<<< Updated upstream
-OpenAi API key: https://platform.openai.com/account/api-keys
-SerpAPI key: https://serpapi.com/dashboard
-SerperAPI: https://serper.dev/api-key
-Google API key: https://console.cloud.google.com/apis/credentials
-Google CSE ID: https://cse.google.com/cse/all
-=======
 - OpenAi API key: https://platform.openai.com/account/api-keys
 - SerpAPI key: https://serpapi.com/dashboard
 - SerperAPI: https://serper.dev/api-key
 - Google API key: https://console.cloud.google.com/apis/credentials
 - Google CSE ID: https://cse.google.com/cse/all
->>>>>>> Stashed changes
 
 ## Installation
 
@@ -105,11 +93,7 @@ Select the model you'd like the query. The default is gpt-3.5-turbo. Note you ne
 ## Updates
 
 - April 24th: Initial commit, included the basic functionality of the app.
-<<<<<<< Updated upstream
-- April 27th: Added vector store, commands and refactored to use PyQt for the UI. Added Hotkey functionality with pyperclip.
-=======
 - April 27th: Added vector store, commands and refactored to use [PyQt](https://riverbankcomputing.com/software/pyqt/intro) for the UI. Added Hotkey functionality with pyperclip.
->>>>>>> Stashed changes
 - April 28th: Added memsearch, addproject, addmem. Removed Hotkey. Few bug corrections.
 - April 29th: Refactored code base to be more readable, added documentation to code base, updated README, updated requirements, created install scripts and run scripts, QA'd both scripts, added error correction to stop file from constantly closing. Updated .gitignore.
 
@@ -122,7 +106,3 @@ Bakobi Inc. - https://sites.google.com/bakobi.com/bakobi-creative-design/home
 ## License
 
 GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
