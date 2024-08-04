@@ -47,5 +47,7 @@ class RunStepCreate(BaseModel):
     assistant_id: str
     step_details: Any
     type: Literal["message_creation", "tool_calls"]
-    status: Literal["in_progress", "cancelled", "failed", "completed", "expired"]
+    status: Literal[
+        "in_progress", "cancelled", "failed", "completed", "expired"
+    ]
     step_details: StepDetails

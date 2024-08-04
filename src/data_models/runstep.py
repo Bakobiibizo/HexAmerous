@@ -19,7 +19,9 @@ class RunStepUpdate(BaseModel):
     failed_at: Optional[int] = None
     last_error: Optional[Dict[str, Any]] = None
     metadata: Optional[Dict[str, Any]] = None
-    status: Literal["in_progress", "cancelled", "failed", "completed", "expired"] = None
+    status: Literal[
+        "in_progress", "cancelled", "failed", "completed", "expired"
+    ] = None
     step_details: StepDetails = None
     type: Literal["message_creation", "tool_calls"] = None
     usage: Optional[Dict[str, Any]] = None
