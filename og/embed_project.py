@@ -23,7 +23,6 @@ def run_embed_project(file_path):
 
             # Read the file content
             with open(python_file, 'r', encoding='UTF-8', errors='ignore') as f:
-            with open(python_file, 'r', encoding='UTF-8', errors='ignore') as f:
                 file_content = f.read()
 
             # Create a Markdown version of the code with syntax highlighting

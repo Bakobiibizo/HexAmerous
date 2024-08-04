@@ -33,9 +33,6 @@ text_splitter = RecursiveCharacterTextSplitter(chunk_size=300, chunk_overlap=25)
 
 print('base_formatter function')
 
-<<<<<<< Updated upstream
-def check_filepath(file_path):
-=======
 def check_file(file_path):
 >>>>>>> Stashed changes
     loader = UnstructuredFileLoader(file_path)
