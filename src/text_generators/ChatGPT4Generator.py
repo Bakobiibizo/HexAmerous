@@ -1,6 +1,6 @@
 import os
 from typing import List, Dict, Iterator
-from src.text_generators.interface import Generator, available_generators
+from src.text_generators.interface import Generator, AvailableGenerators
 
 
 class GPT4Generator(Generator):

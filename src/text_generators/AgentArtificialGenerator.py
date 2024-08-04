@@ -244,6 +244,7 @@ def get_agentartificial_generator():
 def get_agentartficial_generator():
     return AgentArtificialGenerator()
 
+
 available_generators.add_generator("agent_artificial", get_agentartificial_generator)
 
 

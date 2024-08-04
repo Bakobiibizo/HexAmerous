@@ -2,6 +2,9 @@ from src.text_generators.interface import Generator, available_generators
 from typing import Dict, List
 
 
+all_generators = available_generators.get_all_generators()
+
+
 class GeneratorManager:
     def __init__(self, selected_generator: str):
         """
@@ -14,9 +17,10 @@ class GeneratorManager:
             None
         """
         self.selected_generator = selected_generator
-        self.generators = available_generators.generators
+        self.generators = {**all_generators}
         self.accumulated_tokens = 0
         self.truncated_dicts = []
+        self.generator = None
 
     def set_generator(self, generator_name: str, generator) -> Generator:
         """
@@ -29,10 +33,10 @@ class GeneratorManager:
             Generator: The generator that is set.
         """
         print(self.generators)
-        self.generator = generator
+        self.generator = self.generators[generator_name]
         return self.generator
 
-    def get_generators(self) -> List[str]:
+    def list_generators(self) -> List[str]:
         """
         Returns a list of generator names.
 
@@ -41,7 +45,7 @@ class GeneratorManager:
         """
         return list(self.generators.keys())
         
-    def truncate_convtext_dicts(
+    def truncate_context_dicts(
         self, context_dicts: List[Dict[str, str]], max_tokens: int
     ) -> List[Dict[str, str]]:
         """

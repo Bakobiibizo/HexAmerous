@@ -106,10 +106,10 @@ class GeneratorConfig(BaseModel):
     context: List
     context_window: int
 
+
 class AvailableGenerators(BaseModel):
     generators: Dict[str, Callable] = {}
 
-        
     def add_generator(self, name: str, generator):
         """
         Add a new generator to the AvailableGenerators instance.
@@ -176,5 +176,6 @@ class AvailableGenerators(BaseModel):
             Generator: The generator function associated with the provided name.
         """
         return self.generators[name]()
+
 
 available_generators = AvailableGenerators()
