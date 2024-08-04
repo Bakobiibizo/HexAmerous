@@ -7,24 +7,14 @@ from datetime import datetime
 from loguru import logger
 from openai import OpenAI
 from dotenv import load_dotenv
-import requests
-from pydantic import BaseModel
-from typing_extensions import List, Dict, Union
-from datetime import datetime
-from loguru import logger
-from src.generators.manager import GeneratorManager
-
-manager= GeneratorManager()
-
-client = manager.get_generators()
 
 from enum import Enum
-from src.generators.manager import GeneratorManager
+from src.text_generators.JippityGenerator import get_jippity_generator
 
 
 load_dotenv()
 
-manager = GeneratorManager()
+manager = get_jippity_generator()
 
 client = manager.get_generators()
 
@@ -34,7 +24,7 @@ load_dotenv()
 
 openai = OpenAI()
 openai.api_key = os.getenv("OPENAI_API_KEY")
-openai.base_url = "https://the-roost-agentartificial.ngrok.app"
+openai.base_url = os.getenv("OPENAI_BASE_URL")
 
 logger.info("loading HexAmerous")
 
