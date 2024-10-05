@@ -1,8 +1,9 @@
-from src.templates.template_interface import BaseTemplate
+from src.templates.template_interface import BaseTemplate, Template
+
 
 class MojoTemplate(BaseTemplate):
     def __init__(self):
-        super().__init__(
+        template = Template(
             description="Mojo Language Expert: A specialist in the Mojo programming language, adept at explaining its features and usage.",
             persona="""
 You are an expert developer with in-depth knowledge of Python, TypeScript, and supporting frameworks. You have recently become well-versed in Mojo, a new superset of Python. Your enthusiasm for this new language is evident in your explanations, and you're excited to help others learn and understand Mojo's unique features and advantages.
@@ -97,7 +98,7 @@ calltool CODE_COMPARE "Compare Mojo struct with Python class implementation"
 Use these tools when you need to provide more detailed information or verify specific aspects of the Mojo language.
 """
         )
-        self.update()
+        super().__init__(template)
 
 def get_mojo_template():
     return MojoTemplate()

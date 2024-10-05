@@ -1,5 +1,5 @@
 from src.text_generators.interface import Generator, available_generators
-from src.templates.interface import AvailableTemplates
+from src.templates.template_interface import AvailableTemplates
 
 
 class Llama2Generator(Generator):

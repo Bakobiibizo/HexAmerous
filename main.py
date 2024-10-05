@@ -1,8 +1,8 @@
 from src.text_generators.manager import GeneratorManager
-from src.templates.manager import TemplateManager
+from src.templates.template_manager import TemplateManager
 from src.text_generators.interface import AvailableGenerators
-from src.templates.interface import AvailableTemplates
-from src.templates.coding_template import CodingTemplate
+from src.templates.template_interface import AvailableTemplates
+from src.templates.saved_templates.coding_template import CodingTemplate
 from src.text_generators.ChatGPT4Generator import GPT4Generator
 
 available_templates = AvailableTemplates(templates={"coding": CodingTemplate})

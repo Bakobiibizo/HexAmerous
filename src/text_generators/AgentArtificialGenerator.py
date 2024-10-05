@@ -7,7 +7,7 @@ from src.text_generators.interface import (
     GeneratorConfig,
     available_generators,
 )
-from src.templates.interface import available_templates, base_template
+from src.templates.template_interface import available_templates, base_template
 from dotenv import load_dotenv
 
 load_dotenv()

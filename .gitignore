@@ -11,3 +11,6 @@ venv
 creds/*
 src/vectordb.rar
 docs/ingestion/data.txt
+.cursorrules
+
+og

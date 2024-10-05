@@ -3,6 +3,14 @@ from typing_extensions import List, Dict, Iterator, Callable
 from abc import ABC, abstractmethod
 
 
+class GeneratorError(Exception):
+    """Base class for all Generator errors."""
+    
+    
+class GPT4GeneratorError(GeneratorError):
+    """Error raised when an error occurs in the GPT4Generator."""
+    
+
 class Generator(BaseModel, ABC):
     template: Callable
     url: str
