@@ -1,37 +1,69 @@
 import weaviate
-import weaviate.classes as wvc
+from typing import List, Dict
 import os
-from typing import List
 
-WEAVIATE_URL = os.getenv("WEAVIATE_URL")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
-weaviate_client = weaviate.connect_to_wcs(
-    cluster_url=WEAVIATE_URL,
-    auth_credentials=None,
-    headers={
-        "X-OpenAI-Api-Key": OPENAI_API_KEY,
-    },
+client = weaviate.Client(
+    url=os.getenv("WEAVIATE_URL"),
+    auth_client_secret=weaviate.AuthApiKey(api_key=os.getenv("WEAVIATE_API_KEY"))
 )
 
-
-def retrieve_file_chunks(file_ids: List[str], query: str) -> List[str]:
-    collection = None
-    try:
-        collection = weaviate_client.collections.get(name="opengpts")
-    except Exception:
-        collection = weaviate_client.collections.create(
-            name="opengpts",
-            vectorizer_config=wvc.config.Configure.Vectorizer.text2vec_openai(),
-        )
-
-    retrieve_file_chunks = collection.query.near_text(
-        query=query,
-        limit=2,
-        filters=wvc.query.Filter.by_property("file_id").contains_any(file_ids),
+def store_document(document: Dict[str, str]) -> str:
+    """
+    Store a document in Weaviate.
+    
+    Args:
+    document (Dict[str, str]): A dictionary containing the document data.
+    
+    Returns:
+    str: The UUID of the stored document.
+    """
+    return client.data_object.create(
+        data_object=document,
+        class_name="Document"
     )
-    print("RETRIEVE FILE CHUNKS: ", retrieve_file_chunks)
 
-    chunks = [chunk.properties["text"] for chunk in retrieve_file_chunks.objects]
+def retrieve_documents(query: str, limit: int = 5) -> List[Dict[str, str]]:
+    """
+    Retrieve documents from Weaviate based on a semantic search query.
+    
+    Args:
+    query (str): The search query.
+    limit (int): The maximum number of documents to retrieve.
+    
+    Returns:
+    List[Dict[str, str]]: A list of retrieved documents.
+    """
+    result = (
+        client.query
+        .get("Document", ["content", "metadata"])
+        .with_near_text({"concepts": [query]})
+        .with_limit(limit)
+        .do()
+    )
+    return result["data"]["Get"]["Document"]
 
-    return chunks
+def retrieve_file_chunks(file_ids: List[str], query: str, limit: int = 5) -> List[Dict[str, str]]:
+    """
+    Retrieve file chunks from Weaviate based on file IDs and a semantic search query.
+    
+    Args:
+    file_ids (List[str]): List of file IDs to search within.
+    query (str): The search query.
+    limit (int): The maximum number of chunks to retrieve.
+    
+    Returns:
+    List[Dict[str, str]]: A list of retrieved file chunks.
+    """
+    result = (
+        client.query
+        .get("FileChunk", ["content", "metadata"])
+        .with_near_text({"concepts": [query]})
+        .with_where({
+            "path": ["metadata", "file_id"],
+            "operator": "In",
+            "valueString": file_ids
+        })
+        .with_limit(limit)
+        .do()
+    )
+    return result["data"]["Get"]["FileChunk"]

@@ -1,4 +1,5 @@
-import json
+import requests
+from bs4 import BeautifulSoup
 from typing import Optional
 from openai.types.beta.threads import ThreadMessage
 from openai.pagination import SyncCursorPage
@@ -8,8 +9,6 @@ from utils.tools import ActionItem, Actions, actions_to_map
 from utils.openai_clients import litellm_client, assistants_client
 from data_models import run
 import os
-
-# import coala
 from utils.coala import CoALA
 
 
@@ -23,9 +22,8 @@ class WebRetrieval:
         tools_map: dict[str, ActionItem],
         job_summary: str,
     ):
-        self.query_maker_instructions = f"""Your role is generate a query for semantic search to retrieve important according to current working memory and the available files.
-Even if there is no relevant information in the working memory, you should still generate a query to retrieve the most relevant information from the available files.
-Only respond with the query iteself NOTHING ELSE."""  # TODO: Sean, bespoke prompt currently used for creating the retrieval query
+        self.query_maker_instructions = f"""Your role is to generate a search query based on the current working memory and the job summary.
+Only respond with the search query itself, NOTHING ELSE."""
         self.run_id = run_id
         self.thread_id = thread_id
         self.assistant_id = assistant_id
@@ -40,7 +38,6 @@ Only respond with the query iteself NOTHING ELSE."""  # TODO: Sean, bespoke prom
         runsteps: SyncCursorPage[run.RunStep],
         content: Optional[str] = None,
     ) -> run.RunStep:
-        # get relevant retrieval query
         self.coala = CoALA(
             runsteps=runsteps,
             messages=messages,
@@ -48,6 +45,21 @@ Only respond with the query iteself NOTHING ELSE."""  # TODO: Sean, bespoke prom
             tools_map=self.tool_items,
         )
 
+        query = self.generate_search_query()
+        print("Web retrieval query:", query)
+
+        search_results = self.perform_web_search(query)
+        
+        run_step = create_web_retrieval_runstep(
+            self.thread_id,
+            self.run_id,
+            self.assistant_id,
+            search_results,
+            site="google.com",  # You might want to make this configurable
+        )
+        return run_step
+
+    def generate_search_query(self) -> str:
         messages = [
             {
                 "role": "user",
@@ -59,19 +71,29 @@ Only respond with the query iteself NOTHING ELSE."""  # TODO: Sean, bespoke prom
             messages=messages,
             max_tokens=200,  # You may adjust the token limit as necessary
         )
-        query = response.choices[0].message.content
-        print("Retrieval query: ", query)
-        # TODO: retrieve from db, and delete mock retrieval document
-        retrieved_documents = retrieve_file_chunks(self.assistant.file_ids, query)
+        return response.choices[0].message.content
 
-        run_step = create_web_retrieval_runstep(  # TODO: Sean, this is important, this is how state is managed
-            self.thread_id,
-            self.run_id,
-            self.assistant_id,
-            retrieved_documents,
-            site="INSERT_SITE_HERE",
-        )
-        return run_step
+    def perform_web_search(self, query: str) -> str:
+        # This is a simple implementation. You might want to use a proper search API for production.
+        url = f"https://www.google.com/search?q={query}"
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+        response = requests.get(url, headers=headers)
+        soup = BeautifulSoup(response.text, 'html.parser')
+        
+        # Extract search results
+        search_results = []
+        for g in soup.find_all('div', class_='g'):
+            anchor = g.find('a')
+            if anchor:
+                link = anchor['href']
+                title = anchor.find('h3')
+                if title:
+                    title = title.text
+                    search_results.append(f"{title}\n{link}\n\n")
+        
+        return "".join(search_results[:5])  # Return top 5 results
 
     def compose_query_system_prompt(self) -> str:
         trace = self.coala.compose_trace()
@@ -81,5 +103,5 @@ Only respond with the query iteself NOTHING ELSE."""  # TODO: Sean, bespoke prom
 Current working memory:
 Question: {self.job_summary}
 {trace}"""  # TODO: Sean, this prompt should not change too much
-        print("\n\nRETRIEVAL SYSTEM PROMP: ", composed_instruction)
+        print("\n\nWEB RETRIEVAL SYSTEM PROMP: ", composed_instruction)
         return composed_instruction

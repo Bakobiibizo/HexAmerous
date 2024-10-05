@@ -1,4 +1,4 @@
-from src.templates.template_interface import BaseTemplate
+from src.templates.interface import BaseTemplate
 
 class MojoTemplate(BaseTemplate):
     def __init__(self):

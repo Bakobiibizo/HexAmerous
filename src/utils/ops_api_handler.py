@@ -1,6 +1,5 @@
 # api_handler.py
 from typing import List, Literal
-from openai import OpenAI
 import requests
 import os
 from dotenv import load_dotenv

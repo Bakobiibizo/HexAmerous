@@ -1,6 +1,17 @@
-from pydantic import BaseModel
-from typing import Any
-from src.data_models.component import Component
+from tqdm import tqdm
+from src.vectordb.embedders.interface import (
+    strip_non_letters,
+    EMBEDDINGS,
+    VECTORIZERS,
+    InputForm,
+    Document,
+    Client,
+    Component
+)
+from src.utils.logging import get_logger
+
+
+logger = get_logger()
 
 
 class Embedder(Component):
@@ -13,7 +24,7 @@ class Embedder(Component):
         self.input_form = InputForm.TEXT.value  # Default for all Embedders
         self.vectorizer = ""
 
-    def embed(documents: list[Document], client: Client, batch_size: int = 100) -> bool:
+    def embed(self, documents: list[Document], client: Client, batch_size: int = 100) -> bool:
         """Embed verba documents and its chunks to Weaviate
         @parameter: documents : list[Document] - List of Verba documents
         @parameter: client : Client - Weaviate Client
@@ -35,7 +46,7 @@ class Embedder(Component):
         """
         try:
             if self.vectorizer not in VECTORIZERS and self.vectorizer not in EMBEDDINGS:
-                msg.fail(f"Vectorizer of {self.name} not found")
+                logger.error(f"Vectorizer of {self.name} not found")
                 return False
 
             for i, document in enumerate(documents):
@@ -56,7 +67,7 @@ class Embedder(Component):
                     token_counter = 0
                     temp_batch = []
 
-                msg.info(
+                logger.info(
                     f"({i+1}/{len(documents)}) Importing document {document.name} with {len(batches)} batches"
                 )
 
@@ -185,7 +196,7 @@ class Embedder(Component):
             where={"path": ["doc_name"], "operator": "Equal", "valueText": doc_name},
         )
 
-        msg.warn(f"Deleted document {doc_name} and its chunks")
+        logger.warning(f"Deleted document {doc_name} and its chunks")
 
     def remove_document_by_id(self, client: Client, doc_id: str):
         doc_class_name = "Document_" + strip_non_letters(self.vectorizer)
@@ -198,7 +209,7 @@ class Embedder(Component):
             where={"path": ["doc_uuid"], "operator": "Equal", "valueText": doc_id},
         )
 
-        msg.warn(f"Deleted document {doc_id} and its chunks")
+        logger.warning(f"Deleted document {doc_id} and its chunks")
 
     def get_document_class(self) -> str:
         return "Document_" + strip_non_letters(self.vectorizer)
@@ -306,7 +317,7 @@ class Embedder(Component):
                 == match_results["data"]["Get"][self.get_cache_class()][0]["query"]
             )
         ):
-            msg.good("Direct match from cache")
+            logger.success("Direct match from cache")
             return (
                 match_results["data"]["Get"][self.get_cache_class()][0]["system"],
                 0.0,
@@ -333,7 +344,7 @@ class Embedder(Component):
             ).do()
 
         if "data" not in query_results:
-            msg.warn(query_results)
+            logger.warning(query_results)
             return None, None
 
         results = query_results["data"]["Get"][self.get_cache_class()]
@@ -344,7 +355,7 @@ class Embedder(Component):
         result = results[0]
 
         if float(result["_additional"]["distance"]) <= dist:
-            msg.good("Retrieved similar from cache")
+            logger.success("Retrieved similar from cache")
             return result["system"], float(result["_additional"]["distance"])
 
         else:
@@ -365,7 +376,7 @@ class Embedder(Component):
                 "query": str(query),
                 "system": system,
             }
-            msg.good("Saved to cache")
+            logger.success("Saved to cache")
 
             if needs_vectorization:
                 vector = self.vectorize_query(query)

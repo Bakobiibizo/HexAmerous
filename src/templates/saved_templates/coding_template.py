@@ -1,4 +1,4 @@
-from src.templates.template_interface import BaseTemplate, Template
+from src.templates.interface import BaseTemplate, Template
 
 
 class CodingTemplate(BaseTemplate):

@@ -2,12 +2,16 @@ import os
 from typing import List, Dict, Optional, AsyncGenerator
 from anthropic import AsyncAnthropic
 from src.text_generators.interface import Generator, available_generators
-from src.templates.template_interface import available_templates  # Change this import
+from src.templates.handler import 
+
+
+TEMPLATES = get_template_manager()
+
 
 class AnthropicGenerator(Generator):
     def __init__(self):
         super().__init__(
-            template=available_templates.get_template("coding")(),  # Change this line
+            templates=
             url=os.getenv("ANTHROPIC_URL", "https://api.anthropic.com/v1/messages"),
             api=os.getenv("ANTHROPIC_API_KEY"),
             context_window=100000,

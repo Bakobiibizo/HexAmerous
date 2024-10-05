@@ -1,9 +1,7 @@
-"""
-Template Manager
-"""
 from pydantic import BaseModel, Field
-from typing import List, Dict, Literal, Union, Generator, Any
-from src.templates.template_interface import TemplateManager, BaseTemplate
+from typing import List, Dict
+from src.templates.interface import TemplateManager, BaseTemplate
+
 
 class Handler(BaseModel):
     templates: TemplateManager = Field(default_factory=TemplateManager)
@@ -22,13 +20,19 @@ class TemplateHandler(TemplateManager):
         None
     """
 
-    def __init__(self, selected_template: str):
+    def __init__(self, selected_template: str=None):
         super().__init__()
         self.templates = TemplateManager()
-        self.selected_template = self.select_template(selected_template)
+        if not selected_template:
+            self.cli_select_template()
+        self.selected_template = self.get_template(selected_template)
         self.available_templates = TemplateManager().get_all_fields()
         self.system_prompt = self.get_system_prompt()
 
+    def get_selected_template(self, selected_template: str) -> str:
+        self.selected_template = self.templates.get_template(selected_template)
+        return self.selected_template
+    
     def get_system_prompt(self) -> Dict[str, str]:
         """
         Get the template and return a system prompt based on the selected template.
@@ -38,8 +42,18 @@ class TemplateHandler(TemplateManager):
         Returns:
             Dict[str, str]: The system prompt based on the selected template
         """
-        return self.templates[self.selected_template].create_system_prompt()
-
+        return self.templates.get_template(self.selected_template).create_system_prompt()
     
+    def cli_select_template(self):
+        print("Available Templates:")
+        for template in self.templates.get_all_fields().keys():
+            print(template)
+        selected_template = input("Enter the name of the template you want to use: ")
+        self.selected_template = selected_template
+
+
+def get_template_manager(selected_template: str):
+    return TemplateHandler(selected_template)
+
 if __name__ == "__main__":
-    print(TemplateHandler().get_all_fields())
+    print(get_template_manager("coding_template").get_system_prompt())
