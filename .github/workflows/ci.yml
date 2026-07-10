@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [master, production-completion]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+          enable-cache: true
+      - run: uv sync --extra dev
+      - run: uv run ruff check hexamerous tests main.py
+      - run: uv run pytest --cov=hexamerous --cov-report=term-missing
+      - run: uv build

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from typing import Protocol
@@ -74,9 +75,19 @@ class AnthropicProvider:
             system = f"{system}\n\n{request.context}"
         messages = [
             {"role": item.role.value, "content": item.content}
-            for item in request.messages if item.role.value != "system"
+            for item in request.messages
+            if item.role.value != "system"
         ]
         with self.client.messages.stream(
             model=request.model, max_tokens=4096, system=system, messages=messages
         ) as stream:
             yield from stream.text_stream
+
+
+def configured_providers() -> list[Provider]:
+    providers: list[Provider] = [EchoProvider()]
+    if os.getenv("OPENAI_API_KEY"):
+        providers.append(OpenAIProvider())
+    if os.getenv("ANTHROPIC_API_KEY"):
+        providers.append(AnthropicProvider())
+    return providers

@@ -30,8 +30,11 @@ class AgentService:
         system_prompt: str = "You are HexAmerous, a precise senior software engineering agent.",
     ) -> Conversation:
         return self.repository.create_conversation(
-            title, provider or self.settings.default_provider,
-            model or self.settings.default_model, system_prompt, workspace_id,
+            title,
+            provider or self.settings.default_provider,
+            model or self.settings.default_model,
+            system_prompt,
+            workspace_id,
         )
 
     def send(
@@ -50,10 +53,14 @@ class AgentService:
         except KeyError as error:
             raise ValueError(f"Provider is not configured: {conversation.provider}") from error
         chunks: list[str] = []
-        for token in provider.stream(GenerationRequest(
-            model=conversation.model, system_prompt=conversation.system_prompt,
-            messages=messages, context=context,
-        )):
+        for token in provider.stream(
+            GenerationRequest(
+                model=conversation.model,
+                system_prompt=conversation.system_prompt,
+                messages=messages,
+                context=context,
+            )
+        ):
             if cancelled and cancelled():
                 raise InterruptedError("Generation cancelled")
             chunks.append(token)

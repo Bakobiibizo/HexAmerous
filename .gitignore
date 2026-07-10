@@ -1,16 +1,10 @@
+.coverage
 .env
-.venv
-log/development log**
-__pycache__
-docs/*.txt
-docs/*.clip
-docs/index/**
-project/*.md
-.vscode
-venv
-creds/*
-src/vectordb.rar
-docs/ingestion/data.txt
-.cursorrules
-
-og
+.pytest_cache/
+.ruff_cache/
+.venv/
+__pycache__/
+*.egg-info/
+build/
+dist/
+htmlcov/

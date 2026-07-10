@@ -39,14 +39,22 @@ def test_workspace_index_and_search(service: AgentService, tmp_path: Path) -> No
     envelope = {
         "schema_version": "grist/envelope/v1",
         "kind": "repo_ingest",
-        "payload": {"artifacts": [{
-            "path": "parser.py", "kind": "python_code", "content_hash": "sha256:test",
-            "artifact": {"payload": {"symbols": [{"name": "parse_invoice"}]}}
-        }]},
+        "payload": {
+            "artifacts": [
+                {
+                    "path": "parser.py",
+                    "kind": "python_code",
+                    "content_hash": "sha256:test",
+                    "artifact": {"payload": {"symbols": [{"name": "parse_invoice"}]}},
+                }
+            ]
+        },
     }
+
     def runner(command):
         assert command == ["grist", "ingest", "repo", str(root.resolve())]
         return subprocess.CompletedProcess(command, 0, json.dumps(envelope), "")
+
     assert GristIndexer(service.repository, runner).index(workspace.id, root) == 1
     results = service.repository.search(workspace.id, "parse invoice")
     assert results[0].relative_path == "parser.py"
@@ -57,10 +65,37 @@ def test_grist_schema_is_validated(service: AgentService, tmp_path: Path) -> Non
     root = tmp_path / "project"
     root.mkdir()
     workspace = service.repository.create_workspace("Example", root)
+
     def runner(command):
         return subprocess.CompletedProcess(command, 0, '{"schema_version":"wrong"}', "")
+
     with pytest.raises(RuntimeError, match="Unsupported Grist"):
         GristIndexer(service.repository, runner).index(workspace.id, root)
+
+
+def test_grist_reindex_removes_stale_artifacts(service: AgentService, tmp_path: Path) -> None:
+    root = tmp_path / "project"
+    root.mkdir()
+    workspace = service.repository.create_workspace("Example", root)
+    artifacts = [
+        {"path": "old.py", "kind": "python_code", "artifact": {"payload": {"name": "old"}}},
+        {"path": "keep.py", "kind": "python_code", "artifact": {"payload": {"name": "keep"}}},
+    ]
+
+    def runner(command):
+        envelope = {
+            "schema_version": "grist/envelope/v1",
+            "kind": "repo_ingest",
+            "payload": {"artifacts": artifacts},
+        }
+        return subprocess.CompletedProcess(command, 0, json.dumps(envelope), "")
+
+    indexer = GristIndexer(service.repository, runner)
+    assert indexer.index(workspace.id, root) == 2
+    artifacts.pop(0)
+    assert indexer.index(workspace.id, root) == 1
+    assert service.repository.search(workspace.id, "old") == []
+    assert service.repository.search(workspace.id, "keep")[0].relative_path == "keep.py"
 
 
 def test_foreign_keys_and_cascade(tmp_path: Path) -> None:
@@ -75,4 +110,13 @@ def test_foreign_keys_and_cascade(tmp_path: Path) -> None:
 
 def test_migration_is_idempotent(service: AgentService) -> None:
     service.repository.migrate()
+
+
+def test_delete_workspace_detaches_conversations(service: AgentService, tmp_path: Path) -> None:
+    root = tmp_path / "project"
+    root.mkdir()
+    workspace = service.repository.create_workspace("Example", root)
+    conversation = service.new_conversation("Chat", workspace_id=workspace.id)
+    assert service.repository.delete_workspace(workspace.id)
+    assert service.repository.get_conversation(conversation.id).workspace_id is None
     service.repository.migrate()

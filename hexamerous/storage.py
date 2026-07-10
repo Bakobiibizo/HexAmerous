@@ -121,6 +121,18 @@ class Repository:
             rows = db.execute("SELECT * FROM workspaces ORDER BY updated_at DESC").fetchall()
         return [Workspace(**dict(row)) for row in rows]
 
+    def find_workspace(self, root_path: Path) -> Workspace | None:
+        with self.connect() as db:
+            row = db.execute(
+                "SELECT * FROM workspaces WHERE root_path = ?", (str(root_path.resolve()),)
+            ).fetchone()
+        return Workspace(**dict(row)) if row else None
+
+    def delete_workspace(self, workspace_id: str) -> bool:
+        with self.connect() as db:
+            result = db.execute("DELETE FROM workspaces WHERE id = ?", (workspace_id,))
+        return result.rowcount > 0
+
     def create_conversation(
         self,
         title: str,
@@ -131,16 +143,29 @@ class Repository:
     ) -> Conversation:
         now = utc_now()
         conversation = Conversation(
-            str(uuid4()), workspace_id, title.strip() or "New conversation", provider, model,
-            system_prompt, now, now,
+            str(uuid4()),
+            workspace_id,
+            title.strip() or "New conversation",
+            provider,
+            model,
+            system_prompt,
+            now,
+            now,
         )
         with self.connect() as db:
             db.execute(
                 "INSERT INTO conversations VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                tuple(conversation.__dict__.values()) if hasattr(conversation, "__dict__") else (
-                    conversation.id, conversation.workspace_id, conversation.title,
-                    conversation.provider, conversation.model, conversation.system_prompt,
-                    conversation.created_at, conversation.updated_at,
+                tuple(conversation.__dict__.values())
+                if hasattr(conversation, "__dict__")
+                else (
+                    conversation.id,
+                    conversation.workspace_id,
+                    conversation.title,
+                    conversation.provider,
+                    conversation.model,
+                    conversation.system_prompt,
+                    conversation.created_at,
+                    conversation.updated_at,
                 ),
             )
         return conversation
@@ -164,6 +189,11 @@ class Repository:
         with self.connect() as db:
             rows = db.execute(query, params).fetchall()
         return [Conversation(**dict(row)) for row in rows]
+
+    def delete_conversation(self, conversation_id: str) -> bool:
+        with self.connect() as db:
+            result = db.execute("DELETE FROM conversations WHERE id = ?", (conversation_id,))
+        return result.rowcount > 0
 
     def add_message(self, conversation_id: str, role: Role, content: str) -> Message:
         if not content.strip():
@@ -201,10 +231,32 @@ class Repository:
                 ON CONFLICT(workspace_id, relative_path) DO UPDATE SET
                     content=excluded.content, content_hash=excluded.content_hash,
                     language=excluded.language, updated_at=excluded.updated_at""",
-                [(
-                    item.id, item.workspace_id, item.relative_path, item.content,
-                    item.content_hash, item.language, item.updated_at,
-                ) for item in documents],
+                [
+                    (
+                        item.id,
+                        item.workspace_id,
+                        item.relative_path,
+                        item.content,
+                        item.content_hash,
+                        item.language,
+                        item.updated_at,
+                    )
+                    for item in documents
+                ],
+            )
+        return len(documents)
+
+    def reconcile_documents(self, workspace_id: str, documents: Sequence[ContextDocument]) -> int:
+        paths = {item.relative_path for item in documents}
+        self.upsert_documents(documents)
+        with self.connect() as db:
+            rows = db.execute(
+                "SELECT relative_path FROM documents WHERE workspace_id = ?", (workspace_id,)
+            ).fetchall()
+            stale = [row["relative_path"] for row in rows if row["relative_path"] not in paths]
+            db.executemany(
+                "DELETE FROM documents WHERE workspace_id = ? AND relative_path = ?",
+                [(workspace_id, path) for path in stale],
             )
         return len(documents)
 

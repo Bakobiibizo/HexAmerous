@@ -57,13 +57,15 @@ class GristIndexer:
             if not isinstance(artifact, dict):
                 continue
             content_hash = str(item.get("content_hash", ""))
-            documents.append(ContextDocument(
-                id=str(uuid4()),
-                workspace_id=workspace_id,
-                relative_path=item["path"],
-                content=json.dumps(artifact, sort_keys=True, separators=(",", ":")),
-                content_hash=content_hash,
-                language=str(item.get("kind", "unknown")),
-                updated_at=utc_now(),
-            ))
-        return self.repository.upsert_documents(documents)
+            documents.append(
+                ContextDocument(
+                    id=str(uuid4()),
+                    workspace_id=workspace_id,
+                    relative_path=item["path"],
+                    content=json.dumps(artifact, sort_keys=True, separators=(",", ":")),
+                    content_hash=content_hash,
+                    language=str(item.get("kind", "unknown")),
+                    updated_at=utc_now(),
+                )
+            )
+        return self.repository.reconcile_documents(workspace_id, documents)
