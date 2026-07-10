@@ -1,17 +1,6 @@
-from src.text_generators.manager import GeneratorManager
-from src.templates.manager import TemplateManager
-from src.text_generators.interface import available_generators
-from src.templates.interface import available_templates
-from src.templates.coding_template import CodingTemplate
-from src.text_generators.ChatGPT4Generator import GPT4Generator
+"""Compatibility entrypoint for source checkouts."""
 
-available_templates.templates["coding"] = CodingTemplate
-available_generators.generators["gpt4"] = GPT4Generator
+from hexamerous.cli import main
 
-
-class HexGenerator:
-    def __init__(self):
-        self.generator = GeneratorManager(
-            selected_generator=""
-        )
-        self.template = TemplateManager()
+if __name__ == "__main__":
+    raise SystemExit(main())
