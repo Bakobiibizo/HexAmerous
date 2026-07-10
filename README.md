@@ -1,83 +1,76 @@
-# Hexamerous
+# HexAmerous
 
-## Overview
+HexAmerous is a local-first command-line coding agent. It keeps conversations and
+project context in a local SQLite database, uses [Grist](https://github.com/hydra-dynamix)
+for explicit repository ingestion, and connects to model providers through small,
+optional adapters.
 
-Hexamerous is a comprehensive coding assistant designed to facilitate development in Python and TypeScript. It offers a range of features, including context-aware code generation, vectorstore integration for long-term memory, and advanced UI components for managing interactions.
+HexAmerous does not require a hosted vector database, message broker, or background
+service. Nothing is indexed until you run the workspace command.
 
-## Current Status
+## Requirements
 
-The project is currently in active development. Recent updates include the modularization of UI components, enhancements to text generation capabilities, and improvements to vectorstore integration. The following areas are still in progress:
+- Python 3.11 or newer
+- `grist` on `PATH` when indexing repositories
+- An API key only when using a hosted model provider
 
-- Completing the implementation of placeholder methods in UI components.
-- Finalizing API interactions for text generators.
-- Enhancing vectorstore functionality for efficient data retrieval and storage.
+## Install
 
-## Features
+```bash
+uv tool install .
+```
 
-- **Contextual Code Generation**: Provides intelligent code suggestions based on the current context.
-- **Vectorstore Integration**: Supports long-term memory and efficient document search.
-- **UI Components**: Includes customizable widgets for managing user interactions.
+For development:
 
-## Installation
+```bash
+uv sync --extra dev
+uv run pytest
+```
 
-To set up the development environment using Poetry, follow these steps:
+Provider SDKs are optional:
 
-1. Ensure you have Python 3.8 or higher installed on your system.
-2. Install Poetry by following the [official installation guide](https://python-poetry.org/docs/#installation).
-3. Clone the repository and navigate to the project directory:
+```bash
+uv sync --extra openai
+uv sync --extra anthropic
+```
 
-   ```bash
-   git clone <repository-url>
-   cd hexamerous
-   ```
+## Commands
 
-4. Install the project dependencies:
+Validate the local database and list configured providers:
 
-   ```bash
-   poetry install
-   ```
+```bash
+hexamerous doctor
+```
 
-5. Run the application:
+Create a workspace and ingest its semantic structure through Grist:
 
-   ```bash
-   poetry run python main.py
-   ```
+```bash
+hexamerous workspace ~/repos/my-project --name my-project
+```
 
-This will set up a virtual environment and install all necessary dependencies specified in the `pyproject.toml` file.
+Run an offline diagnostic conversation:
 
-## Environment Variables
+```bash
+hexamerous chat "check the local conversation store" --provider echo --model offline
+```
 
-Configure the `.env` file with the necessary API keys and settings. Refer to the `env-example.env` file for guidance.
+List persisted conversations:
 
-## Component Descriptions
+```bash
+hexamerous list
+```
 
-### UI Components
-- **ChatWidget**: Manages chat interactions and user input.
-- **CustomTitleBar**: Provides a customizable title bar for the application.
-- **LargeTextInputDialog**: Handles large text input from users.
+Application state uses the platform data directory by default. Override it with
+`HEXAMEROUS_DATA_DIR`; set `HEXAMEROUS_CONFIG` to load a different JSON config.
 
-### Text Generators
-- **AgentArtificialGenerator**: Interfaces with the AgentArtificial API for text generation.
+## Privacy
 
-### Vectorstore
-- **VectorDB**: Manages connections and operations with the vector database.
-- **WeaviateManager**: Handles embedding and importing data into Weaviate.
+Conversation history, workspace metadata, and imported Grist artifacts are stored
+locally. Content sent to a hosted model is subject to that provider's policies.
+HexAmerous never reads or indexes a repository implicitly.
 
-## Contribution Guidelines
+## Status
 
-Contributions are welcome! To contribute:
-
-1. Fork the repository and create a new branch for your feature or bugfix.
-2. Ensure your code follows the project's coding standards and includes appropriate documentation.
-3. Submit a pull request with a clear description of your changes.
-
-## Future Plans
-
-- Implementing additional features for text analysis and processing.
-- Expanding support for more APIs and data sources.
-- Improving the user interface for better usability and accessibility.
-
-## Author
-
-Bakobiibizo - richard@bakobi.com
-Bakobi Inc. - https://sites.google.com/bakobi.com/bakobi-creative-design/home
+The local core, migrations, Grist ingestion boundary, provider protocol, and CLI
+are covered by isolated tests. OpenAI and Anthropic adapters are optional so the
+core remains usable and testable without credentials or network access.
