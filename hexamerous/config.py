@@ -12,7 +12,7 @@ from platformdirs import user_config_path, user_data_path
 class Settings:
     data_dir: Path
     database_path: Path
-    default_provider: str = "openai"
+    default_provider: str = "echo"
     default_model: str = "gpt-4o-mini"
     context_results: int = 6
     context_character_limit: int = 24_000
